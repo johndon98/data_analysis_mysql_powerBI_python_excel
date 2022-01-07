@@ -75,8 +75,3 @@ margins, dydx(*) post
 *table command
 esttab m1 m2 m3, se eqlabels(none) mlabels(none) nobaselevels nolabel varlabels(1.british british 1.sc sc 2.ID11 muslim HHEDUC education) drop(3.ID11 NPERSONS logincomepc 1.URBAN2011 2.CI11 3.CI11) star(* .10 ** .05 *** .01)
 
-
-
-
-
-
