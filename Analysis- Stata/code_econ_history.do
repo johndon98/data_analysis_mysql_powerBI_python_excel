@@ -45,11 +45,11 @@ drop in 571 if ID11==6
 drop in 970 if ID11==8
 
 *logit
-*svy: logit TR2 member acq british HHEDUC i.ID11 i.ID13 i.CI11
-*margins, dydx(member)
-*margins, dydx(acq)
-*margins british, at(acq==(0(1)11)) vce(uncond)
-*marginsplot, legend(rows(1))
+svy: logit TR2 member acq british HHEDUC i.ID11 i.ID13 i.CI11
+margins, dydx(member)
+margins, dydx(acq)
+margins british, at(acq==(0(1)11)) vce(uncond)
+marginsplot, legend(rows(1))
 
 *summary
 sum member acq british TR2 DB1A DB9C NPERSONS HHEDUC ID11 sc logincomepc CI11 URBAN2011
