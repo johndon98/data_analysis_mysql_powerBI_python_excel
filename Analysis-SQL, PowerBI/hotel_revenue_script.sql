@@ -71,10 +71,11 @@ GROUP BY  hotel, arrival_date_year
 ORDER BY hotel;
 
 -- append market_segment and meal_cost to full_revenue
--- used last part as query in Power BI while loading database (lines 75-79)
+-- used last part as query in Power BI while loading database 
 
 SELECT * FROM full_revenue
 LEFT JOIN market_segment
 ON full_revenue.market_segment = market_segment.market_segment
 LEFT JOIN meal_cost
 ON meal_cost.meal = full_revenue.meal;
+
