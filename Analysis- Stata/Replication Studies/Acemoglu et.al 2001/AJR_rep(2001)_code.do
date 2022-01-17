@@ -219,26 +219,3 @@ ivregress 2sls logpgp95 (avexpr=new_logem4) if source0==1 & shortnam!= "GMB", fi
 
 *control for distance from equator
 ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if source0==1 & shortnam!= "GMB", first vce(cluster new_logem4)  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
