@@ -148,17 +148,3 @@ test _b[lambdafinal2]=0.02
 log close
 type mrw_replication.smcl
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
