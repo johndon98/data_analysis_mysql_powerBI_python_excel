@@ -1,4 +1,4 @@
-##Snapshot of Hotel Revenue Dashboard
+Snapshot of Hotel Revenue Dashboard
 ---
 
 
