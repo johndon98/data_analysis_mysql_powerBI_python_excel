@@ -1,4 +1,4 @@
-## Azure Machine Learning Exercises - MSLEARN DP-100
+## Azure Machine Learning Operations Exercises - MSLEARN DP-100
 
 The code was cloned from https://github.com/MicrosoftLearning/mslearn-dp100
 
