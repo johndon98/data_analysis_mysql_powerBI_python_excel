@@ -9,5 +9,4 @@
   <img src="https://user-images.githubusercontent.com/97033400/153876107-da01c55f-bfa0-42a9-8f7d-b11062c6fba4.jpg" width="50%"/>
   <img src="https://user-images.githubusercontent.com/97033400/153876107-da01c55f-bfa0-42a9-8f7d-b11062c6fba4.jpg" width="50%"/>
 </p>
-![Screenshot 2022-02-14 145549]()
-![Screenshot 2022-02-14 145618]()
+
