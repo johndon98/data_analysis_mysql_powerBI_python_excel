@@ -19,5 +19,5 @@
   <img src="https://user-images.githubusercontent.com/97033400/153895521-b20234b6-f3ff-4195-90d5-81582e829f3b.jpg" width="40%"/>
   <img src="https://user-images.githubusercontent.com/97033400/153895536-58da15dc-7d70-4833-a8a8-f836ead8feb0.jpg" width="40%"/>
  
-<div>
+</div>
 
