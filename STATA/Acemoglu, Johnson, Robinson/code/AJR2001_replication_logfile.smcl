@@ -1,0 +1,1268 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)\ajr_replication.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 7 May 2021, 14:12:55
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. cd "C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)"
+{res}C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)
+{txt}
+{com}. 
+. *load data
+. use AJR2001_replication.dta, clear
+{txt}
+{com}. 
+. *3.a)
+. *graph (fig.1 in AJR)
+. 
+. twoway (scatter logpgp95 logem4, mstyle(none) mlabel(shortnam) mlabgap(-3) ysc(r(4 10))ylabel(#4))|| (lfit logpgp95 logem4) if excolony==1
+{res}{txt}
+{com}. 
+. *Comments: strong negative relationship, colonies where europeans faced higher mortality rates have lower gdp per capita today.
+. *can spot same values for many countries, imputed from neighbours.
+. 
+. *4.a)
+. 
+. gen mortality_level = exp(logem4)
+{txt}(75 missing values generated)
+
+{com}. summarize mortality_level
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+mortality_~l {c |}{res}         87    222.4782    411.4632       2.55       2940
+{txt}
+{com}. 
+. /*b) Reasons for extremely high mortality rates: measurement errors, associated with african nations hence could be due to their disease environment like malaria,
+> data could have been collected during an epidemic, soldiers are replaced so it gets high if many die quickly*/
+. 
+. /*5.a) Their focus is on how property rights affect economic performance. For this data on investment risk maybe a reasonable proxy.
+> They argue that expropriation risk is related to all other institutional features (footnote.3), 
+> datasource specializes in assesing risk for foreign investors(not sure how this is capturing true quality of institutions as a whole in a country)*/
+. 
+. 
+. *b)graph(fig.2 AJR) 
+. 
+. graph twoway (scatter logpgp95 avexpr, mstyle(none) mlabel(shortnam) mlabgap(-3) ysc(r(4 10)) ylabel(#4))|| (lfit logpgp95 avexpr) if excolony==1
+{res}{txt}
+{com}. 
+. *Comment: countries with higher avg. protection against expropriation, have higher gdp per capita. 
+. 
+. *c)column 1, table 2(AJR)
+. 
+. reg logpgp95 avexpr if excolony!=.  /*SUR is missing, excluding that replicates result*/
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       110
+{txt}{hline 13}{c +}{hline 34}   F(1, 108)       = {res}   173.60
+{txt}       Model {c |} {res} 88.9819449         1  88.9819449   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 55.3576891       108  .512571195   {txt}R-squared       ={res}    0.6165
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6129
+{txt}       Total {c |} {res} 144.339634       109  1.32421683   {txt}Root MSE        =   {res} .71594
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .5393153{col 26}{space 2} .0409326{col 37}{space 1}   13.18{col 46}{space 3}0.000{col 54}{space 4} .4581799{col 67}{space 3} .6204508
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.564146{col 26}{space 2} .3037032{col 37}{space 1}   15.03{col 46}{space 3}0.000{col 54}{space 4} 3.962153{col 67}{space 3} 5.166138
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *d)i)basesample
+. 
+. gen basesample = 0
+{txt}
+{com}. replace basesample = 1 if excolony==1 & logem4!=. & avexpr!=. & logpgp95!=.
+{txt}(64 real changes made)
+
+{com}. 
+. *ii)
+. 
+. reg logpgp95 avexpr if basesample==1 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        64
+{txt}{hline 13}{c +}{hline 34}   F(1, 62)        = {res}    72.82
+{txt}       Model {c |} {res} 37.0420118         1  37.0420118   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 31.5397067        62  .508704946   {txt}R-squared       ={res}    0.5401
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5327
+{txt}       Total {c |} {res} 68.5817185        63  1.08859871   {txt}Root MSE        =   {res} .71324
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2}  .522107{col 26}{space 2}  .061185{col 37}{space 1}    8.53{col 46}{space 3}0.000{col 54}{space 4} .3997999{col 67}{space 3} .6444142
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.660383{col 26}{space 2} .4085062{col 37}{space 1}   11.41{col 46}{space 3}0.000{col 54}{space 4} 3.843791{col 67}{space 3} 5.476976
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *Comment: results similar to the one using whole world sample.
+. 
+. *iii) MEX UGA
+. 
+. predict gdp_hat if e(sample)
+{txt}(option {bf:xb} assumed; fitted values)
+(98 missing values generated)
+
+{com}. 
+. list shortnam avexpr logpgp95 gdp_hat if shortnam=="MEX"| shortnam=="UGA"  /*not sure if this is the right approach*/
+{txt}
+     {c TLC}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c TRC}
+     {c |} {res}shortnam     avexpr   logpgp95    gdp_hat {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c RT}
+ 93. {c |} {res}     MEX        7.5   8.943768   8.576186 {txt}{c |}
+150. {c |} {res}     UGA   4.454545   6.966024   6.986133 {txt}{c |}
+     {c BLC}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c BRC}
+
+{com}. 
+. *predicted difference in log points(gdp)
+. display 100*(8.576186) - 100*(6.986133)
+{res}159.0053
+{txt}
+{com}. display exp(8.576186 - 6.986133)-1       /*approx. 4 fold*/
+{res}3.9040088
+{txt}
+{com}. 
+. *actual difference in log points
+. display 100*(8.943768) - 100*(6.966024)
+{res}197.7744
+{txt}
+{com}. display exp(8.943768 - 6.966024) -1      /*approx. 6 fold*/     
+{res}6.2264218
+{txt}
+{com}. 
+. 
+. *display exp((delta x)*0.94) - 1        /* exact %change in gdp ; display exp(difference in log points)-1 should give same answer*/
+. *display exp((7.5 - 4.45)*0.52) - 1     /* 3.87, approx. 4 fold increase*/
+. 
+. 
+. *6)
+. *a) graph (fig.3 AJR)
+. graph twoway (scatter avexpr logem4, mstyle(none) mlabel(shortnam) mlabgap(-3))|| (lfit avexpr logem4) if excolony==1
+{res}{txt}
+{com}. 
+. *Comment: Negative relationship. Higher mortality rates associated with lower protection against expropriation/worse institutions today.
+. 
+. *b)
+. 
+. *panel A Table 3
+. gen eurodes = euro1900/100
+{txt}(9 missing values generated)
+
+{com}. 
+. foreach i in cons00a democ00a eurodes logem4{c -(}
+{txt}  2{com}. reg avexpr `i' if basesample==1
+{txt}  3{com}. outreg2 using table3.xls, replace dec(2) nocons
+{txt}  4{com}. {c )-}
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        60
+{txt}{hline 13}{c +}{hline 34}   F(1, 58)        = {res}    14.80
+{txt}       Model {c |} {res} 26.6658113         1  26.6658113   {txt}Prob > F        ={res}    0.0003
+{txt}    Residual {c |} {res} 104.517425        58  1.80202456   {txt}R-squared       ={res}    0.2033
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.1895
+{txt}       Total {c |} {res} 131.183236        59  2.22344468   {txt}Root MSE        =   {res} 1.3424
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}cons00a {c |}{col 14}{res}{space 2} .3182682{col 26}{space 2} .0827363{col 37}{space 1}    3.85{col 46}{space 3}0.000{col 54}{space 4} .1526534{col 67}{space 3} .4838829
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 5.755866{col 26}{space 2} .2543385{col 37}{space 1}   22.63{col 46}{space 3}0.000{col 54}{space 4} 5.246753{col 67}{space 3}  6.26498
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}{browse `"table3.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)"' :dir}{com} : {txt}{stata `"seeout using "table3.txt""':seeout}
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        59
+{txt}{hline 13}{c +}{hline 34}   F(1, 57)        = {res}    17.77
+{txt}       Model {c |} {res} 30.6559392         1  30.6559392   {txt}Prob > F        ={res}    0.0001
+{txt}    Residual {c |} {res} 98.3238783        57  1.72498032   {txt}R-squared       ={res}    0.2377
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2243
+{txt}       Total {c |} {res} 128.979817        58  2.22378996   {txt}Root MSE        =   {res} 1.3134
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}democ00a {c |}{col 14}{res}{space 2}  .241985{col 26}{space 2} .0574015{col 37}{space 1}    4.22{col 46}{space 3}0.000{col 54}{space 4} .1270405{col 67}{space 3} .3569295
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.099079{col 26}{space 2} .1953024{col 37}{space 1}   31.23{col 46}{space 3}0.000{col 54}{space 4} 5.707992{col 67}{space 3} 6.490165
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}{browse `"table3.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)"' :dir}{com} : {txt}{stata `"seeout using "table3.txt""':seeout}
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        63
+{txt}{hline 13}{c +}{hline 34}   F(1, 61)        = {res}    25.97
+{txt}       Model {c |} {res} 40.4215257         1  40.4215257   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 94.9502343        61  1.55656122   {txt}R-squared       ={res}    0.2986
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2871
+{txt}       Total {c |} {res}  135.37176        62  2.18341548   {txt}Root MSE        =   {res} 1.2476
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}eurodes {c |}{col 14}{res}{space 2} 3.162298{col 26}{space 2}  .620554{col 37}{space 1}    5.10{col 46}{space 3}0.000{col 54}{space 4} 1.921424{col 67}{space 3} 4.403173
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 5.992639{col 26}{space 2} .1865202{col 37}{space 1}   32.13{col 46}{space 3}0.000{col 54}{space 4} 5.619669{col 67}{space 3} 6.365609
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}{browse `"table3.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)"' :dir}{com} : {txt}{stata `"seeout using "table3.txt""':seeout}
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        64
+{txt}{hline 13}{c +}{hline 34}   F(1, 62)        = {res}    22.95
+{txt}       Model {c |} {res} 36.7071397         1  36.7071397   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 99.1791012        62  1.59966292   {txt}R-squared       ={res}    0.2701
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2584
+{txt}       Total {c |} {res} 135.886241        63  2.15692446   {txt}Root MSE        =   {res} 1.2648
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}logem4 {c |}{col 14}{res}{space 2}-.6067782{col 26}{space 2} .1266686{col 37}{space 1}   -4.79{col 46}{space 3}0.000{col 54}{space 4}-.8599852{col 67}{space 3}-.3535713
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  9.34141{col 26}{space 2} .6107178{col 37}{space 1}   15.30{col 46}{space 3}0.000{col 54}{space 4} 8.120603{col 67}{space 3} 10.56222
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}{browse `"table3.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)"' :dir}{com} : {txt}{stata `"seeout using "table3.txt""':seeout}
+
+{com}. reg avexpr cons1 indtime if basesample==1
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        60
+{txt}{hline 13}{c +}{hline 34}   F(2, 57)        = {res}     6.67
+{txt}       Model {c |} {res} 24.8802849         2  12.4401425   {txt}Prob > F        ={res}    0.0025
+{txt}    Residual {c |} {res} 106.302951        57  1.86496405   {txt}R-squared       ={res}    0.1897
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.1612
+{txt}       Total {c |} {res} 131.183236        59  2.22344468   {txt}Root MSE        =   {res} 1.3656
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}cons1 {c |}{col 14}{res}{space 2} .2492712{col 26}{space 2} .0788095{col 37}{space 1}    3.16{col 46}{space 3}0.003{col 54}{space 4} .0914578{col 67}{space 3} .4070845
+{txt}{space 5}indtime {c |}{col 14}{res}{space 2} .0081955{col 26}{space 2} .0029455{col 37}{space 1}    2.78{col 46}{space 3}0.007{col 54}{space 4} .0022972{col 67}{space 3} .0140939
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.889853{col 26}{space 2} .4691272{col 37}{space 1}   10.42{col 46}{space 3}0.000{col 54}{space 4} 3.950442{col 67}{space 3} 5.829264
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2
+  outreg2 using `"table3.xls"', dec(2) nocons
+{txt}{browse `"table3.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\ajr(2001)"' :dir}{com} : {txt}{stata `"seeout using "table3.txt""':seeout}
+
+{com}. 
+. *Comment: association between early and present-day institutions. same holds for democracy index.(basically trying to prove persistence of institutions)
+. 
+. 
+. *c)i)
+. *2sls
+. 
+. ivregress 2sls logpgp95 (avexp=logem4) if basesample==1, first
+{res}
+{txt}First-stage regressions
+{hline 23}
+
+{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}F({res}   1{txt},{res}     62{txt}){col 67}= {res}     22.95
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.2701
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2584
+{txt}{col 49}Root MSE{col 67}= {res}    1.2648
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}logem4 {c |}{col 14}{res}{space 2}-.6067782{col 26}{space 2} .1266686{col 37}{space 1}   -4.79{col 46}{space 3}0.000{col 54}{space 4}-.8599852{col 67}{space 3}-.3535713
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  9.34141{col 26}{space 2} .6107178{col 37}{space 1}   15.30{col 46}{space 3}0.000{col 54}{space 4} 8.120603{col 67}{space 3} 10.56222
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     37.57
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.1870
+{txt}{col 51}Root MSE{col 67}=    {res}  .9334
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .9442794{col 26}{space 2} .1540603{col 37}{space 1}    6.13{col 46}{space 3}0.000{col 54}{space 4} .6423267{col 67}{space 3} 1.246232
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1.909667{col 26}{space 2} 1.010557{col 37}{space 1}    1.89{col 46}{space 3}0.059{col 54}{space 4}-.0709894{col 67}{space 3} 3.890323
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}logem4{p_end}
+
+{com}. *comment: first-stage provides evidence for mortality as strong instrument for institutions. 
+. *2nd stage - institutions have strong causal effect on economic performance.
+. 
+. 
+. *c)ii) MEX UGA
+. predict iv_hat if e(sample)
+{txt}(option xb assumed; fitted values)
+(98 missing values generated)
+
+{com}. 
+. list shortnam logpgp95 avexpr gdp_hat iv_hat if shortnam=="UGA"| shortnam=="MEX"
+{txt}
+     {c TLC}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c TRC}
+     {c |} {res}shortnam   logpgp95     avexpr    gdp_hat     iv_hat {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c RT}
+ 93. {c |} {res}     MEX   8.943768        7.5   8.576186   8.991762 {txt}{c |}
+150. {c |} {res}     UGA   6.966024   4.454545   6.986133   6.116002 {txt}{c |}
+     {c BLC}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c -}{hline 10}{c BRC}
+
+{com}. 
+. *predicted difference in log points(gdp)
+. display 100*(8.991762)-100*(6.116002)
+{res}287.576
+{txt}
+{com}. display exp(8.991762 - 6.116002)-1
+{res}16.738901
+{txt}
+{com}. *actual difference
+. display exp(8.943768 - 6.966024) -1           /*approx. 6 fold difference*/
+{res}6.2264218
+{txt}
+{com}. 
+. 
+. /* exact %change in gdp*/
+. display exp((7.5 - 4.454545)*0.94) - 1       /* approx. 16 fold; is it supposed to be this high? */
+{res}16.509222
+{txt}
+{com}. 
+. *iii)
+. 
+. 
+. 
+. 
+. *d)
+. *i)original from Hall and Jones (1999)
+. reg logpgp95 latitude 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        64
+{txt}{hline 13}{c +}{hline 34}   F(1, 62)        = {res}    15.85
+{txt}       Model {c |} {res} 13.9610896         1  13.9610896   {txt}Prob > F        ={res}    0.0002
+{txt}    Residual {c |} {res} 54.6206289        62  .880977886   {txt}R-squared       ={res}    0.2036
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.1907
+{txt}       Total {c |} {res} 68.5817185        63  1.08859871   {txt}Root MSE        =   {res}  .9386
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 3.548306{col 26}{space 2} .8913411{col 37}{space 1}    3.98{col 46}{space 3}0.000{col 54}{space 4} 1.766541{col 67}{space 3} 5.330072
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 7.419611{col 26}{space 2} .1995609{col 37}{space 1}   37.18{col 46}{space 3}0.000{col 54}{space 4} 7.020694{col 67}{space 3} 7.818527
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. pwcorr latitude avexpr, sig
+
+             {txt}{c |} latitude   avexpr
+{hline 13}{c +}{hline 18}
+    latitude {c |} {res}  1.0000 
+             {txt}{c |}
+             {c |}
+      avexpr {c |} {res}  0.3807   1.0000 
+             {txt}{c |}{res}   0.0019
+             {txt}{c |}
+
+{com}. 
+. reg logpgp95 avexpr latitude 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        64
+{txt}{hline 13}{c +}{hline 34}   F(2, 61)        = {res}    41.18
+{txt}       Model {c |} {res} 39.3990028         2  19.6995014   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 29.1827157        61  .478405176   {txt}R-squared       ={res}    0.5745
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5605
+{txt}       Total {c |} {res} 68.5817185        63  1.08859871   {txt}Root MSE        =   {res} .69167
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .4678917{col 26}{space 2} .0641656{col 37}{space 1}    7.29{col 46}{space 3}0.000{col 54}{space 4} .3395846{col 67}{space 3} .5961988
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} 1.576641{col 26}{space 2} .7103161{col 37}{space 1}    2.22{col 46}{space 3}0.030{col 54}{space 4} .1562757{col 67}{space 3} 2.997006
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.728088{col 26}{space 2} .3973262{col 37}{space 1}   11.90{col 46}{space 3}0.000{col 54}{space 4} 3.933585{col 67}{space 3} 5.522591
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *e)malaria
+. 
+. reg logpgp95 malfal94 if basesample==1
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        62
+{txt}{hline 13}{c +}{hline 34}   F(1, 60)        = {res}    64.59
+{txt}       Model {c |} {res} 33.7563555         1  33.7563555   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  31.358336        60  .522638934   {txt}R-squared       ={res}    0.5184
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5104
+{txt}       Total {c |} {res} 65.1146915        61  1.06745396   {txt}Root MSE        =   {res} .72294
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}malfal94 {c |}{col 14}{res}{space 2}-1.717107{col 26}{space 2} .2136586{col 37}{space 1}   -8.04{col 46}{space 3}0.000{col 54}{space 4}-2.144488{col 67}{space 3}-1.289726
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 8.698138{col 26}{space 2} .1246568{col 37}{space 1}   69.78{col 46}{space 3}0.000{col 54}{space 4} 8.448787{col 67}{space 3} 8.947489
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *ii)column 1, table 7
+. ivregress 2sls logpgp95 malfal94 (avexp=logem4) if basesample==1, first
+{res}
+{txt}First-stage regressions
+{hline 23}
+
+{col 49}Number of obs{col 67}= {res}        62
+{txt}{col 49}F({res}   2{txt},{res}     59{txt}){col 67}= {res}     12.31
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.2945
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2706
+{txt}{col 49}Root MSE{col 67}= {res}    1.2675
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}malfal94 {c |}{col 14}{res}{space 2}-.7902259{col 26}{space 2} .5375324{col 37}{space 1}   -1.47{col 46}{space 3}0.147{col 54}{space 4}-1.865826{col 67}{space 3}  .285374
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.4172807{col 26}{space 2} .1855323{col 37}{space 1}   -2.25{col 46}{space 3}0.028{col 54}{space 4}  -.78853{col 67}{space 3}-.0460314
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 8.757417{col 26}{space 2}  .750646{col 37}{space 1}   11.67{col 46}{space 3}0.000{col 54}{space 4} 7.255377{col 67}{space 3} 10.25946
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        62
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     76.90
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.5345
+{txt}{col 51}Root MSE{col 67}=    {res} .69917
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .6870742{col 26}{space 2} .2452507{col 37}{space 1}    2.80{col 46}{space 3}0.005{col 54}{space 4} .2063916{col 67}{space 3} 1.167757
+{txt}{space 4}malfal94 {c |}{col 14}{res}{space 2}-.5784585{col 26}{space 2} .4559506{col 37}{space 1}   -1.27{col 46}{space 3}0.205{col 54}{space 4}-1.472105{col 67}{space 3} .3151882
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.790856{col 26}{space 2} 1.755795{col 37}{space 1}    2.16{col 46}{space 3}0.031{col 54}{space 4}  .349561{col 67}{space 3} 7.232151
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}malfal94 logem4{p_end}
+
+{com}. 
+. 
+. //Albouy(2012)//
+. 
+. *1)
+. *a)same as in AJR
+.  
+. ivregress 2sls logpgp95 (avexpr=logem4) if basesample==1, first
+{res}
+{txt}First-stage regressions
+{hline 23}
+
+{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}F({res}   1{txt},{res}     62{txt}){col 67}= {res}     22.95
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.2701
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2584
+{txt}{col 49}Root MSE{col 67}= {res}    1.2648
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}logem4 {c |}{col 14}{res}{space 2}-.6067782{col 26}{space 2} .1266686{col 37}{space 1}   -4.79{col 46}{space 3}0.000{col 54}{space 4}-.8599852{col 67}{space 3}-.3535713
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  9.34141{col 26}{space 2} .6107178{col 37}{space 1}   15.30{col 46}{space 3}0.000{col 54}{space 4} 8.120603{col 67}{space 3} 10.56222
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     37.57
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.1870
+{txt}{col 51}Root MSE{col 67}=    {res}  .9334
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .9442794{col 26}{space 2} .1540603{col 37}{space 1}    6.13{col 46}{space 3}0.000{col 54}{space 4} .6423267{col 67}{space 3} 1.246232
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1.909667{col 26}{space 2} 1.010557{col 37}{space 1}    1.89{col 46}{space 3}0.059{col 54}{space 4}-.0709894{col 67}{space 3} 3.890323
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}logem4{p_end}
+
+{com}. 
+. ivregress 2sls logpgp95 latitude (avexpr=logem4) if basesample==1, first     
+{res}
+{txt}First-stage regressions
+{hline 23}
+
+{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}F({res}   2{txt},{res}     61{txt}){col 67}= {res}     12.82
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.2960
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2729
+{txt}{col 49}Root MSE{col 67}= {res}    1.2523
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 2.002033{col 26}{space 2} 1.337154{col 37}{space 1}    1.50{col 46}{space 3}0.139{col 54}{space 4}-.6717719{col 67}{space 3} 4.675838
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.5102537{col 26}{space 2} .1410181{col 37}{space 1}   -3.62{col 46}{space 3}0.001{col 54}{space 4}-.7922368{col 67}{space 3}-.2282706
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 8.529309{col 26}{space 2} .8123128{col 37}{space 1}   10.50{col 46}{space 3}0.000{col 54}{space 4} 6.904989{col 67}{space 3} 10.15363
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     35.68
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.1024
+{txt}{col 51}Root MSE{col 67}=    {res} .98074
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .9957437{col 26}{space 2} .2164378{col 37}{space 1}    4.60{col 46}{space 3}0.000{col 54}{space 4} .5715335{col 67}{space 3} 1.419954
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2}-.6476942{col 26}{space 2} 1.303557{col 37}{space 1}   -0.50{col 46}{space 3}0.619{col 54}{space 4} -3.20262{col 67}{space 3} 1.907231
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1.691647{col 26}{space 2} 1.262388{col 37}{space 1}    1.34{col 46}{space 3}0.180{col 54}{space 4}-.7825875{col 67}{space 3} 4.165881
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude logem4{p_end}
+
+{com}. 
+. *b) sample of 64 countries
+. 
+. ivregress 2sls logpgp95 (avexpr=logem4) if basesample==1, first vce(cluster logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}N. of clusters{col 67}= {res}        36
+{txt}{col 49}F({res}   1{txt},{res}     62{txt}){col 67}= {res}     12.52
+{txt}{col 49}Prob > F{col 67}= {res}    0.0008
+{txt}{col 49}R-squared{col 67}= {res}    0.2701
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2584
+{txt}{col 49}Root MSE{col 67}= {res}    1.2648
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}logem4 {c |}{col 14}{res}{space 2}-.6067782{col 26}{space 2} .1714745{col 37}{space 1}   -3.54{col 46}{space 3}0.001{col 54}{space 4}-.9495508{col 67}{space 3}-.2640057
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  9.34141{col 26}{space 2} .7981243{col 37}{space 1}   11.70{col 46}{space 3}0.000{col 54}{space 4} 7.745982{col 67}{space 3} 10.93684
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     22.18
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.1870
+{txt}{col 51}Root MSE{col 67}=    {res}  .9334
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:36} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .9442794{col 26}{space 2} .2004964{col 37}{space 1}    4.71{col 46}{space 3}0.000{col 54}{space 4} .5513136{col 67}{space 3} 1.337245
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1.909667{col 26}{space 2} 1.329946{col 37}{space 1}    1.44{col 46}{space 3}0.151{col 54}{space 4}  -.69698{col 67}{space 3} 4.516313
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=logem4) if basesample==1, first vce(cluster logem4)  /*coef remain same, se slightly higher*/ 
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}N. of clusters{col 67}= {res}        36
+{txt}{col 49}F({res}   2{txt},{res}     61{txt}){col 67}= {res}      8.14
+{txt}{col 49}Prob > F{col 67}= {res}    0.0007
+{txt}{col 49}R-squared{col 67}= {res}    0.2960
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2729
+{txt}{col 49}Root MSE{col 67}= {res}    1.2523
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 2.002033{col 26}{space 2} 1.472737{col 37}{space 1}    1.36{col 46}{space 3}0.179{col 54}{space 4} -.942887{col 67}{space 3} 4.946953
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.5102537{col 26}{space 2} .1900851{col 37}{space 1}   -2.68{col 46}{space 3}0.009{col 54}{space 4}-.8903524{col 67}{space 3} -.130155
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 8.529309{col 26}{space 2} 1.044686{col 37}{space 1}    8.16{col 46}{space 3}0.000{col 54}{space 4} 6.440329{col 67}{space 3} 10.61829
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     21.74
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.1024
+{txt}{col 51}Root MSE{col 67}=    {res} .98074
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:36} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .9957437{col 26}{space 2} .2713589{col 37}{space 1}    3.67{col 46}{space 3}0.000{col 54}{space 4}   .46389{col 67}{space 3} 1.527597
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2}-.6476942{col 26}{space 2} 1.327331{col 37}{space 1}   -0.49{col 46}{space 3}0.626{col 54}{space 4}-3.249216{col 67}{space 3} 1.953827
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1.691647{col 26}{space 2} 1.634153{col 37}{space 1}    1.04{col 46}{space 3}0.301{col 54}{space 4}-1.511234{col 67}{space 3} 4.894527
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude logem4{p_end}
+
+{com}. 
+. *c) restricted sample of 28 countries
+. 
+. ivregress 2sls logpgp95 (avexpr=logem4) if source0==1, first vce(cluster logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        28
+{txt}{col 49}N. of clusters{col 67}= {res}        28
+{txt}{col 49}F({res}   1{txt},{res}     26{txt}){col 67}= {res}      9.24
+{txt}{col 49}Prob > F{col 67}= {res}    0.0053
+{txt}{col 49}R-squared{col 67}= {res}    0.3239
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2979
+{txt}{col 49}Root MSE{col 67}= {res}    1.3406
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}logem4 {c |}{col 14}{res}{space 2}-.5913071{col 26}{space 2}  .194505{col 37}{space 1}   -3.04{col 46}{space 3}0.005{col 54}{space 4} -.991118{col 67}{space 3}-.1914963
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 9.442467{col 26}{space 2} .9303594{col 37}{space 1}   10.15{col 46}{space 3}0.000{col 54}{space 4} 7.530086{col 67}{space 3} 11.35485
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        28
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     17.62
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.3901
+{txt}{col 51}Root MSE{col 67}=    {res}  .8607
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:28} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .8607172{col 26}{space 2} .2050721{col 37}{space 1}    4.20{col 46}{space 3}0.000{col 54}{space 4} .4587832{col 67}{space 3} 1.262651
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.148304{col 26}{space 2} 1.413441{col 37}{space 1}    1.52{col 46}{space 3}0.129{col 54}{space 4} -.621989{col 67}{space 3} 4.918596
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=logem4) if source0==1, first vce(cluster logem4)  
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        28
+{txt}{col 49}N. of clusters{col 67}= {res}        28
+{txt}{col 49}F({res}   2{txt},{res}     25{txt}){col 67}= {res}      9.26
+{txt}{col 49}Prob > F{col 67}= {res}    0.0010
+{txt}{col 49}R-squared{col 67}= {res}    0.3990
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3510
+{txt}{col 49}Root MSE{col 67}= {res}    1.2890
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 3.337788{col 26}{space 2} 1.630609{col 37}{space 1}    2.05{col 46}{space 3}0.051{col 54}{space 4}-.0205141{col 67}{space 3} 6.696091
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.4183464{col 26}{space 2} .2200924{col 37}{space 1}   -1.90{col 46}{space 3}0.069{col 54}{space 4}-.8716351{col 67}{space 3} .0349423
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 7.931682{col 26}{space 2} 1.231779{col 37}{space 1}    6.44{col 46}{space 3}0.000{col 54}{space 4} 5.394784{col 67}{space 3} 10.46858
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        28
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     34.50
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.4269
+{txt}{col 51}Root MSE{col 67}=    {res} .83437
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:28} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2}  .832605{col 26}{space 2} .3256667{col 37}{space 1}    2.56{col 46}{space 3}0.011{col 54}{space 4}   .19431{col 67}{space 3}   1.4709
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} .3207883{col 26}{space 2} 1.831744{col 37}{space 1}    0.18{col 46}{space 3}0.861{col 54}{space 4}-3.269363{col 67}{space 3}  3.91094
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.268553{col 26}{space 2} 1.878884{col 37}{space 1}    1.21{col 46}{space 3}0.227{col 54}{space 4}-1.413993{col 67}{space 3} 5.951099
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude logem4{p_end}
+
+{com}. 
+. *comment: weak instrument leading to small se.
+. 
+. *d) controlling for campaign and slave
+. 
+. *64 countries
+. ivregress 2sls logpgp95 campaign slave (avexpr=logem4) if basesample==1, first vce(cluster logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}N. of clusters{col 67}= {res}        36
+{txt}{col 49}F({res}   3{txt},{res}     60{txt}){col 67}= {res}      6.50
+{txt}{col 49}Prob > F{col 67}= {res}    0.0007
+{txt}{col 49}R-squared{col 67}= {res}    0.3294
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2959
+{txt}{col 49}Root MSE{col 67}= {res}    1.2323
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}campaign {c |}{col 14}{res}{space 2}  -.74074{col 26}{space 2} .4631023{col 37}{space 1}   -1.60{col 46}{space 3}0.115{col 54}{space 4}-1.667083{col 67}{space 3} .1856026
+{txt}{space 7}slave {c |}{col 14}{res}{space 2}-1.563443{col 26}{space 2} .8801866{col 37}{space 1}   -1.78{col 46}{space 3}0.081{col 54}{space 4}-3.324078{col 67}{space 3} .1971928
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.4348176{col 26}{space 2} .1841283{col 37}{space 1}   -2.36{col 46}{space 3}0.021{col 54}{space 4} -.803129{col 67}{space 3}-.0665061
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  9.12441{col 26}{space 2} .7310526{col 37}{space 1}   12.48{col 46}{space 3}0.000{col 54}{space 4} 7.662087{col 67}{space 3} 10.58673
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}3{txt}){col 67}= {res}     16.82
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0008
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} 1.1102
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:36} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} 1.139976{col 26}{space 2} .3942607{col 37}{space 1}    2.89{col 46}{space 3}0.004{col 54}{space 4}  .367239{col 67}{space 3} 1.912713
+{txt}{space 4}campaign {c |}{col 14}{res}{space 2} .5706608{col 26}{space 2} .6267346{col 37}{space 1}    0.91{col 46}{space 3}0.363{col 54}{space 4}-.6577165{col 67}{space 3} 1.799038
+{txt}{space 7}slave {c |}{col 14}{res}{space 2}  .739502{col 26}{space 2} 1.406032{col 37}{space 1}    0.53{col 46}{space 3}0.599{col 54}{space 4}-2.016271{col 67}{space 3} 3.495275
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .2138674{col 26}{space 2} 3.034614{col 37}{space 1}    0.07{col 46}{space 3}0.944{col 54}{space 4}-5.733867{col 67}{space 3} 6.161602
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}campaign slave logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude campaign slave (avexpr=logem4) if basesample==1, first vce(cluster logem4) 
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}N. of clusters{col 67}= {res}        36
+{txt}{col 49}F({res}   4{txt},{res}     59{txt}){col 67}= {res}      5.35
+{txt}{col 49}Prob > F{col 67}= {res}    0.0010
+{txt}{col 49}R-squared{col 67}= {res}    0.3433
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.2988
+{txt}{col 49}Root MSE{col 67}= {res}    1.2298
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 1.526165{col 26}{space 2} 1.305671{col 37}{space 1}    1.17{col 46}{space 3}0.247{col 54}{space 4}-1.086476{col 67}{space 3} 4.138806
+{txt}{space 4}campaign {c |}{col 14}{res}{space 2}-.7267827{col 26}{space 2} .4651988{col 37}{space 1}   -1.56{col 46}{space 3}0.124{col 54}{space 4}-1.657643{col 67}{space 3} .2040781
+{txt}{space 7}slave {c |}{col 14}{res}{space 2}-1.345899{col 26}{space 2} .8683574{col 37}{space 1}   -1.55{col 46}{space 3}0.127{col 54}{space 4}-3.083478{col 67}{space 3} .3916805
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.3700315{col 26}{space 2} .2008464{col 37}{space 1}   -1.84{col 46}{space 3}0.070{col 54}{space 4}-.7719242{col 67}{space 3} .0318612
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 8.523543{col 26}{space 2} .9353591{col 37}{space 1}    9.11{col 46}{space 3}0.000{col 54}{space 4} 6.651894{col 67}{space 3} 10.39519
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}4{txt}){col 67}= {res}     15.02
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0047
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} 1.2004
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:36} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} 1.232085{col 26}{space 2} .5400936{col 37}{space 1}    2.28{col 46}{space 3}0.023{col 54}{space 4} .1735208{col 67}{space 3} 2.290649
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} -.943474{col 26}{space 2}  1.62832{col 37}{space 1}   -0.58{col 46}{space 3}0.562{col 54}{space 4}-4.134923{col 67}{space 3} 2.247975
+{txt}{space 4}campaign {c |}{col 14}{res}{space 2} .6302613{col 26}{space 2} .7425568{col 37}{space 1}    0.85{col 46}{space 3}0.396{col 54}{space 4}-.8251233{col 67}{space 3} 2.085646
+{txt}{space 7}slave {c |}{col 14}{res}{space 2} .7490238{col 26}{space 2} 1.512844{col 37}{space 1}    0.50{col 46}{space 3}0.621{col 54}{space 4}-2.216096{col 67}{space 3} 3.714144
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.2551185{col 26}{space 2} 3.858135{col 37}{space 1}   -0.07{col 46}{space 3}0.947{col 54}{space 4}-7.816924{col 67}{space 3} 7.306687
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude campaign slave logem4{p_end}
+
+{com}.   
+.  
+. *28 countries
+. ivregress 2sls logpgp95 campaign slave (avexpr=logem4) if source0==1, first vce(cluster logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        28
+{txt}{col 49}N. of clusters{col 67}= {res}        28
+{txt}{col 49}F({res}   3{txt},{res}     24{txt}){col 67}= {res}      7.16
+{txt}{col 49}Prob > F{col 67}= {res}    0.0013
+{txt}{col 49}R-squared{col 67}= {res}    0.4334
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3625
+{txt}{col 49}Root MSE{col 67}= {res}    1.2774
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}campaign {c |}{col 14}{res}{space 2}-1.154601{col 26}{space 2} .5677193{col 37}{space 1}   -2.03{col 46}{space 3}0.053{col 54}{space 4}-2.326316{col 67}{space 3} .0171137
+{txt}{space 7}slave {c |}{col 14}{res}{space 2}-1.879784{col 26}{space 2} .6724152{col 37}{space 1}   -2.80{col 46}{space 3}0.010{col 54}{space 4} -3.26758{col 67}{space 3}-.4919868
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.3531366{col 26}{space 2} .2205713{col 37}{space 1}   -1.60{col 46}{space 3}0.122{col 54}{space 4}-.8083734{col 67}{space 3} .1021001
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  9.08986{col 26}{space 2}  .907582{col 37}{space 1}   10.02{col 46}{space 3}0.000{col 54}{space 4} 7.216703{col 67}{space 3} 10.96302
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        28
+{txt}{col 1}{col 51}Wald chi2({res}3{txt}){col 67}= {res}     15.84
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0012
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.1814
+{txt}{col 51}Root MSE{col 67}=    {res} .99714
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:28} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} 1.031311{col 26}{space 2} .4843618{col 37}{space 1}    2.13{col 46}{space 3}0.033{col 54}{space 4} .0819795{col 67}{space 3} 1.980643
+{txt}{space 4}campaign {c |}{col 14}{res}{space 2} .4653643{col 26}{space 2} .8495645{col 37}{space 1}    0.55{col 46}{space 3}0.584{col 54}{space 4}-1.199752{col 67}{space 3}  2.13048
+{txt}{space 7}slave {c |}{col 14}{res}{space 2} 1.023556{col 26}{space 2} 1.366401{col 37}{space 1}    0.75{col 46}{space 3}0.454{col 54}{space 4}-1.654541{col 67}{space 3} 3.701654
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .6832427{col 26}{space 2} 3.789781{col 37}{space 1}    0.18{col 46}{space 3}0.857{col 54}{space 4}-6.744591{col 67}{space 3} 8.111077
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}campaign slave logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude campaign slave (avexpr=logem4) if source0==1, first vce(cluster logem4) 
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        28
+{txt}{col 49}N. of clusters{col 67}= {res}        28
+{txt}{col 49}F({res}   4{txt},{res}     23{txt}){col 67}= {res}      6.80
+{txt}{col 49}Prob > F{col 67}= {res}    0.0009
+{txt}{col 49}R-squared{col 67}= {res}    0.4858
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3964
+{txt}{col 49}Root MSE{col 67}= {res}    1.2430
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2}  3.00119{col 26}{space 2} 1.615237{col 37}{space 1}    1.86{col 46}{space 3}0.076{col 54}{space 4}-.3401819{col 67}{space 3} 6.342563
+{txt}{space 4}campaign {c |}{col 14}{res}{space 2}-1.167069{col 26}{space 2} .5208272{col 37}{space 1}   -2.24{col 46}{space 3}0.035{col 54}{space 4}-2.244482{col 67}{space 3}-.0896554
+{txt}{space 7}slave {c |}{col 14}{res}{space 2}-1.330653{col 26}{space 2} .6811929{col 37}{space 1}   -1.95{col 46}{space 3}0.063{col 54}{space 4}-2.739808{col 67}{space 3} .0785019
+{txt}{space 6}logem4 {c |}{col 14}{res}{space 2}-.2054932{col 26}{space 2} .2515086{col 37}{space 1}   -0.82{col 46}{space 3}0.422{col 54}{space 4}-.7257783{col 67}{space 3}  .314792
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 7.735435{col 26}{space 2}  1.24186{col 37}{space 1}    6.23{col 46}{space 3}0.000{col 54}{space 4} 5.166451{col 67}{space 3} 10.30442
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        28
+{txt}{col 1}{col 51}Wald chi2({res}4{txt}){col 67}= {res}     25.40
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.2463
+{txt}{col 51}Root MSE{col 67}=    {res} .95683
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:28} clusters in logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .9889782{col 26}{space 2} .9271776{col 37}{space 1}    1.07{col 46}{space 3}0.286{col 54}{space 4}-.8282564{col 67}{space 3} 2.806213
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} .3038789{col 26}{space 2} 3.639608{col 37}{space 1}    0.08{col 46}{space 3}0.933{col 54}{space 4}-6.829622{col 67}{space 3}  7.43738
+{txt}{space 4}campaign {c |}{col 14}{res}{space 2} .4152243{col 26}{space 2} 1.342565{col 37}{space 1}    0.31{col 46}{space 3}0.757{col 54}{space 4}-2.216155{col 67}{space 3} 3.046604
+{txt}{space 7}slave {c |}{col 14}{res}{space 2} .9995806{col 26}{space 2} 1.531903{col 37}{space 1}    0.65{col 46}{space 3}0.514{col 54}{space 4}-2.002895{col 67}{space 3} 4.002056
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .9309039{col 26}{space 2}  6.30798{col 37}{space 1}    0.15{col 46}{space 3}0.883{col 54}{space 4}-11.43251{col 67}{space 3} 13.29432
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude campaign slave logem4{p_end}
+
+{com}.  
+. 
+. 
+. //AJR(2012) reply//
+. 
+. *1.a)
+. 
+. 
+. *b) capping at 250
+. 
+. gen capped_level = mortality_level 
+{txt}(75 missing values generated)
+
+{com}. replace capped_level =250 if mortality_level>250
+{txt}(98 real changes made)
+
+{com}. replace capped_level = .  if mortality_level==.
+{txt}(75 real changes made, 75 to missing)
+
+{com}. 
+. gen new_logem4 = ln(capped_level)
+{txt}(75 missing values generated)
+
+{com}. 
+. *64 countries
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if basesample==1, first vce(cluster new_logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}N. of clusters{col 67}= {res}        29
+{txt}{col 49}F({res}   1{txt},{res}     62{txt}){col 67}= {res}     23.79
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.3576
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3473
+{txt}{col 49}Root MSE{col 67}= {res}    1.1865
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 2}new_logem4 {c |}{col 14}{res}{space 2}-.9196075{col 26}{space 2} .1885572{col 37}{space 1}   -4.88{col 46}{space 3}0.000{col 54}{space 4}-1.296528{col 67}{space 3} -.542687
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 10.61871{col 26}{space 2}  .824523{col 37}{space 1}   12.88{col 46}{space 3}0.000{col 54}{space 4} 8.970514{col 67}{space 3} 12.26691
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     21.74
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.3555
+{txt}{col 51}Root MSE{col 67}=    {res} .83106
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:29} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .8273708{col 26}{space 2} .1774448{col 37}{space 1}    4.66{col 46}{space 3}0.000{col 54}{space 4} .4795853{col 67}{space 3} 1.175156
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.671399{col 26}{space 2} 1.237431{col 37}{space 1}    2.16{col 46}{space 3}0.031{col 54}{space 4} .2460785{col 67}{space 3}  5.09672
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}new_logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if basesample==1, first vce(cluster new_logem4) 
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        64
+{txt}{col 49}N. of clusters{col 67}= {res}        29
+{txt}{col 49}F({res}   2{txt},{res}     61{txt}){col 67}= {res}     12.75
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.3636
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3427
+{txt}{col 49}Root MSE{col 67}= {res}    1.1907
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 1.002943{col 26}{space 2} 1.373739{col 37}{space 1}    0.73{col 46}{space 3}0.468{col 54}{space 4}-1.744018{col 67}{space 3} 3.749905
+{txt}{space 2}new_logem4 {c |}{col 14}{res}{space 2}-.8461669{col 26}{space 2}  .177687{col 37}{space 1}   -4.76{col 46}{space 3}0.000{col 54}{space 4}-1.201474{col 67}{space 3}-.4908598
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  10.1094{col 26}{space 2} .9126085{col 37}{space 1}   11.08{col 46}{space 3}0.000{col 54}{space 4} 8.284522{col 67}{space 3} 11.93427
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        64
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     22.04
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.3645
+{txt}{col 51}Root MSE{col 67}=    {res} .82524
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:29} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .8199626{col 26}{space 2} .1822502{col 37}{space 1}    4.50{col 46}{space 3}0.000{col 54}{space 4} .4627587{col 67}{space 3} 1.177167
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} .0930361{col 26}{space 2} .7721508{col 37}{space 1}    0.12{col 46}{space 3}0.904{col 54}{space 4}-1.420352{col 67}{space 3} 1.606424
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.702818{col 26}{space 2} 1.233753{col 37}{space 1}    2.19{col 46}{space 3}0.028{col 54}{space 4} .2847077{col 67}{space 3} 5.120929
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude new_logem4{p_end}
+
+{com}. 
+. *28 countries
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if source0==1, first vce(cluster new_logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        28
+{txt}{col 49}N. of clusters{col 67}= {res}        23
+{txt}{col 49}F({res}   1{txt},{res}     26{txt}){col 67}= {res}     22.31
+{txt}{col 49}Prob > F{col 67}= {res}    0.0001
+{txt}{col 49}R-squared{col 67}= {res}    0.3969
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3737
+{txt}{col 49}Root MSE{col 67}= {res}    1.2662
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 2}new_logem4 {c |}{col 14}{res}{space 2} -.949344{col 26}{space 2} .2010062{col 37}{space 1}   -4.72{col 46}{space 3}0.000{col 54}{space 4}-1.362518{col 67}{space 3}-.5361699
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  10.8085{col 26}{space 2} .9786168{col 37}{space 1}   11.04{col 46}{space 3}0.000{col 54}{space 4} 8.796922{col 67}{space 3} 12.82007
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        28
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     36.59
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.4513
+{txt}{col 51}Root MSE{col 67}=    {res}  .8164
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:23} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .8093879{col 26}{space 2} .1338051{col 37}{space 1}    6.05{col 46}{space 3}0.000{col 54}{space 4} .5471348{col 67}{space 3} 1.071641
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  2.49211{col 26}{space 2} .8945916{col 37}{space 1}    2.79{col 46}{space 3}0.005{col 54}{space 4} .7387425{col 67}{space 3} 4.245477
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}new_logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if source0==1, first vce(cluster new_logem4)  
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        28
+{txt}{col 49}N. of clusters{col 67}= {res}        23
+{txt}{col 49}F({res}   2{txt},{res}     25{txt}){col 67}= {res}     14.68
+{txt}{col 49}Prob > F{col 67}= {res}    0.0001
+{txt}{col 49}R-squared{col 67}= {res}    0.4278
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3820
+{txt}{col 49}Root MSE{col 67}= {res}    1.2578
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2}  2.33603{col 26}{space 2} 1.597987{col 37}{space 1}    1.46{col 46}{space 3}0.156{col 54}{space 4}-.9550862{col 67}{space 3} 5.627146
+{txt}{space 2}new_logem4 {c |}{col 14}{res}{space 2}-.7387523{col 26}{space 2} .2121542{col 37}{space 1}   -3.48{col 46}{space 3}0.002{col 54}{space 4}-1.175692{col 67}{space 3}-.3018125
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 9.401152{col 26}{space 2} 1.244346{col 37}{space 1}    7.56{col 46}{space 3}0.000{col 54}{space 4} 6.838374{col 67}{space 3} 11.96393
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        28
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     42.20
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.5489
+{txt}{col 51}Root MSE{col 67}=    {res}  .7402
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:23} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .7199247{col 26}{space 2} .1865461{col 37}{space 1}    3.86{col 46}{space 3}0.000{col 54}{space 4}  .354301{col 67}{space 3} 1.085548
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2}  .942118{col 26}{space 2} 1.159262{col 37}{space 1}    0.81{col 46}{space 3}0.416{col 54}{space 4}-1.329993{col 67}{space 3} 3.214229
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.891493{col 26}{space 2}  1.07005{col 37}{space 1}    2.70{col 46}{space 3}0.007{col 54}{space 4} .7942337{col 67}{space 3} 4.988751
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude new_logem4{p_end}
+
+{com}. 
+. 
+. *c) Gambia's high institutional score and high mortality level makes it weird. 
+. 
+. 
+. *d)dropping Gambia
+. 
+. *64 countries
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if basesample==1 & shortnam!= "GMB", first vce(cluster new_logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        63
+{txt}{col 49}N. of clusters{col 67}= {res}        29
+{txt}{col 49}F({res}   1{txt},{res}     61{txt}){col 67}= {res}     31.23
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.4007
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3909
+{txt}{col 49}Root MSE{col 67}= {res}    1.1420
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 2}new_logem4 {c |}{col 14}{res}{space 2}-.9718155{col 26}{space 2} .1739019{col 37}{space 1}   -5.59{col 46}{space 3}0.000{col 54}{space 4}-1.319554{col 67}{space 3}-.6240771
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 10.80742{col 26}{space 2} .7739803{col 37}{space 1}   13.96{col 46}{space 3}0.000{col 54}{space 4} 9.259747{col 67}{space 3} 12.35509
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        63
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     28.08
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.4696
+{txt}{col 51}Root MSE{col 67}=    {res} .75635
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:29} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .7832457{col 26}{space 2} .1478036{col 37}{space 1}    5.30{col 46}{space 3}0.000{col 54}{space 4} .4935559{col 67}{space 3} 1.072936
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.993284{col 26}{space 2} 1.023558{col 37}{space 1}    2.92{col 46}{space 3}0.003{col 54}{space 4} .9871463{col 67}{space 3} 4.999422
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}new_logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if basesample==1 & shortnam!= "GMB", first vce(cluster new_logem4) 
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        63
+{txt}{col 49}N. of clusters{col 67}= {res}        29
+{txt}{col 49}F({res}   2{txt},{res}     60{txt}){col 67}= {res}     17.36
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.4050
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.3852
+{txt}{col 49}Root MSE{col 67}= {res}    1.1473
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} .8492021{col 26}{space 2} 1.413655{col 37}{space 1}    0.60{col 46}{space 3}0.550{col 54}{space 4} -1.97853{col 67}{space 3} 3.676934
+{txt}{space 2}new_logem4 {c |}{col 14}{res}{space 2}-.9089171{col 26}{space 2} .1635978{col 37}{space 1}   -5.56{col 46}{space 3}0.000{col 54}{space 4}-1.236162{col 67}{space 3}-.5816727
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 10.37359{col 26}{space 2} .8793556{col 37}{space 1}   11.80{col 46}{space 3}0.000{col 54}{space 4} 8.614613{col 67}{space 3} 12.13256
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        63
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     29.34
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.4890
+{txt}{col 51}Root MSE{col 67}=    {res} .74235
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:29} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .7627389{col 26}{space 2} .1454504{col 37}{space 1}    5.24{col 46}{space 3}0.000{col 54}{space 4} .4776615{col 67}{space 3} 1.047816
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} .2690619{col 26}{space 2} .7223996{col 37}{space 1}    0.37{col 46}{space 3}0.710{col 54}{space 4}-1.146815{col 67}{space 3} 1.684939
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.077454{col 26}{space 2} .9847711{col 37}{space 1}    3.13{col 46}{space 3}0.002{col 54}{space 4} 1.147338{col 67}{space 3}  5.00757
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude new_logem4{p_end}
+
+{com}. 
+. *28 countries
+. 
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if source0==1 & shortnam!= "GMB", first vce(cluster new_logem4)
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        27
+{txt}{col 49}N. of clusters{col 67}= {res}        23
+{txt}{col 49}F({res}   1{txt},{res}     25{txt}){col 67}= {res}     28.21
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.4935
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.4733
+{txt}{col 49}Root MSE{col 67}= {res}    1.1611
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 2}new_logem4 {c |}{col 14}{res}{space 2}-1.064791{col 26}{space 2} .2004635{col 37}{space 1}   -5.31{col 46}{space 3}0.000{col 54}{space 4}-1.477654{col 67}{space 3}-.6519289
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 11.20304{col 26}{space 2} .9664227{col 37}{space 1}   11.59{col 46}{space 3}0.000{col 54}{space 4} 9.212655{col 67}{space 3} 13.19343
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        27
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     54.58
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.6162
+{txt}{col 51}Root MSE{col 67}=    {res} .69098
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:23} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .7326364{col 26}{space 2} .0991679{col 37}{space 1}    7.39{col 46}{space 3}0.000{col 54}{space 4} .5382709{col 67}{space 3}  .927002
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.072666{col 26}{space 2} .6274115{col 37}{space 1}    4.90{col 46}{space 3}0.000{col 54}{space 4} 1.842962{col 67}{space 3}  4.30237
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}new_logem4{p_end}
+
+{com}. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if source0==1 & shortnam!= "GMB", first vce(cluster new_logem4)  
+{res}
+{txt}First-stage regressions
+{hline 23}
+{res}
+{txt}{col 49}Number of obs{col 67}= {res}        27
+{txt}{col 49}N. of clusters{col 67}= {res}        23
+{txt}{col 49}F({res}   2{txt},{res}     24{txt}){col 67}= {res}     17.15
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.5174
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.4772
+{txt}{col 49}Root MSE{col 67}= {res}    1.1568
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      avexpr{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}latitude {c |}{col 14}{res}{space 2} 2.022418{col 26}{space 2} 1.672164{col 37}{space 1}    1.21{col 46}{space 3}0.238{col 54}{space 4}-1.428759{col 67}{space 3} 5.473595
+{txt}{space 2}new_logem4 {c |}{col 14}{res}{space 2}-.8787694{col 26}{space 2} .2423847{col 37}{space 1}   -3.63{col 46}{space 3}0.001{col 54}{space 4}-1.379027{col 67}{space 3} -.378512
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 9.971979{col 26}{space 2} 1.367473{col 37}{space 1}    7.29{col 46}{space 3}0.000{col 54}{space 4} 7.149653{col 67}{space 3} 12.79431
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}        27
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}     65.87
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.6955
+{txt}{col 51}Root MSE{col 67}=    {res} .61547
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:23} clusters in new_logem4)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    logpgp95{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}avexpr {c |}{col 14}{res}{space 2} .6151265{col 26}{space 2} .1546527{col 37}{space 1}    3.98{col 46}{space 3}0.000{col 54}{space 4} .3120128{col 67}{space 3} .9182403
+{txt}{space 4}latitude {c |}{col 14}{res}{space 2} 1.360335{col 26}{space 2} 1.138354{col 37}{space 1}    1.20{col 46}{space 3}0.232{col 54}{space 4}-.8707969{col 67}{space 3} 3.591467
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.561088{col 26}{space 2} .8069274{col 37}{space 1}    4.41{col 46}{space 3}0.000{col 54}{space 4} 1.979539{col 67}{space 3} 5.142636
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 28}Instrumented:{space 2}avexpr{p_end}
+{p 0 15 28}Instruments:{space 3}latitude new_logem4{p_end}
+
+{com}. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+{txt}end of do-file
+
+{com}. exit, clear
