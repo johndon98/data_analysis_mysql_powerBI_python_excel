@@ -1,0 +1,1264 @@
+--------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\johnd\OneDrive\Desktop\sose21\Dev\ajr(2001)\code\AJR2001_replication_logfile.log
+  log type:  text
+ opened on:  27 Jan 2024, 15:48:05
+
+. set more off
+
+.  
+. 
+. *load data
+. use ".\data\AJR2001_replication.dta", clear
+
+. 
+. *3.a)
+. *graph (fig.1 in AJR)
+. 
+. twoway (scatter logpgp95 logem4, mstyle(none) mlabel(shortnam) mlabgap(-3) ysc(r(4 10))ylabel(#4))|| (
+> lfit logpgp95 logem4) if excolony==1
+
+. 
+. *Comments: strong negative relationship, colonies where europeans faced higher mortality rates have lo
+> wer gdp per capita today.
+. *can spot same values for many countries, imputed from neighbours.
+. 
+. *4.a)
+. 
+. gen mortality_level = exp(logem4)
+(75 missing values generated)
+
+. summarize mortality_level
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+mortality_~l |         87    222.4782    411.4632       2.55       2940
+
+. 
+. /*b) Reasons for extremely high mortality rates: measurement errors, associated with african nations h
+> ence could be due to their disease environment like malaria,
+> data could have been collected during an epidemic, soldiers are replaced so it gets high if many die q
+> uickly*/
+. 
+. /*5.a) Their focus is on how property rights affect economic performance. For this data on investment 
+> risk maybe a reasonable proxy.
+> They argue that expropriation risk is related to all other institutional features (footnote.3), 
+> datasource specializes in assesing risk for foreign investors(not sure how this is capturing true qual
+> ity of institutions as a whole in a country)*/
+. 
+. 
+. *b)graph(fig.2 AJR) 
+. 
+. graph twoway (scatter logpgp95 avexpr, mstyle(none) mlabel(shortnam) mlabgap(-3) ysc(r(4 10)) ylabel(#
+> 4))|| (lfit logpgp95 avexpr) if excolony==1
+
+. 
+. *Comment: countries with higher avg. protection against expropriation, have higher gdp per capita. 
+. 
+. *c)column 1, table 2(AJR)
+. 
+. reg logpgp95 avexpr if excolony!=.  /*SUR is missing, excluding that replicates result*/
+
+      Source |       SS           df       MS      Number of obs   =       110
+-------------+----------------------------------   F(1, 108)       =    173.60
+       Model |  88.9819449         1  88.9819449   Prob > F        =    0.0000
+    Residual |  55.3576891       108  .512571195   R-squared       =    0.6165
+-------------+----------------------------------   Adj R-squared   =    0.6129
+       Total |  144.339634       109  1.32421683   Root MSE        =    .71594
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .5393153   .0409326    13.18   0.000     .4581799    .6204508
+       _cons |   4.564146   .3037032    15.03   0.000     3.962153    5.166138
+------------------------------------------------------------------------------
+
+. 
+. *d)i)basesample
+. 
+. gen basesample = 0
+
+. replace basesample = 1 if excolony==1 & logem4!=. & avexpr!=. & logpgp95!=.
+(64 real changes made)
+
+. 
+. *ii)
+. 
+. reg logpgp95 avexpr if basesample==1 
+
+      Source |       SS           df       MS      Number of obs   =        64
+-------------+----------------------------------   F(1, 62)        =     72.82
+       Model |  37.0420118         1  37.0420118   Prob > F        =    0.0000
+    Residual |  31.5397067        62  .508704946   R-squared       =    0.5401
+-------------+----------------------------------   Adj R-squared   =    0.5327
+       Total |  68.5817185        63  1.08859871   Root MSE        =    .71324
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |    .522107    .061185     8.53   0.000     .3997999    .6444142
+       _cons |   4.660383   .4085062    11.41   0.000     3.843791    5.476976
+------------------------------------------------------------------------------
+
+. 
+. *Comment: results similar to the one using whole world sample.
+. 
+. *iii) MEX UGA
+. 
+. predict gdp_hat if e(sample)
+(option xb assumed; fitted values)
+(98 missing values generated)
+
+. 
+. list shortnam avexpr logpgp95 gdp_hat if shortnam=="MEX"| shortnam=="UGA"  /*not sure if this is the r
+> ight approach*/
+
+     +-------------------------------------------+
+     | shortnam     avexpr   logpgp95    gdp_hat |
+     |-------------------------------------------|
+ 93. |      MEX        7.5   8.943768   8.576186 |
+150. |      UGA   4.454545   6.966024   6.986133 |
+     +-------------------------------------------+
+
+. 
+. *predicted difference in log points(gdp)
+. display 100*(8.576186) - 100*(6.986133)
+159.0053
+
+. display exp(8.576186 - 6.986133)-1       /*approx. 4 fold*/
+3.9040088
+
+. 
+. *actual difference in log points
+. display 100*(8.943768) - 100*(6.966024)
+197.7744
+
+. display exp(8.943768 - 6.966024) -1      /*approx. 6 fold*/     
+6.2264218
+
+. 
+. 
+. *display exp((delta x)*0.94) - 1        /* exact %change in gdp ; display exp(difference in log points
+> )-1 should give same answer*/
+. *display exp((7.5 - 4.45)*0.52) - 1     /* 3.87, approx. 4 fold increase*/
+. 
+. 
+. *6)
+. *a) graph (fig.3 AJR)
+. graph twoway (scatter avexpr logem4, mstyle(none) mlabel(shortnam) mlabgap(-3))|| (lfit avexpr logem4)
+>  if excolony==1
+
+. 
+. *Comment: Negative relationship. Higher mortality rates associated with lower protection against expro
+> priation/worse institutions today.
+. 
+. *b)
+. 
+. *panel A Table 3
+. gen eurodes = euro1900/100
+(9 missing values generated)
+
+. 
+. foreach i in cons00a democ00a eurodes logem4{
+  2. reg avexpr `i' if basesample==1
+  3. outreg2 using ".\output\table3.xlsx", replace dec(2) nocons
+  4. }
+
+      Source |       SS           df       MS      Number of obs   =        60
+-------------+----------------------------------   F(1, 58)        =     14.80
+       Model |  26.6658113         1  26.6658113   Prob > F        =    0.0003
+    Residual |  104.517425        58  1.80202456   R-squared       =    0.2033
+-------------+----------------------------------   Adj R-squared   =    0.1895
+       Total |  131.183236        59  2.22344468   Root MSE        =    1.3424
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     cons00a |   .3182682   .0827363     3.85   0.000     .1526534    .4838829
+       _cons |   5.755866   .2543385    22.63   0.000     5.246753     6.26498
+------------------------------------------------------------------------------
+.\output\table3.xlsx
+dir : seeout
+
+      Source |       SS           df       MS      Number of obs   =        59
+-------------+----------------------------------   F(1, 57)        =     17.77
+       Model |  30.6559392         1  30.6559392   Prob > F        =    0.0001
+    Residual |  98.3238783        57  1.72498032   R-squared       =    0.2377
+-------------+----------------------------------   Adj R-squared   =    0.2243
+       Total |  128.979817        58  2.22378996   Root MSE        =    1.3134
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    democ00a |    .241985   .0574015     4.22   0.000     .1270405    .3569295
+       _cons |   6.099079   .1953024    31.23   0.000     5.707992    6.490165
+------------------------------------------------------------------------------
+.\output\table3.xlsx
+dir : seeout
+
+      Source |       SS           df       MS      Number of obs   =        63
+-------------+----------------------------------   F(1, 61)        =     25.97
+       Model |  40.4215257         1  40.4215257   Prob > F        =    0.0000
+    Residual |  94.9502343        61  1.55656122   R-squared       =    0.2986
+-------------+----------------------------------   Adj R-squared   =    0.2871
+       Total |   135.37176        62  2.18341548   Root MSE        =    1.2476
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     eurodes |   3.162298    .620554     5.10   0.000     1.921424    4.403173
+       _cons |   5.992639   .1865202    32.13   0.000     5.619669    6.365609
+------------------------------------------------------------------------------
+.\output\table3.xlsx
+dir : seeout
+
+      Source |       SS           df       MS      Number of obs   =        64
+-------------+----------------------------------   F(1, 62)        =     22.95
+       Model |  36.7071397         1  36.7071397   Prob > F        =    0.0000
+    Residual |  99.1791012        62  1.59966292   R-squared       =    0.2701
+-------------+----------------------------------   Adj R-squared   =    0.2584
+       Total |  135.886241        63  2.15692446   Root MSE        =    1.2648
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      logem4 |  -.6067782   .1266686    -4.79   0.000    -.8599852   -.3535713
+       _cons |    9.34141   .6107178    15.30   0.000     8.120603    10.56222
+------------------------------------------------------------------------------
+.\output\table3.xlsx
+dir : seeout
+
+. reg avexpr cons1 indtime if basesample==1
+
+      Source |       SS           df       MS      Number of obs   =        60
+-------------+----------------------------------   F(2, 57)        =      6.67
+       Model |  24.8802849         2  12.4401425   Prob > F        =    0.0025
+    Residual |  106.302951        57  1.86496405   R-squared       =    0.1897
+-------------+----------------------------------   Adj R-squared   =    0.1612
+       Total |  131.183236        59  2.22344468   Root MSE        =    1.3656
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       cons1 |   .2492712   .0788095     3.16   0.003     .0914578    .4070845
+     indtime |   .0081955   .0029455     2.78   0.007     .0022972    .0140939
+       _cons |   4.889853   .4691272    10.42   0.000     3.950442    5.829264
+------------------------------------------------------------------------------
+
+. outreg2
+  outreg2 using `".\output\table3.xlsx"', dec(2) nocons
+.\output\table3.xlsx
+dir : seeout
+
+. 
+. *Comment: association between early and present-day institutions. same holds for democracy index.(basi
+> cally trying to prove persistence of institutions)
+. 
+. 
+. *c)i)
+. *2sls
+. 
+. ivregress 2sls logpgp95 (avexp=logem4) if basesample==1, first
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                F(   1,     62)   =      22.95
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2701
+                                                Adj R-squared     =     0.2584
+                                                Root MSE          =     1.2648
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      logem4 |  -.6067782   .1266686    -4.79   0.000    -.8599852   -.3535713
+       _cons |    9.34141   .6107178    15.30   0.000     8.120603    10.56222
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(1)    =      37.57
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.1870
+                                                  Root MSE        =      .9334
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .9442794   .1540603     6.13   0.000     .6423267    1.246232
+       _cons |   1.909667   1.010557     1.89   0.059    -.0709894    3.890323
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   logem4
+
+. *comment: first-stage provides evidence for mortality as strong instrument for institutions. 
+. *2nd stage - institutions have strong causal effect on economic performance.
+. 
+. 
+. *c)ii) MEX UGA
+. predict iv_hat if e(sample)
+(option xb assumed; fitted values)
+(98 missing values generated)
+
+. 
+. list shortnam logpgp95 avexpr gdp_hat iv_hat if shortnam=="UGA"| shortnam=="MEX"
+
+     +------------------------------------------------------+
+     | shortnam   logpgp95     avexpr    gdp_hat     iv_hat |
+     |------------------------------------------------------|
+ 93. |      MEX   8.943768        7.5   8.576186   8.991762 |
+150. |      UGA   6.966024   4.454545   6.986133   6.116002 |
+     +------------------------------------------------------+
+
+. 
+. *predicted difference in log points(gdp)
+. display 100*(8.991762)-100*(6.116002)
+287.576
+
+. display exp(8.991762 - 6.116002)-1
+16.738901
+
+. *actual difference
+. display exp(8.943768 - 6.966024) -1           /*approx. 6 fold difference*/
+6.2264218
+
+. 
+. 
+. /* exact %change in gdp*/
+. display exp((7.5 - 4.454545)*0.94) - 1       /* approx. 16 fold; is it supposed to be this high? */
+16.509222
+
+. 
+. *iii)
+. 
+. 
+. 
+. 
+. *d)
+. *i)original from Hall and Jones (1999)
+. reg logpgp95 latitude 
+
+      Source |       SS           df       MS      Number of obs   =        64
+-------------+----------------------------------   F(1, 62)        =     15.85
+       Model |  13.9610896         1  13.9610896   Prob > F        =    0.0002
+    Residual |  54.6206289        62  .880977886   R-squared       =    0.2036
+-------------+----------------------------------   Adj R-squared   =    0.1907
+       Total |  68.5817185        63  1.08859871   Root MSE        =     .9386
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   3.548306   .8913411     3.98   0.000     1.766541    5.330072
+       _cons |   7.419611   .1995609    37.18   0.000     7.020694    7.818527
+------------------------------------------------------------------------------
+
+. 
+. pwcorr latitude avexpr, sig
+
+             | latitude   avexpr
+-------------+------------------
+    latitude |   1.0000 
+             |
+             |
+      avexpr |   0.3807   1.0000 
+             |   0.0019
+             |
+
+. 
+. reg logpgp95 avexpr latitude 
+
+      Source |       SS           df       MS      Number of obs   =        64
+-------------+----------------------------------   F(2, 61)        =     41.18
+       Model |  39.3990028         2  19.6995014   Prob > F        =    0.0000
+    Residual |  29.1827157        61  .478405176   R-squared       =    0.5745
+-------------+----------------------------------   Adj R-squared   =    0.5605
+       Total |  68.5817185        63  1.08859871   Root MSE        =    .69167
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .4678917   .0641656     7.29   0.000     .3395846    .5961988
+    latitude |   1.576641   .7103161     2.22   0.030     .1562757    2.997006
+       _cons |   4.728088   .3973262    11.90   0.000     3.933585    5.522591
+------------------------------------------------------------------------------
+
+. 
+. *e)malaria
+. 
+. reg logpgp95 malfal94 if basesample==1
+
+      Source |       SS           df       MS      Number of obs   =        62
+-------------+----------------------------------   F(1, 60)        =     64.59
+       Model |  33.7563555         1  33.7563555   Prob > F        =    0.0000
+    Residual |   31.358336        60  .522638934   R-squared       =    0.5184
+-------------+----------------------------------   Adj R-squared   =    0.5104
+       Total |  65.1146915        61  1.06745396   Root MSE        =    .72294
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    malfal94 |  -1.717107   .2136586    -8.04   0.000    -2.144488   -1.289726
+       _cons |   8.698138   .1246568    69.78   0.000     8.448787    8.947489
+------------------------------------------------------------------------------
+
+. 
+. *ii)column 1, table 7
+. ivregress 2sls logpgp95 malfal94 (avexp=logem4) if basesample==1, first
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         62
+                                                F(   2,     59)   =      12.31
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2945
+                                                Adj R-squared     =     0.2706
+                                                Root MSE          =     1.2675
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    malfal94 |  -.7902259   .5375324    -1.47   0.147    -1.865826     .285374
+      logem4 |  -.4172807   .1855323    -2.25   0.028      -.78853   -.0460314
+       _cons |   8.757417    .750646    11.67   0.000     7.255377    10.25946
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         62
+                                                  Wald chi2(2)    =      76.90
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.5345
+                                                  Root MSE        =     .69917
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .6870742   .2452507     2.80   0.005     .2063916    1.167757
+    malfal94 |  -.5784585   .4559506    -1.27   0.205    -1.472105    .3151882
+       _cons |   3.790856   1.755795     2.16   0.031      .349561    7.232151
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   malfal94 logem4
+
+. 
+. 
+. //Albouy(2012)//
+. 
+. *1)
+. *a)same as in AJR
+.  
+. ivregress 2sls logpgp95 (avexpr=logem4) if basesample==1, first
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                F(   1,     62)   =      22.95
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2701
+                                                Adj R-squared     =     0.2584
+                                                Root MSE          =     1.2648
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      logem4 |  -.6067782   .1266686    -4.79   0.000    -.8599852   -.3535713
+       _cons |    9.34141   .6107178    15.30   0.000     8.120603    10.56222
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(1)    =      37.57
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.1870
+                                                  Root MSE        =      .9334
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .9442794   .1540603     6.13   0.000     .6423267    1.246232
+       _cons |   1.909667   1.010557     1.89   0.059    -.0709894    3.890323
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   logem4
+
+. 
+. ivregress 2sls logpgp95 latitude (avexpr=logem4) if basesample==1, first     
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                F(   2,     61)   =      12.82
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2960
+                                                Adj R-squared     =     0.2729
+                                                Root MSE          =     1.2523
+
+------------------------------------------------------------------------------
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   2.002033   1.337154     1.50   0.139    -.6717719    4.675838
+      logem4 |  -.5102537   .1410181    -3.62   0.001    -.7922368   -.2282706
+       _cons |   8.529309   .8123128    10.50   0.000     6.904989    10.15363
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(2)    =      35.68
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.1024
+                                                  Root MSE        =     .98074
+
+------------------------------------------------------------------------------
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .9957437   .2164378     4.60   0.000     .5715335    1.419954
+    latitude |  -.6476942   1.303557    -0.50   0.619     -3.20262    1.907231
+       _cons |   1.691647   1.262388     1.34   0.180    -.7825875    4.165881
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude logem4
+
+. 
+. *b) sample of 64 countries
+. 
+. ivregress 2sls logpgp95 (avexpr=logem4) if basesample==1, first vce(cluster logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                N. of clusters    =         36
+                                                F(   1,     62)   =      12.52
+                                                Prob > F          =     0.0008
+                                                R-squared         =     0.2701
+                                                Adj R-squared     =     0.2584
+                                                Root MSE          =     1.2648
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      logem4 |  -.6067782   .1714745    -3.54   0.001    -.9495508   -.2640057
+       _cons |    9.34141   .7981243    11.70   0.000     7.745982    10.93684
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(1)    =      22.18
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.1870
+                                                  Root MSE        =      .9334
+
+                                (Std. Err. adjusted for 36 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .9442794   .2004964     4.71   0.000     .5513136    1.337245
+       _cons |   1.909667   1.329946     1.44   0.151      -.69698    4.516313
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=logem4) if basesample==1, first vce(cluster logem4)  /*coef r
+> emain same, se slightly higher*/ 
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                N. of clusters    =         36
+                                                F(   2,     61)   =       8.14
+                                                Prob > F          =     0.0007
+                                                R-squared         =     0.2960
+                                                Adj R-squared     =     0.2729
+                                                Root MSE          =     1.2523
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   2.002033   1.472737     1.36   0.179     -.942887    4.946953
+      logem4 |  -.5102537   .1900851    -2.68   0.009    -.8903524    -.130155
+       _cons |   8.529309   1.044686     8.16   0.000     6.440329    10.61829
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(2)    =      21.74
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.1024
+                                                  Root MSE        =     .98074
+
+                                (Std. Err. adjusted for 36 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .9957437   .2713589     3.67   0.000       .46389    1.527597
+    latitude |  -.6476942   1.327331    -0.49   0.626    -3.249216    1.953827
+       _cons |   1.691647   1.634153     1.04   0.301    -1.511234    4.894527
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude logem4
+
+. 
+. *c) restricted sample of 28 countries
+. 
+. ivregress 2sls logpgp95 (avexpr=logem4) if source0==1, first vce(cluster logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         28
+                                                N. of clusters    =         28
+                                                F(   1,     26)   =       9.24
+                                                Prob > F          =     0.0053
+                                                R-squared         =     0.3239
+                                                Adj R-squared     =     0.2979
+                                                Root MSE          =     1.3406
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      logem4 |  -.5913071    .194505    -3.04   0.005     -.991118   -.1914963
+       _cons |   9.442467   .9303594    10.15   0.000     7.530086    11.35485
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         28
+                                                  Wald chi2(1)    =      17.62
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.3901
+                                                  Root MSE        =      .8607
+
+                                (Std. Err. adjusted for 28 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .8607172   .2050721     4.20   0.000     .4587832    1.262651
+       _cons |   2.148304   1.413441     1.52   0.129     -.621989    4.918596
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=logem4) if source0==1, first vce(cluster logem4)  
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         28
+                                                N. of clusters    =         28
+                                                F(   2,     25)   =       9.26
+                                                Prob > F          =     0.0010
+                                                R-squared         =     0.3990
+                                                Adj R-squared     =     0.3510
+                                                Root MSE          =     1.2890
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   3.337788   1.630609     2.05   0.051    -.0205141    6.696091
+      logem4 |  -.4183464   .2200924    -1.90   0.069    -.8716351    .0349423
+       _cons |   7.931682   1.231779     6.44   0.000     5.394784    10.46858
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         28
+                                                  Wald chi2(2)    =      34.50
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.4269
+                                                  Root MSE        =     .83437
+
+                                (Std. Err. adjusted for 28 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |    .832605   .3256667     2.56   0.011       .19431      1.4709
+    latitude |   .3207883   1.831744     0.18   0.861    -3.269363     3.91094
+       _cons |   2.268553   1.878884     1.21   0.227    -1.413993    5.951099
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude logem4
+
+. 
+. *comment: weak instrument leading to small se.
+. 
+. *d) controlling for campaign and slave
+. 
+. *64 countries
+. ivregress 2sls logpgp95 campaign slave (avexpr=logem4) if basesample==1, first vce(cluster logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                N. of clusters    =         36
+                                                F(   3,     60)   =       6.50
+                                                Prob > F          =     0.0007
+                                                R-squared         =     0.3294
+                                                Adj R-squared     =     0.2959
+                                                Root MSE          =     1.2323
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    campaign |    -.74074   .4631023    -1.60   0.115    -1.667083    .1856026
+       slave |  -1.563443   .8801866    -1.78   0.081    -3.324078    .1971928
+      logem4 |  -.4348176   .1841283    -2.36   0.021     -.803129   -.0665061
+       _cons |    9.12441   .7310526    12.48   0.000     7.662087    10.58673
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(3)    =      16.82
+                                                  Prob > chi2     =     0.0008
+                                                  R-squared       =          .
+                                                  Root MSE        =     1.1102
+
+                                (Std. Err. adjusted for 36 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   1.139976   .3942607     2.89   0.004      .367239    1.912713
+    campaign |   .5706608   .6267346     0.91   0.363    -.6577165    1.799038
+       slave |    .739502   1.406032     0.53   0.599    -2.016271    3.495275
+       _cons |   .2138674   3.034614     0.07   0.944    -5.733867    6.161602
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   campaign slave logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude campaign slave (avexpr=logem4) if basesample==1, first vce(cluster lo
+> gem4) 
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                N. of clusters    =         36
+                                                F(   4,     59)   =       5.35
+                                                Prob > F          =     0.0010
+                                                R-squared         =     0.3433
+                                                Adj R-squared     =     0.2988
+                                                Root MSE          =     1.2298
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   1.526165   1.305671     1.17   0.247    -1.086476    4.138806
+    campaign |  -.7267827   .4651988    -1.56   0.124    -1.657643    .2040781
+       slave |  -1.345899   .8683574    -1.55   0.127    -3.083478    .3916805
+      logem4 |  -.3700315   .2008464    -1.84   0.070    -.7719242    .0318612
+       _cons |   8.523543   .9353591     9.11   0.000     6.651894    10.39519
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(4)    =      15.02
+                                                  Prob > chi2     =     0.0047
+                                                  R-squared       =          .
+                                                  Root MSE        =     1.2004
+
+                                (Std. Err. adjusted for 36 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   1.232085   .5400936     2.28   0.023     .1735208    2.290649
+    latitude |   -.943474    1.62832    -0.58   0.562    -4.134923    2.247975
+    campaign |   .6302613   .7425568     0.85   0.396    -.8251233    2.085646
+       slave |   .7490238   1.512844     0.50   0.621    -2.216096    3.714144
+       _cons |  -.2551185   3.858135    -0.07   0.947    -7.816924    7.306687
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude campaign slave logem4
+
+.   
+.  
+. *28 countries
+. ivregress 2sls logpgp95 campaign slave (avexpr=logem4) if source0==1, first vce(cluster logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         28
+                                                N. of clusters    =         28
+                                                F(   3,     24)   =       7.16
+                                                Prob > F          =     0.0013
+                                                R-squared         =     0.4334
+                                                Adj R-squared     =     0.3625
+                                                Root MSE          =     1.2774
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    campaign |  -1.154601   .5677193    -2.03   0.053    -2.326316    .0171137
+       slave |  -1.879784   .6724152    -2.80   0.010     -3.26758   -.4919868
+      logem4 |  -.3531366   .2205713    -1.60   0.122    -.8083734    .1021001
+       _cons |    9.08986    .907582    10.02   0.000     7.216703    10.96302
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         28
+                                                  Wald chi2(3)    =      15.84
+                                                  Prob > chi2     =     0.0012
+                                                  R-squared       =     0.1814
+                                                  Root MSE        =     .99714
+
+                                (Std. Err. adjusted for 28 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   1.031311   .4843618     2.13   0.033     .0819795    1.980643
+    campaign |   .4653643   .8495645     0.55   0.584    -1.199752     2.13048
+       slave |   1.023556   1.366401     0.75   0.454    -1.654541    3.701654
+       _cons |   .6832427   3.789781     0.18   0.857    -6.744591    8.111077
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   campaign slave logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude campaign slave (avexpr=logem4) if source0==1, first vce(cluster logem
+> 4) 
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         28
+                                                N. of clusters    =         28
+                                                F(   4,     23)   =       6.80
+                                                Prob > F          =     0.0009
+                                                R-squared         =     0.4858
+                                                Adj R-squared     =     0.3964
+                                                Root MSE          =     1.2430
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |    3.00119   1.615237     1.86   0.076    -.3401819    6.342563
+    campaign |  -1.167069   .5208272    -2.24   0.035    -2.244482   -.0896554
+       slave |  -1.330653   .6811929    -1.95   0.063    -2.739808    .0785019
+      logem4 |  -.2054932   .2515086    -0.82   0.422    -.7257783     .314792
+       _cons |   7.735435    1.24186     6.23   0.000     5.166451    10.30442
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         28
+                                                  Wald chi2(4)    =      25.40
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.2463
+                                                  Root MSE        =     .95683
+
+                                (Std. Err. adjusted for 28 clusters in logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .9889782   .9271776     1.07   0.286    -.8282564    2.806213
+    latitude |   .3038789   3.639608     0.08   0.933    -6.829622     7.43738
+    campaign |   .4152243   1.342565     0.31   0.757    -2.216155    3.046604
+       slave |   .9995806   1.531903     0.65   0.514    -2.002895    4.002056
+       _cons |   .9309039    6.30798     0.15   0.883    -11.43251    13.29432
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude campaign slave logem4
+
+.  
+. 
+. 
+. //AJR(2012) reply//
+. 
+. *1.a)
+. 
+. 
+. *b) capping at 250
+. 
+. gen capped_level = mortality_level 
+(75 missing values generated)
+
+. replace capped_level =250 if mortality_level>250
+(98 real changes made)
+
+. replace capped_level = .  if mortality_level==.
+(75 real changes made, 75 to missing)
+
+. 
+. gen new_logem4 = ln(capped_level)
+(75 missing values generated)
+
+. 
+. *64 countries
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if basesample==1, first vce(cluster new_logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                N. of clusters    =         29
+                                                F(   1,     62)   =      23.79
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.3576
+                                                Adj R-squared     =     0.3473
+                                                Root MSE          =     1.1865
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  new_logem4 |  -.9196075   .1885572    -4.88   0.000    -1.296528    -.542687
+       _cons |   10.61871    .824523    12.88   0.000     8.970514    12.26691
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(1)    =      21.74
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.3555
+                                                  Root MSE        =     .83106
+
+                            (Std. Err. adjusted for 29 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .8273708   .1774448     4.66   0.000     .4795853    1.175156
+       _cons |   2.671399   1.237431     2.16   0.031     .2460785     5.09672
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   new_logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if basesample==1, first vce(cluster new_logem4) 
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         64
+                                                N. of clusters    =         29
+                                                F(   2,     61)   =      12.75
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.3636
+                                                Adj R-squared     =     0.3427
+                                                Root MSE          =     1.1907
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   1.002943   1.373739     0.73   0.468    -1.744018    3.749905
+  new_logem4 |  -.8461669    .177687    -4.76   0.000    -1.201474   -.4908598
+       _cons |    10.1094   .9126085    11.08   0.000     8.284522    11.93427
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         64
+                                                  Wald chi2(2)    =      22.04
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.3645
+                                                  Root MSE        =     .82524
+
+                            (Std. Err. adjusted for 29 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .8199626   .1822502     4.50   0.000     .4627587    1.177167
+    latitude |   .0930361   .7721508     0.12   0.904    -1.420352    1.606424
+       _cons |   2.702818   1.233753     2.19   0.028     .2847077    5.120929
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude new_logem4
+
+. 
+. *28 countries
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if source0==1, first vce(cluster new_logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         28
+                                                N. of clusters    =         23
+                                                F(   1,     26)   =      22.31
+                                                Prob > F          =     0.0001
+                                                R-squared         =     0.3969
+                                                Adj R-squared     =     0.3737
+                                                Root MSE          =     1.2662
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  new_logem4 |   -.949344   .2010062    -4.72   0.000    -1.362518   -.5361699
+       _cons |    10.8085   .9786168    11.04   0.000     8.796922    12.82007
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         28
+                                                  Wald chi2(1)    =      36.59
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.4513
+                                                  Root MSE        =      .8164
+
+                            (Std. Err. adjusted for 23 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .8093879   .1338051     6.05   0.000     .5471348    1.071641
+       _cons |    2.49211   .8945916     2.79   0.005     .7387425    4.245477
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   new_logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if source0==1, first vce(cluster new_logem4)  
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         28
+                                                N. of clusters    =         23
+                                                F(   2,     25)   =      14.68
+                                                Prob > F          =     0.0001
+                                                R-squared         =     0.4278
+                                                Adj R-squared     =     0.3820
+                                                Root MSE          =     1.2578
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |    2.33603   1.597987     1.46   0.156    -.9550862    5.627146
+  new_logem4 |  -.7387523   .2121542    -3.48   0.002    -1.175692   -.3018125
+       _cons |   9.401152   1.244346     7.56   0.000     6.838374    11.96393
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         28
+                                                  Wald chi2(2)    =      42.20
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.5489
+                                                  Root MSE        =      .7402
+
+                            (Std. Err. adjusted for 23 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .7199247   .1865461     3.86   0.000      .354301    1.085548
+    latitude |    .942118   1.159262     0.81   0.416    -1.329993    3.214229
+       _cons |   2.891493    1.07005     2.70   0.007     .7942337    4.988751
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude new_logem4
+
+. 
+. 
+. *c) Gambia's high institutional score and high mortality level makes it weird. 
+. 
+. 
+. *d)dropping Gambia
+. 
+. *64 countries
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if basesample==1 & shortnam!= "GMB", first vce(cluster new
+> _logem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         63
+                                                N. of clusters    =         29
+                                                F(   1,     61)   =      31.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.4007
+                                                Adj R-squared     =     0.3909
+                                                Root MSE          =     1.1420
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  new_logem4 |  -.9718155   .1739019    -5.59   0.000    -1.319554   -.6240771
+       _cons |   10.80742   .7739803    13.96   0.000     9.259747    12.35509
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         63
+                                                  Wald chi2(1)    =      28.08
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.4696
+                                                  Root MSE        =     .75635
+
+                            (Std. Err. adjusted for 29 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .7832457   .1478036     5.30   0.000     .4935559    1.072936
+       _cons |   2.993284   1.023558     2.92   0.003     .9871463    4.999422
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   new_logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if basesample==1 & shortnam!= "GMB", first vce(cl
+> uster new_logem4) 
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         63
+                                                N. of clusters    =         29
+                                                F(   2,     60)   =      17.36
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.4050
+                                                Adj R-squared     =     0.3852
+                                                Root MSE          =     1.1473
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   .8492021   1.413655     0.60   0.550     -1.97853    3.676934
+  new_logem4 |  -.9089171   .1635978    -5.56   0.000    -1.236162   -.5816727
+       _cons |   10.37359   .8793556    11.80   0.000     8.614613    12.13256
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         63
+                                                  Wald chi2(2)    =      29.34
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.4890
+                                                  Root MSE        =     .74235
+
+                            (Std. Err. adjusted for 29 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .7627389   .1454504     5.24   0.000     .4776615    1.047816
+    latitude |   .2690619   .7223996     0.37   0.710    -1.146815    1.684939
+       _cons |   3.077454   .9847711     3.13   0.002     1.147338     5.00757
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude new_logem4
+
+. 
+. *28 countries
+. 
+. ivregress 2sls logpgp95 (avexpr=new_logem4) if source0==1 & shortnam!= "GMB", first vce(cluster new_lo
+> gem4)
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         27
+                                                N. of clusters    =         23
+                                                F(   1,     25)   =      28.21
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.4935
+                                                Adj R-squared     =     0.4733
+                                                Root MSE          =     1.1611
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  new_logem4 |  -1.064791   .2004635    -5.31   0.000    -1.477654   -.6519289
+       _cons |   11.20304   .9664227    11.59   0.000     9.212655    13.19343
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         27
+                                                  Wald chi2(1)    =      54.58
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.6162
+                                                  Root MSE        =     .69098
+
+                            (Std. Err. adjusted for 23 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .7326364   .0991679     7.39   0.000     .5382709     .927002
+       _cons |   3.072666   .6274115     4.90   0.000     1.842962     4.30237
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   new_logem4
+
+. 
+. *control for distance from equator
+. ivregress 2sls logpgp95 latitude (avexpr=new_logem4) if source0==1 & shortnam!= "GMB", first vce(clust
+> er new_logem4)  
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =         27
+                                                N. of clusters    =         23
+                                                F(   2,     24)   =      17.15
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.5174
+                                                Adj R-squared     =     0.4772
+                                                Root MSE          =     1.1568
+
+------------------------------------------------------------------------------
+             |               Robust
+      avexpr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    latitude |   2.022418   1.672164     1.21   0.238    -1.428759    5.473595
+  new_logem4 |  -.8787694   .2423847    -3.63   0.001    -1.379027    -.378512
+       _cons |   9.971979   1.367473     7.29   0.000     7.149653    12.79431
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression          Number of obs   =         27
+                                                  Wald chi2(2)    =      65.87
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.6955
+                                                  Root MSE        =     .61547
+
+                            (Std. Err. adjusted for 23 clusters in new_logem4)
+------------------------------------------------------------------------------
+             |               Robust
+    logpgp95 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      avexpr |   .6151265   .1546527     3.98   0.000     .3120128    .9182403
+    latitude |   1.360335   1.138354     1.20   0.232    -.8707969    3.591467
+       _cons |   3.561088   .8069274     4.41   0.000     1.979539    5.142636
+------------------------------------------------------------------------------
+Instrumented:  avexpr
+Instruments:   latitude new_logem4
+
+. 
+. *close log file
+. log close
+      name:  <unnamed>
+       log:  C:\Users\johnd\OneDrive\Desktop\sose21\Dev\ajr(2001)\code\AJR2001_replication_logfile.log
+  log type:  text
+ closed on:  27 Jan 2024, 15:48:22
+--------------------------------------------------------------------------------------------------------

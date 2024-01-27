@@ -1,0 +1,51 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\johnd\OneDrive\Desktop\sose21\Dev\ajr(2001)\code\AJR2001_replication_logfile.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}27 Jan 2024, 15:21:52
+{txt}
+{com}. set more off
+{txt}
+{com}.  
+. 
+. *load data
+. use "\data\AJR2001_replication.dta", clear
+{err}{p 0 4 2}
+file \data\AJR2001_replication.dta
+not found
+{p_end}
+{txt}{search r(601), local:r(601);}
+
+end of do-file
+
+{search r(601), local:r(601);}
+
+{com}. do "C:\Users\johnd\AppData\Local\Temp\STD1ab4_000000.tmp"
+{txt}
+{com}. *Replication - AJR(2001)
+. 
+. clear all
+{res}{txt}
+{com}. 
+. *set path to your working directory
+. cd "C:\Users\johnd\OneDrive\Desktop\sose21\Dev\ajr(2001)" 
+{res}C:\Users\johnd\OneDrive\Desktop\sose21\Dev\ajr(2001)
+{txt}
+{com}. 
+. log using ".\code\AJR2001_replication_logfile.log", replace
+{err}log file already open
+{txt}{search r(604), local:r(604);}
+
+end of do-file
+
+{search r(604), local:r(604);}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\johnd\OneDrive\Desktop\sose21\Dev\ajr(2001)\code\AJR2001_replication_logfile.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}27 Jan 2024, 15:22:20
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
