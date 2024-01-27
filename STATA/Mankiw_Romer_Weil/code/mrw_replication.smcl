@@ -1,0 +1,804 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\johnd\OneDrive\Desktop\mrw\tut1\code\mrw_replication.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Apr 2021, 13:22:06
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. cd "C:\Users\johnd\OneDrive\Desktop\mrw\tut1\data\"
+{res}C:\Users\johnd\OneDrive\Desktop\mrw\tut1\data
+{txt}
+{com}. 
+. insheet using pwt61_data.csv, delimiter(",") names
+{txt}(28 vars, 8,568 obs)
+
+{com}. *saveold pwt61_data, replace
+. 
+. keep if year==1960|year==1985
+{txt}(8,232 observations deleted)
+
+{com}. 
+. keep country countryisocode year pop rgdpl kg ki
+{txt}
+{com}. reshape wide pop rgdpl kg ki, i(countryisocode) j(year)
+{txt}(note: j = 1960 1985)
+
+Data{col 36}long{col 43}->{col 48}wide
+{hline 77}
+Number of obs.                 {res}     336   {txt}->{res}     168
+{txt}Number of variables            {res}       7   {txt}->{res}      10
+{txt}j variable (2 values)              {res}year   {txt}->   (dropped)
+xij variables:
+                                    {res}pop   {txt}->   {res}pop1960 pop1985
+                                  rgdpl   {txt}->   {res}rgdpl1960 rgdpl1985
+                                     kg   {txt}->   {res}kg1960 kg1985
+                                     ki   {txt}->   {res}ki1960 ki1985
+{txt}{hline 77}
+
+{com}. 
+. *avg growth rate of population 
+. gen n = exp(ln(pop1985/pop1960)/25)-1
+{txt}(56 missing values generated)
+
+{com}. 
+. *n+g+d variable
+. gen g_d = 0.05
+{txt}
+{com}. gen n_g_d = n + g_d
+{txt}(56 missing values generated)
+
+{com}. 
+. *average investment share of GDP (1960 and 1985)
+. gen inv_y= (ki1960 + ki1985)/200
+{txt}(56 missing values generated)
+
+{com}. 
+. *converting to ln
+. gen ln_gdp_percap1985= ln(rgdpl1985)
+{txt}(42 missing values generated)
+
+{com}. gen ln_inv_y= ln(inv_y)
+{txt}(56 missing values generated)
+
+{com}. gen ln_ngd= ln(n_g_d)
+{txt}(56 missing values generated)
+
+{com}. 
+. * create country list
+. generate intermediate = (country== "Algeria"  | country=="Argentina"  | country=="Australia" | country=="Austria" | country=="Bangladesh" | country=="Belgium" | country=="Bolivia" | country=="Botswana" | country=="Brazil" | country=="Cameroon" | country=="Canada" | country=="Chile" | country=="Colombia" | country=="Costa Rica" | country=="Cote d'Ivoire" | country=="Denmark" | country=="Dominican Republic" | country=="Ecuador" | country=="El Salvador" | country=="Ethiopia" | country=="Finland" | country=="France" | country=="Germany" | country=="Greece" | country=="Guatemala" | country=="Haiti" | country=="Honduras" | country=="Hong Kong" | country=="India" | country=="Indonesia" | country=="Ireland" | country=="Israel" | country=="Italy" | country=="Jamaica" | country=="Japan" | country=="Jordan" | country=="Kenya" | country=="Korea, Republic of"  | country=="Madagascar" | country=="Malawi" | country=="Malaysia" | country=="Mali" | country=="Mexico" | country=="Morocco" | country=="Netherlands" | country=="New Zealand" | country=="Nicaragua" | country=="Nigeria" | country=="Norway" | country=="Pakistan" | country=="Panama" | country=="Paraguay" | country=="Peru" | country=="Philippines" | country=="Portugal" | country=="Senegal" | country=="Singapore" | country=="South Africa" | country=="Spain" | country=="Sri Lanka" | country=="Sweden" | country=="Switzerland" | country=="Syria" | country=="Tanzania" | country=="Thailand" | country=="Trinidad &Tobago" | country=="Tunisia" | country=="Turkey" | country=="United Kingdom" | country=="United States" | country=="Uruguay" | country=="Venezuela" | country=="Zambia" | country=="Zimbabwe")
+{txt}
+{com}. 
+. generate oecd = (country=="Australia" | country=="Austria" | country=="Belgium" | country=="Canada" | country=="Denmark" | country=="Finland" | country=="France" | country=="Germany" | country=="Greece" | country=="Ireland" | country=="Italy" | country=="Japan" | country=="Netherlands" | country=="New Zealand" | country=="Norway" | country=="Portugal" | country=="Spain" | country=="Sweden" | country=="Switzerland" | country=="Turkey" | country=="United Kingdom" | country=="United States")
+{txt}
+{com}. 
+. **run OLS regression**
+. 
+. reg ln_gdp_percap1985 ln_inv_y ln_ngd if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(2, 18)          =  {res}     8.09
+                                                {txt}Prob > F          = {res}    0.0031
+                                                {txt}R-squared         = {res}    0.5468
+                                                {txt}Root MSE          =    {res} .25331
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}ln_gdp_~1985{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}ln_inv_y {c |}{col 14}{res}{space 2} 1.013786{col 26}{space 2} .2521898{col 37}{space 1}    4.02{col 46}{space 3}0.001{col 54}{space 4} .4839545{col 67}{space 3} 1.543617
+{txt}{space 6}ln_ngd {c |}{col 14}{res}{space 2}-.2260745{col 26}{space 2}  .696307{col 37}{space 1}   -0.32{col 46}{space 3}0.749{col 54}{space 4}-1.688961{col 67}{space 3} 1.236812
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  10.5637{col 26}{space 2} 2.005315{col 37}{space 1}    5.27{col 46}{space 3}0.000{col 54}{space 4} 6.350693{col 67}{space 3} 14.77672
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using "task_1_reg.xls" , replace dec(2) se
+{txt}{browse `"task_1_reg.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\mrw\tut1\data"' :dir}{com} : {txt}{stata `"seeout using "task_1_reg.txt""':seeout}
+
+{com}. test _b[ln_inv_y] + _b[ln_ngd]=0
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}ln_inv_y + ln_ngd = 0{p_end}
+
+{txt}       F(  1,    18) ={res}    1.17
+{txt}{col 13}Prob > F ={res}    0.2938
+{txt}
+{com}. 
+. reg ln_gdp_percap1985 ln_inv_y ln_ngd if intermediate, robust
+
+{txt}Linear regression                               Number of obs     = {res}        71
+                                                {txt}F(2, 68)          =  {res}    90.83
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.6448
+                                                {txt}Root MSE          =    {res} .62675
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}ln_gdp_~1985{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}ln_inv_y {c |}{col 14}{res}{space 2} .8738682{col 26}{space 2}  .173415{col 37}{space 1}    5.04{col 46}{space 3}0.000{col 54}{space 4}  .527824{col 67}{space 3} 1.219912
+{txt}{space 6}ln_ngd {c |}{col 14}{res}{space 2}-3.233721{col 26}{space 2} .6577692{col 37}{space 1}   -4.92{col 46}{space 3}0.000{col 54}{space 4}-4.546278{col 67}{space 3}-1.921163
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1.635725{col 26}{space 2} 2.050388{col 37}{space 1}    0.80{col 46}{space 3}0.428{col 54}{space 4} -2.45576{col 67}{space 3} 5.727211
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2
+  outreg2 using `"task_1_reg.xls"', dec(2) se
+{txt}{browse `"task_1_reg.xls"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\mrw\tut1\data"' :dir}{com} : {txt}{stata `"seeout using "task_1_reg.txt""':seeout}
+
+{com}. test _b[ln_inv_y] + _b[ln_ngd]=0
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}ln_inv_y + ln_ngd = 0{p_end}
+
+{txt}       F(  1,    68) ={res}    8.86
+{txt}{col 13}Prob > F ={res}    0.0040
+{txt}
+{com}. 
+. *restricted reg
+. *gen restricted = ln_inv_y - ln_ngd (this works as well)
+. 
+. constraint 1 ln_inv_y + ln_ngd =0
+{txt}
+{com}. cnsreg ln_gdp_percap1985 ln_inv_y ln_ngd if intermediate, constraint(1) robust
+{res}
+{txt}Constrained linear regression{col 49}Number of obs{col 67}= {res}        71
+{txt}{col 49}F({res}   1{txt},{res}     69{txt}){col 67}= {res}    122.28
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}Root MSE{col 67}= {res}    0.6823
+
+{p 0 7}{space 1}{text:( 1)}{space 1} ln_inv_y + ln_ngd = 0{p_end}
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}ln_gdp_~1985{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}ln_inv_y {c |}{col 14}{res}{space 2} 1.199643{col 26}{space 2} .1084882{col 37}{space 1}   11.06{col 46}{space 3}0.000{col 54}{space 4} .9832154{col 67}{space 3} 1.416071
+{txt}{space 6}ln_ngd {c |}{col 14}{res}{space 2}-1.199643{col 26}{space 2} .1084882{col 37}{space 1}  -11.06{col 46}{space 3}0.000{col 54}{space 4}-1.416071{col 67}{space 3}-.9832154
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 7.679008{col 26}{space 2} .1001558{col 37}{space 1}   76.67{col 46}{space 3}0.000{col 54}{space 4} 7.479203{col 67}{space 3} 7.878814
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. *alpha
+. nlcom (alpha_inter:_b[ln_inv_y]/(1 + _b[ln_inv_y])), post
+
+ {txt}alpha_inter:  {res}_b[ln_inv_y]/(1 + _b[ln_inv_y])
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_gdp_~1985{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}alpha_inter {c |}{col 14}{res}{space 2} .5453809{col 26}{space 2} .0224222{col 37}{space 1}   24.32{col 46}{space 3}0.000{col 54}{space 4} .5014342{col 67}{space 3} .5893275
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[alpha_inter]=1/3
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}alpha_inter = .3333333{p_end}
+
+{txt}{col 12}chi2(  1) ={res}   89.44
+{txt}{col 10}Prob > chi2 =  {res}  0.0000
+{txt}
+{com}. 
+. cnsreg ln_gdp_percap1985 ln_inv_y ln_ngd if oecd, constraint(1) robust
+{res}
+{txt}Constrained linear regression{col 49}Number of obs{col 67}= {res}        21
+{txt}{col 49}F({res}   1{txt},{res}     19{txt}){col 67}= {res}     14.55
+{txt}{col 49}Prob > F{col 67}= {res}    0.0012
+{txt}{col 49}Root MSE{col 67}= {res}    0.2515
+
+{p 0 7}{space 1}{text:( 1)}{space 1} ln_inv_y + ln_ngd = 0{p_end}
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}ln_gdp_~1985{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}ln_inv_y {c |}{col 14}{res}{space 2} .8591891{col 26}{space 2} .2252204{col 37}{space 1}    3.81{col 46}{space 3}0.001{col 54}{space 4} .3877973{col 67}{space 3} 1.330581
+{txt}{space 6}ln_ngd {c |}{col 14}{res}{space 2}-.8591891{col 26}{space 2} .2252204{col 37}{space 1}   -3.81{col 46}{space 3}0.001{col 54}{space 4}-1.330581{col 67}{space 3}-.3877973
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 8.527233{col 26}{space 2} .3257382{col 37}{space 1}   26.18{col 46}{space 3}0.000{col 54}{space 4} 7.845455{col 67}{space 3} 9.209011
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. *alpha
+. nlcom (alpha_oecd:_b[ln_inv_y]/(1 + _b[ln_inv_y])), post
+
+  {txt}alpha_oecd:  {res}_b[ln_inv_y]/(1 + _b[ln_inv_y])
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_gdp_~1985{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 2}alpha_oecd {c |}{col 14}{res}{space 2} .4621311{col 26}{space 2} .0651569{col 37}{space 1}    7.09{col 46}{space 3}0.000{col 54}{space 4} .3344259{col 67}{space 3} .5898363
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[alpha_oecd]=1/3
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}alpha_oecd = .3333333{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    3.91
+{txt}{col 10}Prob > chi2 =  {res}  0.0481
+{txt}
+{com}. 
+. 
+. **CONVERGENCE**
+. 
+. gen ln_difference_gdp = ln(rgdpl1985)-ln(rgdpl1960)
+{txt}(56 missing values generated)
+
+{com}. gen ln_initial_gdp = ln(rgdpl1960)
+{txt}(56 missing values generated)
+
+{com}. 
+. *reg (unconditional)
+. 
+. reg ln_difference_gdp ln_initial_gdp if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(1, 19)          =  {res}     5.18
+                                                {txt}Prob > F          = {res}    0.0346
+                                                {txt}R-squared         = {res}    0.3912
+                                                {txt}Root MSE          =    {res} .18066
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.3125103{col 28}{space 2} .1372575{col 39}{space 1}   -2.28{col 48}{space 3}0.035{col 56}{space 4}-.5997936{col 69}{space 3} -.025227
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 3.525149{col 28}{space 2} 1.248572{col 39}{space 1}    2.82{col 48}{space 3}0.011{col 56}{space 4} .9118581{col 69}{space 3} 6.138439
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. reg ln_difference_gdp ln_initial_gdp if intermediate, robust
+
+{txt}Linear regression                               Number of obs     = {res}        71
+                                                {txt}F(1, 69)          =  {res}     1.49
+                                                {txt}Prob > F          = {res}    0.2267
+                                                {txt}R-squared         = {res}    0.0147
+                                                {txt}Root MSE          =    {res} .42597
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2} .0577556{col 28}{space 2} .0473525{col 39}{space 1}    1.22{col 48}{space 3}0.227{col 56}{space 4}-.0367101{col 69}{space 3} .1522213
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} .1176465{col 28}{space 2} .3959533{col 39}{space 1}    0.30{col 48}{space 3}0.767{col 56}{space 4}-.6722586{col 69}{space 3} .9075517
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *reg(conditional)
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(3, 17)          =  {res}     8.20
+                                                {txt}Prob > F          = {res}    0.0014
+                                                {txt}R-squared         = {res}    0.7258
+                                                {txt}Root MSE          =    {res} .12819
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.4683473{col 28}{space 2} .1074771{col 39}{space 1}   -4.36{col 48}{space 3}0.000{col 56}{space 4} -.695104{col 69}{space 3}-.2415905
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5233455{col 28}{space 2} .1948675{col 39}{space 1}    2.69{col 48}{space 3}0.016{col 56}{space 4} .1122109{col 69}{space 3}   .93448
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.3522569{col 28}{space 2} .3732922{col 39}{space 1}   -0.94{col 48}{space 3}0.359{col 56}{space 4}-1.139835{col 69}{space 3} .4353208
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2}  4.71496{col 28}{space 2} 1.844044{col 39}{space 1}    2.56{col 48}{space 3}0.020{col 56}{space 4} .8243668{col 69}{space 3} 8.605553
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict y_hatoecd if e(sample)
+{txt}(option {bf:xb} assumed; fitted values)
+(147 missing values generated)
+
+{com}. 
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd if intermediate, robust
+
+{txt}Linear regression                               Number of obs     = {res}        71
+                                                {txt}F(3, 67)          =  {res}    17.17
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.4132
+                                                {txt}Root MSE          =    {res}  .3336
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.1519492{col 28}{space 2} .0774193{col 39}{space 1}   -1.96{col 48}{space 3}0.054{col 56}{space 4}-.3064787{col 69}{space 3} .0025803
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5282973{col 28}{space 2}  .093827{col 39}{space 1}    5.63{col 48}{space 3}0.000{col 56}{space 4} .3410177{col 69}{space 3} .7155769
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.3241709{col 28}{space 2} .3442803{col 39}{space 1}   -0.94{col 48}{space 3}0.350{col 56}{space 4}-1.011357{col 69}{space 3} .3630154
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 1.957039{col 28}{space 2}  .909782{col 39}{space 1}    2.15{col 48}{space 3}0.035{col 56}{space 4} .1411068{col 69}{space 3} 3.772972
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. predict y_hatinter if e(sample)
+{txt}(option {bf:xb} assumed; fitted values)
+(97 missing values generated)
+
+{com}. 
+. 
+. *restricted
+. 
+. cnsreg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd if oecd, constraint(1) robust
+{res}
+{txt}Constrained linear regression{col 49}Number of obs{col 67}= {res}        21
+{txt}{col 49}F({res}   2{txt},{res}     18{txt}){col 67}= {res}     11.00
+{txt}{col 49}Prob > F{col 67}= {res}    0.0008
+{txt}{col 49}Root MSE{col 67}= {res}    0.1250
+
+{p 0 7}{space 1}{text:( 1)}{space 1} ln_inv_y + ln_ngd = 0{p_end}
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.4636778{col 28}{space 2} .0988752{col 39}{space 1}   -4.69{col 48}{space 3}0.000{col 56}{space 4}-.6714068{col 69}{space 3}-.2559488
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .4865229{col 28}{space 2} .1404042{col 39}{space 1}    3.47{col 48}{space 3}0.003{col 56}{space 4} .1915447{col 69}{space 3} .7815012
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.4865229{col 28}{space 2} .1404042{col 39}{space 1}   -3.47{col 48}{space 3}0.003{col 56}{space 4}-.7815012{col 69}{space 3}-.1915447
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 4.235276{col 28}{space 2} .7537978{col 39}{space 1}    5.62{col 48}{space 3}0.000{col 56}{space 4} 2.651605{col 69}{space 3} 5.818947
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. *lambda
+. nlcom (lambdaoecd:ln(_b[ln_initial_gdp]+1)/(-25)), post
+
+  {txt}lambdaoecd:  {res}ln(_b[ln_initial_gdp]+1)/(-25)
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 2}lambdaoecd {c |}{col 14}{res}{space 2} .0249208{col 26}{space 2} .0073743{col 37}{space 1}    3.38{col 46}{space 3}0.001{col 54}{space 4} .0104674{col 67}{space 3} .0393742
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[lambdaoecd]=0.04
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}lambdaoecd = .04{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    4.18
+{txt}{col 10}Prob > chi2 =  {res}  0.0409
+{txt}
+{com}. 
+. cnsreg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd if intermediate, constraint(1) robust
+{res}
+{txt}Constrained linear regression{col 49}Number of obs{col 67}= {res}        71
+{txt}{col 49}F({res}   2{txt},{res}     68{txt}){col 67}= {res}     25.18
+{txt}{col 49}Prob > F{col 67}= {res}    0.0000
+{txt}{col 49}Root MSE{col 67}= {res}    0.3318
+
+{p 0 7}{space 1}{text:( 1)}{space 1} ln_inv_y + ln_ngd = 0{p_end}
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.1687719{col 28}{space 2}  .071091{col 39}{space 1}   -2.37{col 48}{space 3}0.020{col 56}{space 4}-.3106318{col 69}{space 3} -.026912
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5139943{col 28}{space 2} .0885661{col 39}{space 1}    5.80{col 48}{space 3}0.000{col 56}{space 4} .3372635{col 69}{space 3} .6907251
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.5139943{col 28}{space 2} .0885661{col 39}{space 1}   -5.80{col 48}{space 3}0.000{col 56}{space 4}-.6907251{col 69}{space 3}-.3372635
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 1.558173{col 28}{space 2}   .53467{col 39}{space 1}    2.91{col 48}{space 3}0.005{col 56}{space 4} .4912558{col 69}{space 3} 2.625091
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. *lambda
+. nlcom (lambdainter:ln(_b[ln_initial_gdp]+1)/(-25)), post
+
+ {txt}lambdainter:  {res}ln(_b[ln_initial_gdp]+1)/(-25)
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}lambdainter {c |}{col 14}{res}{space 2}  .007394{col 26}{space 2}  .003421{col 37}{space 1}    2.16{col 46}{space 3}0.031{col 54}{space 4}  .000689{col 67}{space 3} .0140991
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[lambdainter]=0.04
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}lambdainter = .04{p_end}
+
+{txt}{col 12}chi2(  1) ={res}   90.84
+{txt}{col 10}Prob > chi2 =  {res}  0.0000
+{txt}
+{com}. 
+. /*plot (fig.1)
+> graph twoway (scatter y_hatoecd ln_initial_gdp) (lfit y_hatoecd ln_initial_gdp)
+> graph save fig1oecd, replace
+> 
+> graph twoway (scatter y_hatinter ln_initial_gdp) (lfit y_hatinter ln_initial_gdp)
+> graph save fig1inter, replace*/
+. 
+. **adding human capital data**
+. *preserve
+. 
+. *clear
+. *use country ls lh WBcode year using "C:\Users\johnd\OneDrive\Desktop\mrw\tut1\data\BL2013_MF1599_v2.2.dta" if year==1960
+. *rename WBcode countryisocode
+. 
+. *saveold barrolee_mrwrep_sample, replace
+. 
+. *restore
+. 
+. *merge files
+. 
+. merge 1:1 country countryisocode using "C:\Users\johnd\OneDrive\Desktop\mrw\tut1\data\barrolee_mrwrep_sample.dta"
+{res}{txt}{p 0 7 2}
+(note: variable
+country was 
+str24, now str66 to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}              44
+{txt}{col 9}from master{col 30}{res}              33{txt}  (_merge==1)
+{col 9}from using{col 30}{res}              11{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}             135{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. 
+. 
+. *log close
+. *type mrw_replication.smcl
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+{txt}end of do-file
+
+{com}. list country countryisocode if _merge==1
+{txt}
+     {c TLC}{hline 25}{c -}{hline 10}{c TRC}
+     {c |} {res}                country   countr~e {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+  3. {c |} {res}                 Angola        AGO {txt}{c |}
+  4. {c |} {res}                Antigua        ATG {txt}{c |}
+  9. {c |} {res}             Azerbaijan        AZE {txt}{c |}
+ 10. {c |} {res}                Bahamas        BHS {txt}{c |}
+ 14. {c |} {res}                Belarus        BLR {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+ 18. {c |} {res}                Bermuda        BMU {txt}{c |}
+ 19. {c |} {res}                 Bhutan        BTN {txt}{c |}
+ 24. {c |} {res}           Burkina Faso        BFA {txt}{c |}
+ 29. {c |} {res}             Cape Verde        CPV {txt}{c |}
+ 31. {c |} {res}                   Chad        TCD {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+ 35. {c |} {res}                Comoros        COM {txt}{c |}
+ 45. {c |} {res}               Djibouti        DJI {txt}{c |}
+ 46. {c |} {res}               Dominica        DMA {txt}{c |}
+ 51. {c |} {res}      Equatorial Guinea        GNQ {txt}{c |}
+ 52. {c |} {res}                Eritrea        ERI {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+ 54. {c |} {res}               Ethiopia        ETH {txt}{c |}
+ 60. {c |} {res}                Georgia        GEO {txt}{c |}
+ 64. {c |} {res}                Grenada        GRD {txt}{c |}
+ 66. {c |} {res}                 Guinea        GIN {txt}{c |}
+ 67. {c |} {res}          Guinea-Bissau        GNB {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+ 90. {c |} {res}                Lebanon        LBN {txt}{c |}
+ 95. {c |} {res}              Macedonia        MKD {txt}{c |}
+ 96. {c |} {res}             Madagascar        MDG {txt}{c |}
+114. {c |} {res}                Nigeria        NGA {txt}{c |}
+116. {c |} {res}                   Oman        OMN {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+125. {c |} {res}            Puerto Rico        PRI {txt}{c |}
+130. {c |} {res}  Sao Tome and Principe        STP {txt}{c |}
+133. {c |} {res}             Seychelles        SYC {txt}{c |}
+141. {c |} {res}      St. Kitts & Nevis        KNA {txt}{c |}
+142. {c |} {res}              St. Lucia        LCA {txt}{c |}
+     {c LT}{hline 25}{c -}{hline 10}{c RT}
+143. {c |} {res}St.Vincent & Grenadines        VCT {txt}{c |}
+157. {c |} {res}           Turkmenistan        TKM {txt}{c |}
+163. {c |} {res}             Uzbekistan        UZB {txt}{c |}
+     {c BLC}{hline 25}{c -}{hline 10}{c BRC}
+
+{com}. list country countryisocode if _merge==2
+{txt}
+     {c TLC}{hline 24}{c -}{hline 10}{c TRC}
+     {c |} {res}               country   countr~e {txt}{c |}
+     {c LT}{hline 24}{c -}{hline 10}{c RT}
+169. {c |} {res}           Afghanistan        AFG {txt}{c |}
+170. {c |} {res}     Brunei Darussalam        BRN {txt}{c |}
+171. {c |} {res}                  Iraq        IRQ {txt}{c |}
+172. {c |} {res}               Liberia        LBR {txt}{c |}
+173. {c |} {res}Libyan Arab Jamahiriya        LBY {txt}{c |}
+     {c LT}{hline 24}{c -}{hline 10}{c RT}
+174. {c |} {res}              Maldives        MDV {txt}{c |}
+175. {c |} {res}               Myanmar        MMR {txt}{c |}
+176. {c |} {res}               Reunion        REU {txt}{c |}
+177. {c |} {res}                Serbia        SER {txt}{c |}
+178. {c |} {res}                 Tonga        TON {txt}{c |}
+     {c LT}{hline 24}{c -}{hline 10}{c RT}
+179. {c |} {res}  United Arab Emirates        ARE {txt}{c |}
+     {c BLC}{hline 24}{c -}{hline 10}{c BRC}
+
+{com}. do "C:\Users\johnd\AppData\Local\Temp\STD5fa8_000000.tmp"
+{txt}
+{com}. *regression
+. *school enrolment in 1960 used as proxy for initial human capital levels
+. gen ln_school= ln((ls+lh)/100)
+{txt}(33 missing values generated)
+
+{com}. 
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(4, 16)          =  {res}     6.48
+                                                {txt}Prob > F          = {res}    0.0027
+                                                {txt}R-squared         = {res}    0.7732
+                                                {txt}Root MSE          =    {res} .12017
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.5426971{col 28}{space 2} .1183194{col 39}{space 1}   -4.59{col 48}{space 3}0.000{col 56}{space 4}-.7935231{col 69}{space 3}-.2918711
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5140455{col 28}{space 2} .1594529{col 39}{space 1}    3.22{col 48}{space 3}0.005{col 56}{space 4} .1760205{col 69}{space 3} .8520704
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.5269041{col 28}{space 2} .3108805{col 39}{space 1}   -1.69{col 48}{space 3}0.109{col 56}{space 4}-1.185941{col 69}{space 3} .1321331
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .0766328{col 28}{space 2}  .050446{col 39}{space 1}    1.52{col 48}{space 3}0.148{col 56}{space 4} -.030308{col 69}{space 3} .1835735
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 4.977658{col 28}{space 2} 1.599951{col 39}{space 1}    3.11{col 48}{space 3}0.007{col 56}{space 4} 1.585913{col 69}{space 3} 8.369402
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if intermediate, robust
+
+{txt}Linear regression                               Number of obs     = {res}        68
+                                                {txt}F(4, 63)          =  {res}    12.05
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.4406
+                                                {txt}Root MSE          =    {res} .31596
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.3249672{col 28}{space 2} .0729775{col 39}{space 1}   -4.45{col 48}{space 3}0.000{col 56}{space 4}-.4708011{col 69}{space 3}-.1791332
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .4546803{col 28}{space 2} .1045888{col 39}{space 1}    4.35{col 48}{space 3}0.000{col 56}{space 4} .2456763{col 69}{space 3} .6636843
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2} -.459362{col 28}{space 2} .3120343{col 39}{space 1}   -1.47{col 48}{space 3}0.146{col 56}{space 4}-1.082913{col 69}{space 3} .1641887
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .1773383{col 28}{space 2} .0515307{col 39}{space 1}    3.44{col 48}{space 3}0.001{col 56}{space 4} .0743624{col 69}{space 3} .2803142
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 3.245745{col 28}{space 2} .8727038{col 39}{space 1}    3.72{col 48}{space 3}0.000{col 56}{space 4} 1.501786{col 69}{space 3} 4.989704
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\johnd\AppData\Local\Temp\STD5fa8_000000.tmp"
+{txt}
+{com}. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(4, 16)          =  {res}     6.48
+                                                {txt}Prob > F          = {res}    0.0027
+                                                {txt}R-squared         = {res}    0.7732
+                                                {txt}Root MSE          =    {res} .12017
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.5426971{col 28}{space 2} .1183194{col 39}{space 1}   -4.59{col 48}{space 3}0.000{col 56}{space 4}-.7935231{col 69}{space 3}-.2918711
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5140455{col 28}{space 2} .1594529{col 39}{space 1}    3.22{col 48}{space 3}0.005{col 56}{space 4} .1760205{col 69}{space 3} .8520704
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.5269041{col 28}{space 2} .3108805{col 39}{space 1}   -1.69{col 48}{space 3}0.109{col 56}{space 4}-1.185941{col 69}{space 3} .1321331
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .0766328{col 28}{space 2}  .050446{col 39}{space 1}    1.52{col 48}{space 3}0.148{col 56}{space 4} -.030308{col 69}{space 3} .1835735
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 4.977658{col 28}{space 2} 1.599951{col 39}{space 1}    3.11{col 48}{space 3}0.007{col 56}{space 4} 1.585913{col 69}{space 3} 8.369402
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. nlcom (alpha_final:_b[ln_inv_y]/(1 + _b[ln_inv_y])), post
+
+ {txt}alpha_final:  {res}_b[ln_inv_y]/(1 + _b[ln_inv_y])
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}alpha_final {c |}{col 14}{res}{space 2} .3395179{col 26}{space 2} .0695592{col 37}{space 1}    4.88{col 46}{space 3}0.000{col 54}{space 4} .2031844{col 67}{space 3} .4758513
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[alpha_final]=1/3
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}alpha_final = .3333333{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    0.01
+{txt}{col 10}Prob > chi2 =  {res}  0.9292
+{txt}
+{com}. 
+. nlcom (lambdafinal:ln(_b[ln_initial_gdp]+1)/(-25)), post
+
+{err}[ln_initial_gdp] not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\johnd\AppData\Local\Temp\STD5fa8_000000.tmp"
+{txt}
+{com}. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(4, 16)          =  {res}     6.48
+                                                {txt}Prob > F          = {res}    0.0027
+                                                {txt}R-squared         = {res}    0.7732
+                                                {txt}Root MSE          =    {res} .12017
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.5426971{col 28}{space 2} .1183194{col 39}{space 1}   -4.59{col 48}{space 3}0.000{col 56}{space 4}-.7935231{col 69}{space 3}-.2918711
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5140455{col 28}{space 2} .1594529{col 39}{space 1}    3.22{col 48}{space 3}0.005{col 56}{space 4} .1760205{col 69}{space 3} .8520704
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.5269041{col 28}{space 2} .3108805{col 39}{space 1}   -1.69{col 48}{space 3}0.109{col 56}{space 4}-1.185941{col 69}{space 3} .1321331
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .0766328{col 28}{space 2}  .050446{col 39}{space 1}    1.52{col 48}{space 3}0.148{col 56}{space 4} -.030308{col 69}{space 3} .1835735
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 4.977658{col 28}{space 2} 1.599951{col 39}{space 1}    3.11{col 48}{space 3}0.007{col 56}{space 4} 1.585913{col 69}{space 3} 8.369402
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. nlcom (alpha_final:_b[ln_inv_y]/(1 + _b[ln_inv_y])), post
+
+ {txt}alpha_final:  {res}_b[ln_inv_y]/(1 + _b[ln_inv_y])
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}alpha_final {c |}{col 14}{res}{space 2} .3395179{col 26}{space 2} .0695592{col 37}{space 1}    4.88{col 46}{space 3}0.000{col 54}{space 4} .2031844{col 67}{space 3} .4758513
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. nlcom (lambdafinal:ln(_b[ln_initial_gdp]+1)/(-25)), post
+
+{err}[ln_initial_gdp] not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\johnd\AppData\Local\Temp\STD5fa8_000000.tmp"
+{txt}
+{com}. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(4, 16)          =  {res}     6.48
+                                                {txt}Prob > F          = {res}    0.0027
+                                                {txt}R-squared         = {res}    0.7732
+                                                {txt}Root MSE          =    {res} .12017
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.5426971{col 28}{space 2} .1183194{col 39}{space 1}   -4.59{col 48}{space 3}0.000{col 56}{space 4}-.7935231{col 69}{space 3}-.2918711
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5140455{col 28}{space 2} .1594529{col 39}{space 1}    3.22{col 48}{space 3}0.005{col 56}{space 4} .1760205{col 69}{space 3} .8520704
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.5269041{col 28}{space 2} .3108805{col 39}{space 1}   -1.69{col 48}{space 3}0.109{col 56}{space 4}-1.185941{col 69}{space 3} .1321331
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .0766328{col 28}{space 2}  .050446{col 39}{space 1}    1.52{col 48}{space 3}0.148{col 56}{space 4} -.030308{col 69}{space 3} .1835735
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 4.977658{col 28}{space 2} 1.599951{col 39}{space 1}    3.11{col 48}{space 3}0.007{col 56}{space 4} 1.585913{col 69}{space 3} 8.369402
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. nlcom (alpha_final:_b[ln_inv_y]/(1 + _b[ln_inv_y])), post
+
+ {txt}alpha_final:  {res}_b[ln_inv_y]/(1 + _b[ln_inv_y])
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}alpha_final {c |}{col 14}{res}{space 2} .3395179{col 26}{space 2} .0695592{col 37}{space 1}    4.88{col 46}{space 3}0.000{col 54}{space 4} .2031844{col 67}{space 3} .4758513
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[alpha_final]=1/3
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}alpha_final = .3333333{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    0.01
+{txt}{col 10}Prob > chi2 =  {res}  0.9292
+{txt}
+{com}. 
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if oecd, robust
+
+{txt}Linear regression                               Number of obs     = {res}        21
+                                                {txt}F(4, 16)          =  {res}     6.48
+                                                {txt}Prob > F          = {res}    0.0027
+                                                {txt}R-squared         = {res}    0.7732
+                                                {txt}Root MSE          =    {res} .12017
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.5426971{col 28}{space 2} .1183194{col 39}{space 1}   -4.59{col 48}{space 3}0.000{col 56}{space 4}-.7935231{col 69}{space 3}-.2918711
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .5140455{col 28}{space 2} .1594529{col 39}{space 1}    3.22{col 48}{space 3}0.005{col 56}{space 4} .1760205{col 69}{space 3} .8520704
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2}-.5269041{col 28}{space 2} .3108805{col 39}{space 1}   -1.69{col 48}{space 3}0.109{col 56}{space 4}-1.185941{col 69}{space 3} .1321331
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .0766328{col 28}{space 2}  .050446{col 39}{space 1}    1.52{col 48}{space 3}0.148{col 56}{space 4} -.030308{col 69}{space 3} .1835735
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 4.977658{col 28}{space 2} 1.599951{col 39}{space 1}    3.11{col 48}{space 3}0.007{col 56}{space 4} 1.585913{col 69}{space 3} 8.369402
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. nlcom (lambdafinal:ln(_b[ln_initial_gdp]+1)/(-25)), post
+
+ {txt}lambdafinal:  {res}ln(_b[ln_initial_gdp]+1)/(-25)
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}lambdafinal {c |}{col 14}{res}{space 2} .0312964{col 26}{space 2} .0103493{col 37}{space 1}    3.02{col 46}{space 3}0.002{col 54}{space 4} .0110121{col 67}{space 3} .0515807
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[lambdafinal]=0.02
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}lambdafinal = .02{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    1.19
+{txt}{col 10}Prob > chi2 =  {res}  0.2750
+{txt}
+{com}. 
+. 
+. 
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if intermediate, robust
+
+{txt}Linear regression                               Number of obs     = {res}        68
+                                                {txt}F(4, 63)          =  {res}    12.05
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.4406
+                                                {txt}Root MSE          =    {res} .31596
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.3249672{col 28}{space 2} .0729775{col 39}{space 1}   -4.45{col 48}{space 3}0.000{col 56}{space 4}-.4708011{col 69}{space 3}-.1791332
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .4546803{col 28}{space 2} .1045888{col 39}{space 1}    4.35{col 48}{space 3}0.000{col 56}{space 4} .2456763{col 69}{space 3} .6636843
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2} -.459362{col 28}{space 2} .3120343{col 39}{space 1}   -1.47{col 48}{space 3}0.146{col 56}{space 4}-1.082913{col 69}{space 3} .1641887
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .1773383{col 28}{space 2} .0515307{col 39}{space 1}    3.44{col 48}{space 3}0.001{col 56}{space 4} .0743624{col 69}{space 3} .2803142
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 3.245745{col 28}{space 2} .8727038{col 39}{space 1}    3.72{col 48}{space 3}0.000{col 56}{space 4} 1.501786{col 69}{space 3} 4.989704
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. nlcom (alpha_final2:_b[ln_inv_y]/(1 + _b[ln_inv_y])), post
+
+{txt}alpha_final2:  {res}_b[ln_inv_y]/(1 + _b[ln_inv_y])
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+alpha_final2 {c |}{col 14}{res}{space 2} .3125637{col 26}{space 2} .0494254{col 37}{space 1}    6.32{col 46}{space 3}0.000{col 54}{space 4} .2156918{col 67}{space 3} .4094357
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[alpha_final2]=1/3
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}alpha_final2 = .3333333{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    0.18
+{txt}{col 10}Prob > chi2 =  {res}  0.6743
+{txt}
+{com}. 
+. reg ln_difference_gdp ln_initial_gdp ln_inv_y ln_ngd ln_school if intermediate, robust
+
+{txt}Linear regression                               Number of obs     = {res}        68
+                                                {txt}F(4, 63)          =  {res}    12.05
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.4406
+                                                {txt}Root MSE          =    {res} .31596
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 16}{c |}{col 28}    Robust
+{col 1}ln_differenc~p{col 16}{c |}      Coef.{col 28}   Std. Err.{col 40}      t{col 48}   P>|t|{col 56}     [95% Con{col 69}f. Interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+ln_initial_gdp {c |}{col 16}{res}{space 2}-.3249672{col 28}{space 2} .0729775{col 39}{space 1}   -4.45{col 48}{space 3}0.000{col 56}{space 4}-.4708011{col 69}{space 3}-.1791332
+{txt}{space 6}ln_inv_y {c |}{col 16}{res}{space 2} .4546803{col 28}{space 2} .1045888{col 39}{space 1}    4.35{col 48}{space 3}0.000{col 56}{space 4} .2456763{col 69}{space 3} .6636843
+{txt}{space 8}ln_ngd {c |}{col 16}{res}{space 2} -.459362{col 28}{space 2} .3120343{col 39}{space 1}   -1.47{col 48}{space 3}0.146{col 56}{space 4}-1.082913{col 69}{space 3} .1641887
+{txt}{space 5}ln_school {c |}{col 16}{res}{space 2} .1773383{col 28}{space 2} .0515307{col 39}{space 1}    3.44{col 48}{space 3}0.001{col 56}{space 4} .0743624{col 69}{space 3} .2803142
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 3.245745{col 28}{space 2} .8727038{col 39}{space 1}    3.72{col 48}{space 3}0.000{col 56}{space 4} 1.501786{col 69}{space 3} 4.989704
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. nlcom (lambdafinal2:ln(_b[ln_initial_gdp]+1)/(-25)), post
+
+{txt}lambdafinal2:  {res}ln(_b[ln_initial_gdp]+1)/(-25)
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}ln_differe~p{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+lambdafinal2 {c |}{col 14}{res}{space 2} .0157198{col 26}{space 2} .0043244{col 37}{space 1}    3.64{col 46}{space 3}0.000{col 54}{space 4} .0072441{col 67}{space 3} .0241954
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. test _b[lambdafinal2]=0.02
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}lambdafinal2 = .02{p_end}
+
+{txt}{col 12}chi2(  1) ={res}    0.98
+{txt}{col 10}Prob > chi2 =  {res}  0.3223
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. exit, clear
