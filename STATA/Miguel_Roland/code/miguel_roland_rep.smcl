@@ -1,0 +1,1354 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland\data\miguel_roland_rep.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}28 Jan 2024, 02:21:19
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. *load data
+. use ".\data\MR2011_replication.dta", clear
+{txt}
+{com}. 
+. *1(a)
+. 
+. //Panel A Table 1//
+. *two new variables
+. 
+. gen ordnance= General_Purpose + Cluster_Bomb + Missile + Rocket + Cannon_Artillery
+{txt}
+{com}. label variable ordnance "total US bombs, missiles, and rockets"
+{txt}
+{com}. 
+. gen ordnancekm2= ordnance/area_tot_km2
+{txt}
+{com}. label variable ordnancekm2 "total US bombs, missiles, and rockets per km2"
+{txt}
+{com}. estpost summarize ordnancekm2 ordnance General_Purpose Cluster_Bomb Missile Rocket Cannon_Artillery Incendiary WP Ammunition
+
+{txt}{space 0}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 9:e(count)}{space 1}{space 1}{ralign 9:e(sum_w)}{space 1}{space 1}{ralign 9:e(mean)}{space 1}{space 1}{ralign 9:e(Var)}{space 1}{space 1}{ralign 9:e(sd)}{space 1}{space 1}{ralign 9:e(min)}{space 1}{space 1}{ralign 9:e(max)}{space 1}{space 1}{ralign 9:e(sum)}{space 1}
+{space 0}{hline 13}{c   +}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 12:ordnancekm2}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 32.28611}}}{space 1}{space 1}{ralign 9:{res:{sf: 4686.066}}}{space 1}{space 1}{ralign 9:{res:{sf: 68.45484}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 561.4873}}}{space 1}{space 1}{ralign 9:{res:{sf: 18855.09}}}{space 1}
+{space 0}{space 0}{ralign 12:ordnance}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 14691.92}}}{space 1}{space 1}{ralign 9:{res:{sf: 1.39e+09}}}{space 1}{space 1}{ralign 9:{res:{sf: 37349.23}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:   365449}}}{space 1}{space 1}{ralign 9:{res:{sf:  8580079}}}{space 1}
+{space 0}{space 0}{ralign 12:General_Pu~e}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 11124.16}}}{space 1}{space 1}{ralign 9:{res:{sf: 9.47e+08}}}{space 1}{space 1}{ralign 9:{res:{sf:  30778.7}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:   322111}}}{space 1}{space 1}{ralign 9:{res:{sf:  6496508}}}{space 1}
+{space 0}{space 0}{ralign 12:Cluster_Bomb}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 706.1336}}}{space 1}{space 1}{ralign 9:{res:{sf:  5143636}}}{space 1}{space 1}{ralign 9:{res:{sf: 2267.959}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:    32403}}}{space 1}{space 1}{ralign 9:{res:{sf:   412382}}}{space 1}
+{space 0}{space 0}{ralign 12:Missile}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 24.71918}}}{space 1}{space 1}{ralign 9:{res:{sf: 14814.93}}}{space 1}{space 1}{ralign 9:{res:{sf: 121.7166}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:     1600}}}{space 1}{space 1}{ralign 9:{res:{sf:    14436}}}{space 1}
+{space 0}{space 0}{ralign 12:Rocket}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 2828.346}}}{space 1}{space 1}{ralign 9:{res:{sf: 5.20e+07}}}{space 1}{space 1}{ralign 9:{res:{sf: 7207.671}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:   106445}}}{space 1}{space 1}{ralign 9:{res:{sf:  1651754}}}{space 1}
+{space 0}{space 0}{ralign 12:Cannon_Art~y}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 8.559932}}}{space 1}{space 1}{ralign 9:{res:{sf: 2690.785}}}{space 1}{space 1}{ralign 9:{res:{sf: 51.87278}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:      772}}}{space 1}{space 1}{ralign 9:{res:{sf:     4999}}}{space 1}
+{space 0}{space 0}{ralign 12:Incendiary}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 795.1062}}}{space 1}{space 1}{ralign 9:{res:{sf:  2698245}}}{space 1}{space 1}{ralign 9:{res:{sf: 1642.634}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:    11667}}}{space 1}{space 1}{ralign 9:{res:{sf:   464342}}}{space 1}
+{space 0}{space 0}{ralign 12:WP}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf: 70.74658}}}{space 1}{space 1}{ralign 9:{res:{sf: 94013.07}}}{space 1}{space 1}{ralign 9:{res:{sf: 306.6155}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:     3580}}}{space 1}{space 1}{ralign 9:{res:{sf:    41316}}}{space 1}
+{space 0}{space 0}{ralign 12:Ammunition}{space 1}{c |}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:      584}}}{space 1}{space 1}{ralign 9:{res:{sf:  5677.11}}}{space 1}{space 1}{ralign 9:{res:{sf: 1.22e+08}}}{space 1}{space 1}{ralign 9:{res:{sf: 11060.53}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:   136416}}}{space 1}{space 1}{ralign 9:{res:{sf:  3315432}}}{space 1}
+
+{com}. 
+. 
+. esttab, title("Summary statistics — U.S. ordnance data, 1965–75") posthead("Panel A: district-level data") noobs modelwidth(10) varwidth(50) ///
+> cell((mean(label(Mean)fmt(%9.1f)) sd(label(S.D.)fmt(%9.1f)) max(label(Max)fmt(%9.1f)) count(label(Obs)fmt(%9.0g)))) nonumber ///
+> coeflabel(ordnance "total US bombs, missiles, and rockets" ordnancekm2 "total US bombs, missiles, and rockets per km2" ///
+> General_Purpose "General purpose bombs" Cluster_Bomb "Cluster bombs" Missile "Missiles" Rocket "Rockets" Cannon_Artillery "Cannon artillery" ///
+> Incendiary "Incendiaries" WP "White Phosphorous" Ammunition "Ammunition(000's of rounds)")
+{res}
+{txt}Summary statistics — U.S. ordnance data, 1965–75
+{txt}{hline 94}
+{txt}                                                                                              
+{txt}                                                         Mean       S.D.        Max        Obs
+{txt}Panel A: district-level data
+{txt}total US bombs, missiles, and rockets per km2     {res}       32.3       68.5      561.5        584{txt}
+{txt}total US bombs, missiles, and rockets             {res}    14691.9    37349.2   365449.0        584{txt}
+{txt}General purpose bombs                             {res}    11124.2    30778.7   322111.0        584{txt}
+{txt}Cluster bombs                                     {res}      706.1     2268.0    32403.0        584{txt}
+{txt}Missiles                                          {res}       24.7      121.7     1600.0        584{txt}
+{txt}Rockets                                           {res}     2828.3     7207.7   106445.0        584{txt}
+{txt}Cannon artillery                                  {res}        8.6       51.9      772.0        584{txt}
+{txt}Incendiaries                                      {res}      795.1     1642.6    11667.0        584{txt}
+{txt}White Phosphorous                                 {res}       70.7      306.6     3580.0        584{txt}
+{txt}Ammunition(000's of rounds)                       {res}     5677.1    11060.5   136416.0        584{txt}
+{txt}{hline 94}
+
+{com}. 
+. *correlation pairwise
+. *pwcorr General_Purpose Cluster_Bomb Missile Rocket Cannon_Artillery Incendiary WP Ammunition [fweight=pop_tot], star(.05)
+. 
+. estpost corr General_Purpose Cluster_Bomb Missile Rocket Cannon_Artillery Incendiary WP Ammunition [fweight=pop_tot]
+
+{txt}{space 0}{space 0}{ralign 12:General_Purp}{space 1}{c |}{space 1}{ralign 9:e(b)}{space 1}{space 1}{ralign 9:e(rho)}{space 1}{space 1}{ralign 9:e(p)}{space 1}{space 1}{ralign 9:e(count)}{space 1}
+{space 0}{hline 13}{c   +}{hline 11}{hline 11}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 12:Cluster_Bomb}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .5901278}}}{space 1}{space 1}{ralign 9:{res:{sf: .5901278}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+{space 0}{space 0}{ralign 12:Missile}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .2664038}}}{space 1}{space 1}{ralign 9:{res:{sf: .2664038}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+{space 0}{space 0}{ralign 12:Rocket}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .6362205}}}{space 1}{space 1}{ralign 9:{res:{sf: .6362205}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+{space 0}{space 0}{ralign 12:Cannon_Art~y}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .3737318}}}{space 1}{space 1}{ralign 9:{res:{sf: .3737318}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+{space 0}{space 0}{ralign 12:Incendiary}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .6511191}}}{space 1}{space 1}{ralign 9:{res:{sf: .6511191}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+{space 0}{space 0}{ralign 12:WP}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .2701751}}}{space 1}{space 1}{ralign 9:{res:{sf: .2701751}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+{space 0}{space 0}{ralign 12:Ammunition}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .5427438}}}{space 1}{space 1}{ralign 9:{res:{sf: .5427438}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf: 7.52e+07}}}{space 1}
+
+{com}. esttab ., varwidth(20) modelwidth(15) compress noobs b(2) not nonumbers star(* .10 ** .05 *** .01)
+{res}
+{txt}{hline 39}
+{txt}                     General_Purpose   
+{txt}{hline 39}
+{txt}Cluster_Bomb        {res}            0.59***{txt}
+{txt}Missile             {res}            0.27***{txt}
+{txt}Rocket              {res}            0.64***{txt}
+{txt}Cannon_Artillery    {res}            0.37***{txt}
+{txt}Incendiary          {res}            0.65***{txt}
+{txt}WP                  {res}            0.27***{txt}
+{txt}Ammunition          {res}            0.54***{txt}
+{txt}{hline 39}
+{txt}* p<.10, ** p<.05, *** p<.01
+
+{com}. 
+. *1(b)
+. 
+. sum ordnancekm2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}ordnancekm2 {c |}{res}        584    32.28611    68.45484          0   561.4873
+{txt}
+{com}. list districtname provincename if ordnancekm2==r(min)
+{txt}
+     {c TLC}{hline 10}{c -}{hline 20}{c TRC}
+     {c |} {res}di~tname         provincename {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 20}{c RT}
+399. {c |} {res}       4   Ho Chi Minh (City) {txt}{c |}
+     {c BLC}{hline 10}{c -}{hline 20}{c BRC}
+
+{com}. list districtname provincename if ordnancekm2==r(max)
+{txt}
+     {c TLC}{hline 13}{c -}{hline 11}{c TRC}
+     {c |} {res}districtn~e   provin~me {txt}{c |}
+     {c LT}{hline 13}{c -}{hline 11}{c RT}
+288. {c |} {res}Trieu phong   Quang Tri {txt}{c |}
+     {c BLC}{hline 13}{c -}{hline 11}{c BRC}
+
+{com}. 
+. summarize ordnancekm2 if provincename=="Ha Noi (City)"
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}ordnancekm2 {c |}{res}         12    14.27781    15.26578   .0833333   41.26667
+{txt}
+{com}. display r(sum)
+{res}171.33375
+{txt}
+{com}. 
+. summarize ordnancekm2 if provincename=="Ho Chi Minh (City)"
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}ordnancekm2 {c |}{res}         22    16.47099    28.31048          0   134.0736
+{txt}
+{com}. display r(sum)
+{res}362.36175
+{txt}
+{com}. 
+. summarize ordnancekm2 if provincename=="Quang Tri"
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}ordnancekm2 {c |}{res}          8    404.1859    139.0337    161.632   561.4873
+{txt}
+{com}. display r(sum)
+{res}3233.4869
+{txt}
+{com}. 
+. *(iv)
+. *I think total ordnance and total km2 (>or< 17°) used to calculate ordnancekm2 separately.
+. sum ordnancekm2 if north_lat < 17.0   
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}ordnancekm2 {c |}{res}        264    25.81545    33.09438          0   177.6046
+{txt}
+{com}. display r(sum)
+{res}6815.2798
+{txt}
+{com}. 
+. sum ordnancekm2 if north_lat > 17.0
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}ordnancekm2 {c |}{res}        320    37.62441     87.1664   .0006793   561.4873
+{txt}
+{com}. display r(sum)
+{res}12039.81
+{txt}
+{com}. 
+. *(c)
+. graph twoway (scatter ordnancekm2 north_lat), xline(17.0)
+{res}{txt}
+{com}. graph export ".\output\scatter.png", replace
+{txt}(note: file .\output\scatter.png not found)
+(file .\output\scatter.png written in PNG format)
+
+{com}. 
+. *(d)
+. egen allordnance = rowtotal(Ammunition Cannon_Artillery Chemical Cluster_Bomb Flare Fuel_Air_Explosive General_Purpose Grenade Incendiary Mine Missile Other Rocket Submunition Torpedo Unknown UnlabeledUSAF A AAC AC ACC AP COM COMM CVT HC HCC HCP HCPD HCVT HE HECVT HEPD HP HVTF ILL ILLUM ILUM MK MK07 MK10 MK12 MK7 MK70 MK8 P P0 RAGON RAP SHRKE UNLABELEDUSN VC VT VTN VTNSD VTSD W WP)
+{txt}
+{com}. gen allordnancekm2 = allordnance/area_tot_km2
+{txt}
+{com}. gen unreported_ordnancekm2 = allordnancekm2 - ordnancekm2
+{txt}
+{com}. display sum(unreported_ordnancekm2)
+{res}0
+{txt}
+{com}. 
+. *correlation 
+. pwcorr allordnancekm2 ordnancekm2 [fweight=pop_tot], sig
+
+             {txt}{c |} allord~2 ordnan~2
+{hline 13}{c +}{hline 18}
+allordnanc~2 {c |} {res}  1.0000 
+             {txt}{c |}
+             {c |}
+ ordnancekm2 {c |} {res}  0.8761   1.0000 
+             {txt}{c |}{res}   0.0000
+             {txt}{c |}
+
+{com}. 
+. *2.(a)
+. *i) 
+. reg poverty_p0 ordnancekm2, robust
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(1, 582)         =  {res}     7.81
+                                                {txt}Prob > F          = {res}    0.0054
+                                                {txt}R-squared         = {res}    0.0200
+                                                {txt}Root MSE          =    {res} .19752
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}  poverty_p0{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2}-.0004117{col 26}{space 2} .0001473{col 37}{space 1}   -2.80{col 46}{space 3}0.005{col 54}{space 4} -.000701{col 67}{space 3}-.0001224
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  .422885{col 26}{space 2} .0092922{col 37}{space 1}   45.51{col 46}{space 3}0.000{col 54}{space 4} .4046346{col 67}{space 3} .4411354
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg1.xlsx", replace depvar
+{txt}{browse `".\output\reg1.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg1.txt""':seeout}
+
+{com}. *ii)
+. reg popdensity1999 ordnancekm2, robust
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(1, 582)         =  {res}     0.07
+                                                {txt}Prob > F          = {res}    0.7973
+                                                {txt}R-squared         = {res}    0.0002
+                                                {txt}Root MSE          =    {res} 5850.5
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}popdens~1999{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2} 1.114473{col 26}{space 2} 4.337109{col 37}{space 1}    0.26{col 46}{space 3}0.797{col 54}{space 4}-7.403818{col 67}{space 3} 9.632764
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 1622.619{col 26}{space 2} 283.9227{col 37}{space 1}    5.72{col 46}{space 3}0.000{col 54}{space 4} 1064.981{col 67}{space 3} 2180.257
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 
+  outreg2 using `".\output\reg1.xlsx"', depvar
+{txt}{browse `".\output\reg1.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg1.txt""':seeout}
+
+{com}. *iii)
+. reg elec_rate ordnancekm2, robust
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(1, 582)         =  {res}    19.21
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.0151
+                                                {txt}Root MSE          =    {res} .26608
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}   elec_rate{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2} .0004812{col 26}{space 2} .0001098{col 37}{space 1}    4.38{col 46}{space 3}0.000{col 54}{space 4} .0002656{col 67}{space 3} .0006968
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .6929084{col 26}{space 2} .0121631{col 37}{space 1}   56.97{col 46}{space 3}0.000{col 54}{space 4} .6690196{col 67}{space 3} .7167973
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2
+  outreg2 using `".\output\reg1.xlsx"', depvar
+{txt}{browse `".\output\reg1.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg1.txt""':seeout}
+
+{com}. *iv
+. reg lit_rate ordnancekm2, robust
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(1, 582)         =  {res}     7.53
+                                                {txt}Prob > F          = {res}    0.0063
+                                                {txt}R-squared         = {res}    0.0065
+                                                {txt}Root MSE          =    {res} .11181
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    lit_rate{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2} .0001324{col 26}{space 2} .0000482{col 37}{space 1}    2.74{col 46}{space 3}0.006{col 54}{space 4} .0000376{col 67}{space 3} .0002271
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8734848{col 26}{space 2} .0053155{col 37}{space 1}  164.33{col 46}{space 3}0.000{col 54}{space 4}  .863045{col 67}{space 3} .8839246
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2
+  outreg2 using `".\output\reg1.xlsx"', depvar
+{txt}{browse `".\output\reg1.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg1.txt""':seeout}
+
+{com}. 
+. *other regressions
+. 
+. reg poverty_p0 ordnancekm2 if south==1, robust
+
+{txt}Linear regression                               Number of obs     = {res}       284
+                                                {txt}F(1, 282)         =  {res}     5.07
+                                                {txt}Prob > F          = {res}    0.0251
+                                                {txt}R-squared         = {res}    0.0120
+                                                {txt}Root MSE          =    {res} .18416
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}  poverty_p0{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2}-.0004937{col 26}{space 2} .0002192{col 37}{space 1}   -2.25{col 46}{space 3}0.025{col 54}{space 4}-.0009253{col 67}{space 3}-.0000622
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .3671737{col 26}{space 2}  .013578{col 37}{space 1}   27.04{col 46}{space 3}0.000{col 54}{space 4} .3404466{col 67}{space 3} .3939008
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg2.xlsx", replace title(dependent variable: estimated poverty rate 1999) ctitle(ex-south)
+{txt}{browse `".\output\reg2.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg2.txt""':seeout}
+
+{com}. reg poverty_p0 ordnancekm2 if south!=1, robust
+
+{txt}Linear regression                               Number of obs     = {res}       300
+                                                {txt}F(1, 298)         =  {res}     7.21
+                                                {txt}Prob > F          = {res}    0.0076
+                                                {txt}R-squared         = {res}    0.0356
+                                                {txt}Root MSE          =    {res} .19446
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}  poverty_p0{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2}-.0004297{col 26}{space 2}   .00016{col 37}{space 1}   -2.69{col 46}{space 3}0.008{col 54}{space 4}-.0007445{col 67}{space 3}-.0001148
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4785613{col 26}{space 2} .0119773{col 37}{space 1}   39.96{col 46}{space 3}0.000{col 54}{space 4} .4549905{col 67}{space 3}  .502132
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg2.xlsx", ctitle(ex-north)
+{txt}{browse `".\output\reg2.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg2.txt""':seeout}
+
+{com}. reg poverty_p0 ordnancekm2 if popdensity6061<200, robust
+
+{txt}Linear regression                               Number of obs     = {res}       409
+                                                {txt}F(1, 407)         =  {res}     7.65
+                                                {txt}Prob > F          = {res}    0.0059
+                                                {txt}R-squared         = {res}    0.0265
+                                                {txt}Root MSE          =    {res} .19121
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}  poverty_p0{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2}-.0004338{col 26}{space 2} .0001568{col 37}{space 1}   -2.77{col 46}{space 3}0.006{col 54}{space 4}-.0007421{col 67}{space 3}-.0001255
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4765867{col 26}{space 2} .0106794{col 37}{space 1}   44.63{col 46}{space 3}0.000{col 54}{space 4} .4555931{col 67}{space 3} .4975803
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg2.xlsx", ctitle(rural)
+{txt}{browse `".\output\reg2.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg2.txt""':seeout}
+
+{com}. reg poverty_p0 ordnancekm2 if popdensity6061>200, robust
+
+{txt}Linear regression                               Number of obs     = {res}       175
+                                                {txt}F(1, 173)         =  {res}    42.20
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.0771
+                                                {txt}Root MSE          =    {res} .15078
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}  poverty_p0{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}ordnancekm2 {c |}{col 14}{res}{space 2}-.0007646{col 26}{space 2} .0001177{col 37}{space 1}   -6.50{col 46}{space 3}0.000{col 54}{space 4}-.0009969{col 67}{space 3}-.0005323
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  .307802{col 26}{space 2}  .012677{col 37}{space 1}   24.28{col 46}{space 3}0.000{col 54}{space 4} .2827805{col 67}{space 3} .3328236
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg2.xlsx", ctitle(urban)
+{txt}{browse `".\output\reg2.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg2.txt""':seeout}
+
+{com}. reg poverty_p0 ordnancekm2 c.ordnancekm2#c.ordnancekm2, robust
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(2, 581)         =  {res}    13.77
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.0506
+                                                {txt}Root MSE          =    {res} .19458
+
+{txt}{hline 28}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 29}{c |}{col 41}    Robust
+{col 1}                 poverty_p0{col 29}{c |}      Coef.{col 41}   Std. Err.{col 53}      t{col 61}   P>|t|{col 69}     [95% Con{col 82}f. Interval]
+{hline 28}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 16}ordnancekm2 {c |}{col 29}{res}{space 2}-.0015175{col 41}{space 2} .0002985{col 52}{space 1}   -5.08{col 61}{space 3}0.000{col 69}{space 4}-.0021038{col 82}{space 3}-.0009311
+{txt}{space 27} {c |}
+c.ordnancekm2#c.ordnancekm2 {c |}{col 29}{res}{space 2} 3.03e-06{col 41}{space 2} 7.62e-07{col 52}{space 1}    3.98{col 61}{space 3}0.000{col 69}{space 4} 1.53e-06{col 82}{space 3} 4.53e-06
+{txt}{space 27} {c |}
+{space 22}_cons {c |}{col 29}{res}{space 2} .4412566{col 41}{space 2} .0102565{col 52}{space 1}   43.02{col 61}{space 3}0.000{col 69}{space 4} .4211124{col 82}{space 3} .4614009
+{txt}{hline 28}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg2.xlsx", ctitle(square bombing)
+{txt}{browse `".\output\reg2.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg2.txt""':seeout}
+
+{com}. sort ordnancekm2
+{txt}
+{com}. 
+. xtile topten = ordnancekm2, nq(10)
+{txt}
+{com}. list districtname topten, sepby(topten)
+{txt}
+     {c TLC}{hline 23}{c -}{hline 8}{c TRC}
+     {c |} {res}         districtname   topten {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+  1. {c |} {res}                    4        1 {txt}{c |}
+  2. {c |} {res}              Na Hang        1 {txt}{c |}
+  3. {c |} {res}               Xi Man        1 {txt}{c |}
+  4. {c |} {res}           Trang Dinh        1 {txt}{c |}
+  5. {c |} {res}             Tua Chua        1 {txt}{c |}
+  6. {c |} {res}               Sin Ho        1 {txt}{c |}
+  7. {c |} {res}            Quang Hoa        1 {txt}{c |}
+  8. {c |} {res}                Ba Be        1 {txt}{c |}
+  9. {c |} {res}              Bao Lac        1 {txt}{c |}
+ 10. {c |} {res}           Bao  Thang        1 {txt}{c |}
+ 11. {c |} {res}             Thach An        1 {txt}{c |}
+ 12. {c |} {res}             Quang Ha        1 {txt}{c |}
+ 13. {c |} {res}             Mong Cai        1 {txt}{c |}
+ 14. {c |} {res}            Bac Quang        1 {txt}{c |}
+ 15. {c |} {res}               Hoa An        1 {txt}{c |}
+ 16. {c |} {res}              Cho Don        1 {txt}{c |}
+ 17. {c |} {res}             Ngan Son        1 {txt}{c |}
+ 18. {c |} {res}            Binh Lieu        1 {txt}{c |}
+ 19. {c |} {res}             Van Lang        1 {txt}{c |}
+ 20. {c |} {res}             Binh Gia        1 {txt}{c |}
+ 21. {c |} {res}             Dinh Hoa        1 {txt}{c |}
+ 22. {c |} {res}            Chiem Hoa        1 {txt}{c |}
+ 23. {c |} {res}             V�n Quan        1 {txt}{c |}
+ 24. {c |} {res}             Dinh Lap        1 {txt}{c |}
+ 25. {c |} {res}               Phu Cu        1 {txt}{c |}
+ 26. {c |} {res}               Bac Ha        1 {txt}{c |}
+ 27. {c |} {res}              Yen Lac        1 {txt}{c |}
+ 28. {c |} {res}             Cau Giay        1 {txt}{c |}
+ 29. {c |} {res}           Thanh Thuy        1 {txt}{c |}
+ 30. {c |} {res}       Dien Bien Dong        1 {txt}{c |}
+ 31. {c |} {res}             Phuc Tho        1 {txt}{c |}
+ 32. {c |} {res}              Van Ban        1 {txt}{c |}
+ 33. {c |} {res}              Tien Lu        1 {txt}{c |}
+ 34. {c |} {res}               Tu Son        1 {txt}{c |}
+ 35. {c |} {res}           Quynh Nhai        1 {txt}{c |}
+ 36. {c |} {res}           Thanh Mien        1 {txt}{c |}
+ 37. {c |} {res}              Cao Loc        1 {txt}{c |}
+ 38. {c |} {res}            Muong Lay        1 {txt}{c |}
+ 39. {c |} {res}            Than Uyen        1 {txt}{c |}
+ 40. {c |} {res}              Yen Lap        1 {txt}{c |}
+ 41. {c |} {res}               Yen My        1 {txt}{c |}
+ 42. {c |} {res}           Lang Chanh        1 {txt}{c |}
+ 43. {c |} {res}            Thoai Son        1 {txt}{c |}
+ 44. {c |} {res}         Mu Cang Chai        1 {txt}{c |}
+ 45. {c |} {res}            Muong Lat        1 {txt}{c |}
+ 46. {c |} {res}             Chau Doc        1 {txt}{c |}
+ 47. {c |} {res}             Tien Yen        1 {txt}{c |}
+ 48. {c |} {res}              V? Nhai        1 {txt}{c |}
+ 49. {c |} {res}              Luc Yen        1 {txt}{c |}
+ 50. {c |} {res}            Que Phong        1 {txt}{c |}
+ 51. {c |} {res}             Phu Quoc        1 {txt}{c |}
+ 52. {c |} {res}            Lap Thach        1 {txt}{c |}
+ 53. {c |} {res}              Tan Yen        1 {txt}{c |}
+ 54. {c |} {res}             Gia Binh        1 {txt}{c |}
+ 55. {c |} {res}             Mai Chau        1 {txt}{c |}
+ 56. {c |} {res}              Ham Yen        1 {txt}{c |}
+ 57. {c |} {res}               Da Bac        1 {txt}{c |}
+ 58. {c |} {res}             Tam Nong        1 {txt}{c |}
+ 59. {c |} {res}              Cho Moi        1 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+ 60. {c |} {res}             Muong La        2 {txt}{c |}
+ 61. {c |} {res}              Bac Son        2 {txt}{c |}
+ 62. {c |} {res}              Bao Yen        2 {txt}{c |}
+ 63. {c |} {res}            Thanh Son        2 {txt}{c |}
+ 64. {c |} {res}               Ba Che        2 {txt}{c |}
+ 65. {c |} {res}              Tan Lac        2 {txt}{c |}
+ 66. {c |} {res}              Gia Loc        2 {txt}{c |}
+ 67. {c |} {res}             Tram Tau        2 {txt}{c |}
+ 68. {c |} {res}             Yen Binh        2 {txt}{c |}
+ 69. {c |} {res}               An Thi        2 {txt}{c |}
+ 70. {c |} {res}            Tam Duong        2 {txt}{c |}
+ 71. {c |} {res}              Lac Son        2 {txt}{c |}
+ 72. {c |} {res}             Tam Nong        2 {txt}{c |}
+ 73. {c |} {res}              Phu Tan        2 {txt}{c |}
+ 74. {c |} {res}              Song Ma        2 {txt}{c |}
+ 75. {c |} {res}            Van Giang        2 {txt}{c |}
+ 76. {c |} {res}            Soc Trang        2 {txt}{c |}
+ 77. {c |} {res}          Thuan Thanh        2 {txt}{c |}
+ 78. {c |} {res}             Chi Linh        2 {txt}{c |}
+ 79. {c |} {res}             Ngoc Lac        2 {txt}{c |}
+ 80. {c |} {res}           Chau Giang        2 {txt}{c |}
+ 81. {c |} {res}             Buon Don        2 {txt}{c |}
+ 82. {c |} {res}             Quoc Oai        2 {txt}{c |}
+ 83. {c |} {res}           Chau Thanh        2 {txt}{c |}
+ 84. {c |} {res}Phan Rang - Thap Cham        2 {txt}{c |}
+ 85. {c |} {res}             Quan Hoa        2 {txt}{c |}
+ 86. {c |} {res}             Tien Son        2 {txt}{c |}
+ 87. {c |} {res}             Chau Phu        2 {txt}{c |}
+ 88. {c |} {res}             Hoa Binh        2 {txt}{c |}
+ 89. {c |} {res}             Moc Chau        2 {txt}{c |}
+ 90. {c |} {res}                    3        2 {txt}{c |}
+ 91. {c |} {res}             Thot Not        2 {txt}{c |}
+ 92. {c |} {res}                Ba Vi        2 {txt}{c |}
+ 93. {c |} {res}             Loc BInh        2 {txt}{c |}
+ 94. {c |} {res}             Quy Chau        2 {txt}{c |}
+ 95. {c |} {res}                    1        2 {txt}{c |}
+ 96. {c |} {res}             Hiep Hoa        2 {txt}{c |}
+ 97. {c |} {res}             Bac Lieu        2 {txt}{c |}
+ 98. {c |} {res}              Phu Yen        2 {txt}{c |}
+ 99. {c |} {res}              Ly Nhan        2 {txt}{c |}
+100. {c |} {res}            Song Thao        2 {txt}{c |}
+101. {c |} {res}               M'Drak        2 {txt}{c |}
+102. {c |} {res}          Tuyen Quang        2 {txt}{c |}
+103. {c |} {res}           Thuan Chau        2 {txt}{c |}
+104. {c |} {res}          Thach Thanh        2 {txt}{c |}
+105. {c |} {res}            Lac Duong        2 {txt}{c |}
+106. {c |} {res}              Kim Boi        2 {txt}{c |}
+107. {c |} {res}              Quy Hop        2 {txt}{c |}
+108. {c |} {res}             Yen Thuy        2 {txt}{c |}
+109. {c |} {res}             Phu Binh        2 {txt}{c |}
+110. {c |} {res}              Yen Son        2 {txt}{c |}
+111. {c |} {res}             Phu Ninh        2 {txt}{c |}
+112. {c |} {res}             Van Chan        2 {txt}{c |}
+113. {c |} {res}            Doan Hung        2 {txt}{c |}
+114. {c |} {res}             Nho Quan        2 {txt}{c |}
+115. {c |} {res}               Cu Jut        2 {txt}{c |}
+116. {c |} {res}             Quan Son        2 {txt}{c |}
+117. {c |} {res}               Que Vo        2 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+118. {c |} {res}             Ba Thuoc        3 {txt}{c |}
+119. {c |} {res}           Long Xuyen        3 {txt}{c |}
+120. {c |} {res}             Kim Dong        3 {txt}{c |}
+121. {c |} {res}             Phu Quoc        3 {txt}{c |}
+122. {c |} {res}              Bac Kan        3 {txt}{c |}
+123. {c |} {res}             Hoanh Bo        3 {txt}{c |}
+124. {c |} {res}            Song Cong        3 {txt}{c |}
+125. {c |} {res}              Dong Da        3 {txt}{c |}
+126. {c |} {res}              Ayun Pa        3 {txt}{c |}
+127. {c |} {res}              Go Cong        3 {txt}{c |}
+128. {c |} {res}             Son Dong        3 {txt}{c |}
+129. {c |} {res}               Ea Sup        3 {txt}{c |}
+130. {c |} {res}              Ba Dinh        3 {txt}{c |}
+131. {c |} {res}             Lac Thuy        3 {txt}{c |}
+132. {c |} {res}             Thanh Ha        3 {txt}{c |}
+133. {c |} {res}             Binh Luc        3 {txt}{c |}
+134. {c |} {res}                    7        3 {txt}{c |}
+135. {c |} {res}           Binh Thanh        3 {txt}{c |}
+136. {c |} {res}              Bac Yen        3 {txt}{c |}
+137. {c |} {res}               Lam Ha        3 {txt}{c |}
+138. {c |} {res}            Tuan Giao        3 {txt}{c |}
+139. {c |} {res}            Duc Trong        3 {txt}{c |}
+140. {c |} {res}             Hai Chau        3 {txt}{c |}
+141. {c |} {res}             Cam Thuy        3 {txt}{c |}
+142. {c |} {res}              Mai Son        3 {txt}{c |}
+143. {c |} {res}           Binh Giang        3 {txt}{c |}
+144. {c |} {res}              Bao Loc        3 {txt}{c |}
+145. {c |} {res}             Hung Yen        3 {txt}{c |}
+146. {c |} {res}               Ky Son        3 {txt}{c |}
+147. {c |} {res}          Tuong Duong        3 {txt}{c |}
+148. {c |} {res}             Yen Dinh        3 {txt}{c |}
+149. {c |} {res}            Vinh Long        3 {txt}{c |}
+150. {c |} {res}             Tan Chau        3 {txt}{c |}
+151. {c |} {res}            Don Duong        3 {txt}{c |}
+152. {c |} {res}               Sa Dec        3 {txt}{c |}
+153. {c |} {res}            Tuy Phong        3 {txt}{c |}
+154. {c |} {res}        Buon Ma Thuot        3 {txt}{c |}
+155. {c |} {res}                Tu Ky        3 {txt}{c |}
+156. {c |} {res}            Luong Tai        3 {txt}{c |}
+157. {c |} {res}               Tan An        3 {txt}{c |}
+158. {c |} {res}            Krong Buk        3 {txt}{c |}
+159. {c |} {res}          Thuong Xuan        3 {txt}{c |}
+160. {c |} {res}            Krong Pak        3 {txt}{c |}
+161. {c |} {res}            Con Cuong        3 {txt}{c |}
+162. {c |} {res}             Long Phu        3 {txt}{c |}
+163. {c |} {res}               Tay Ho        3 {txt}{c |}
+164. {c |} {res}               Da Lat        3 {txt}{c |}
+165. {c |} {res}            Phu Nhuan        3 {txt}{c |}
+166. {c |} {res}             Ea H'leo        3 {txt}{c |}
+167. {c |} {res}             Yen Chau        3 {txt}{c |}
+168. {c |} {res}             Krong Pa        3 {txt}{c |}
+169. {c |} {res}              Cho Moi        3 {txt}{c |}
+170. {c |} {res}              Pho Yen        3 {txt}{c |}
+171. {c |} {res}            Luong Son        3 {txt}{c |}
+172. {c |} {res}            Phu Luong        3 {txt}{c |}
+173. {c |} {res}               Ca Mau        3 {txt}{c |}
+174. {c |} {res}             Gia Vien        3 {txt}{c |}
+175. {c |} {res}            Hoan Kiem        3 {txt}{c |}
+176. {c |} {res}             Da Huoai        3 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+177. {c |} {res}           Binh Xuyen        4 {txt}{c |}
+178. {c |} {res}              Yen The        4 {txt}{c |}
+179. {c |} {res}             Luc Ngan        4 {txt}{c |}
+180. {c |} {res}             Tran yen        4 {txt}{c |}
+181. {c |} {res}             Bien Hoa        4 {txt}{c |}
+182. {c |} {res}               Ea Kar        4 {txt}{c |}
+183. {c |} {res}               Ly Son        4 {txt}{c |}
+184. {c |} {res}             Chi Lang        4 {txt}{c |}
+185. {c |} {res}              Hung Ha        4 {txt}{c |}
+186. {c |} {res}                    2        4 {txt}{c |}
+187. {c |} {res}           Chau Thanh        4 {txt}{c |}
+188. {c |} {res}             Tan Hiep        4 {txt}{c |}
+189. {c |} {res}             Kim Bang        4 {txt}{c |}
+190. {c |} {res}              Bao Lam        4 {txt}{c |}
+191. {c |} {res}               Lap Vo        4 {txt}{c |}
+192. {c |} {res}               Pleiku        4 {txt}{c |}
+193. {c |} {res}             Cam Ranh        4 {txt}{c |}
+194. {c |} {res}              Di Linh        4 {txt}{c |}
+195. {c |} {res}               Dai Tu        4 {txt}{c |}
+196. {c |} {res}             Thanh Ba        4 {txt}{c |}
+197. {c |} {res}             Krong No        4 {txt}{c |}
+198. {c |} {res}             Vinh Loc        4 {txt}{c |}
+199. {c |} {res}             Vinh Bao        4 {txt}{c |}
+200. {c |} {res}              Luc Nam        4 {txt}{c |}
+201. {c |} {res}             Lai Vung        4 {txt}{c |}
+202. {c |} {res}            Song Hinh        4 {txt}{c |}
+203. {c |} {res}           Ninh Giang        4 {txt}{c |}
+204. {c |} {res}               Vu Thu        4 {txt}{c |}
+205. {c |} {res}             Van Ninh        4 {txt}{c |}
+206. {c |} {res}              Son Tra        4 {txt}{c |}
+207. {c |} {res}             Yen Hung        4 {txt}{c |}
+208. {c |} {res}              Van Yen        4 {txt}{c |}
+209. {c |} {res}            Cam Giang        4 {txt}{c |}
+210. {c |} {res}                  Lak        4 {txt}{c |}
+211. {c |} {res}            Son Duong        4 {txt}{c |}
+212. {c |} {res}                    5        4 {txt}{c |}
+213. {c |} {res}            Thanh Khe        4 {txt}{c |}
+214. {c |} {res}              Tu Liem        4 {txt}{c |}
+215. {c |} {res}               Son La        4 {txt}{c |}
+216. {c |} {res}             Yen Dung        4 {txt}{c |}
+217. {c |} {res}               Da Teh        4 {txt}{c |}
+218. {c |} {res}             Huu Lung        4 {txt}{c |}
+219. {c |} {res}               Ba Tri        4 {txt}{c |}
+220. {c |} {res}             Lam Thao        4 {txt}{c |}
+221. {c |} {res}            Dong Hung        4 {txt}{c |}
+222. {c |} {res}                Co To        4 {txt}{c |}
+223. {c |} {res}           Dong Trieu        4 {txt}{c |}
+224. {c |} {res}              Vi Thuy        4 {txt}{c |}
+225. {c |} {res}            Dien Bien        4 {txt}{c |}
+226. {c |} {res}            Kien Thuy        4 {txt}{c |}
+227. {c |} {res}            Ngoc Hien        4 {txt}{c |}
+228. {c |} {res}            Mang Thit        4 {txt}{c |}
+229. {c |} {res}         Thanh Chuong        4 {txt}{c |}
+230. {c |} {res}             Lang Son        4 {txt}{c |}
+231. {c |} {res}           Thanh Binh        4 {txt}{c |}
+232. {c |} {res}               Ha Hoa        4 {txt}{c |}
+233. {c |} {res}             Vinh Loi        4 {txt}{c |}
+234. {c |} {res}           Kien Xuong        4 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+235. {c |} {res}             Tan Hong        5 {txt}{c |}
+236. {c |} {res}                   10        5 {txt}{c |}
+237. {c |} {res}           Thanh Liem        5 {txt}{c |}
+238. {c |} {res}             Nam Sach        5 {txt}{c |}
+239. {c |} {res}               Tra Cu        5 {txt}{c |}
+240. {c |} {res}               My Hao        5 {txt}{c |}
+241. {c |} {res}             Ninh Son        5 {txt}{c |}
+242. {c |} {res}              Ung Hoa        5 {txt}{c |}
+243. {c |} {res}               My Duc        5 {txt}{c |}
+244. {c |} {res}               Chu Se        5 {txt}{c |}
+245. {c |} {res}              Tan Phu        5 {txt}{c |}
+246. {c |} {res}              Moc Hoa        5 {txt}{c |}
+247. {c |} {res}            Tien Lang        5 {txt}{c |}
+248. {c |} {res}         Go Cong Dong        5 {txt}{c |}
+249. {c |} {res}            Yen Phong        5 {txt}{c |}
+250. {c |} {res}             Dak Nong        5 {txt}{c |}
+251. {c |} {res}              Ham Tan        5 {txt}{c |}
+252. {c |} {res}             Bac Binh        5 {txt}{c |}
+253. {c |} {res}            Cau Ngang        5 {txt}{c |}
+254. {c |} {res}            Kon Plong        5 {txt}{c |}
+255. {c |} {res}               Yen Mo        5 {txt}{c |}
+256. {c |} {res}             Kinh Mon        5 {txt}{c |}
+257. {c |} {res}             V?n Canh        5 {txt}{c |}
+258. {c |} {res}             Quy Nhon        5 {txt}{c |}
+259. {c |} {res}                    6        5 {txt}{c |}
+260. {c |} {res}           Krong A Na        5 {txt}{c |}
+261. {c |} {res}              Van Don        5 {txt}{c |}
+262. {c |} {res}             Rach Gia        5 {txt}{c |}
+263. {c |} {res}           Krong Nang        5 {txt}{c |}
+264. {c |} {res}             Cao Lanh        5 {txt}{c |}
+265. {c |} {res}               Tan Ky        5 {txt}{c |}
+266. {c |} {res}             Tay Ninh        5 {txt}{c |}
+267. {c |} {res}             Duy Tien        5 {txt}{c |}
+268. {c |} {res}               Ky Son        5 {txt}{c |}
+269. {c |} {res}             Nam Truc        5 {txt}{c |}
+270. {c |} {res}             Vung Tau        5 {txt}{c |}
+271. {c |} {res}            Nha Trang        5 {txt}{c |}
+272. {c |} {res}            Kim Thanh        5 {txt}{c |}
+273. {c |} {res}            Nhu  Xuan        5 {txt}{c |}
+274. {c |} {res}             Ninh Hoa        5 {txt}{c |}
+275. {c |} {res}              Anh Son        5 {txt}{c |}
+276. {c |} {res}               My Loc        5 {txt}{c |}
+277. {c |} {res}            Yen Khanh        5 {txt}{c |}
+278. {c |} {res}              Me Linh        5 {txt}{c |}
+279. {c |} {res}           Dan Phuong        5 {txt}{c |}
+280. {c |} {res}            Vinh Chau        5 {txt}{c |}
+281. {c |} {res}           Krong Bong        5 {txt}{c |}
+282. {c |} {res}            Thieu Hoa        5 {txt}{c |}
+283. {c |} {res}               An Phu        5 {txt}{c |}
+284. {c |} {res}            Nhu Thanh        5 {txt}{c |}
+285. {c |} {res}              Long Ho        5 {txt}{c |}
+286. {c |} {res}              Kim Son        5 {txt}{c |}
+287. {c |} {res}               An Khe        5 {txt}{c |}
+288. {c |} {res}              Dong Hy        5 {txt}{c |}
+289. {c |} {res}            Chuong My        5 {txt}{c |}
+290. {c |} {res}             Hoai Duc        5 {txt}{c |}
+291. {c |} {res}            Vinh Hung        5 {txt}{c |}
+292. {c |} {res}            Huong Son        5 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+293. {c |} {res}               Ba Ria        6 {txt}{c |}
+294. {c |} {res}               Go Vap        6 {txt}{c |}
+295. {c |} {res}             Cu M'Gar        6 {txt}{c |}
+296. {c |} {res}             Cai Nuoc        6 {txt}{c |}
+297. {c |} {res}             Cat Tien        6 {txt}{c |}
+298. {c |} {res}              Thu Duc        6 {txt}{c |}
+299. {c |} {res}            Thanh Oai        6 {txt}{c |}
+300. {c |} {res}            Yen Thanh        6 {txt}{c |}
+301. {c |} {res}                    8        6 {txt}{c |}
+302. {c |} {res}                KBang        6 {txt}{c |}
+303. {c |} {res}           Vinh Tuong        6 {txt}{c |}
+304. {c |} {res}            Dak R'Lap        6 {txt}{c |}
+305. {c |} {res}               Nha Be        6 {txt}{c |}
+306. {c |} {res}             Song Cau        6 {txt}{c |}
+307. {c |} {res}            Vung Liem        6 {txt}{c |}
+308. {c |} {res}        Dien Bien Phu        6 {txt}{c |}
+309. {c |} {res}            Trieu Son        6 {txt}{c |}
+310. {c |} {res}            Khan Vinh        6 {txt}{c |}
+311. {c |} {res}            Dong Xuan        6 {txt}{c |}
+312. {c |} {res}             Hong Ngu        6 {txt}{c |}
+313. {c |} {res}            Can Giuoc        6 {txt}{c |}
+314. {c |} {res}              An Bien        6 {txt}{c |}
+315. {c |} {res}              Hon Dat        6 {txt}{c |}
+316. {c |} {res}           Quang Ngai        6 {txt}{c |}
+317. {c |} {res}            Thanh Hoa        6 {txt}{c |}
+318. {c |} {res}              Son Hoa        6 {txt}{c |}
+319. {c |} {res}             Bac Ninh        6 {txt}{c |}
+320. {c |} {res}            Thanh Tri        6 {txt}{c |}
+321. {c |} {res}              Van Lam        6 {txt}{c |}
+322. {c |} {res}            Kong Chro        6 {txt}{c |}
+323. {c |} {res}           Thuong Tin        6 {txt}{c |}
+324. {c |} {res}            Thai Thuy        6 {txt}{c |}
+325. {c |} {res}             Vinh Yen        6 {txt}{c |}
+326. {c |} {res}            Tuy Phuoc        6 {txt}{c |}
+327. {c |} {res}              Ke Sach        6 {txt}{c |}
+328. {c |} {res}              Ha Tien        6 {txt}{c |}
+329. {c |} {res}        Ham Thuan Nam        6 {txt}{c |}
+330. {c |} {res}           Chau Thanh        6 {txt}{c |}
+331. {c |} {res}               Vu Ban        6 {txt}{c |}
+332. {c |} {res}          Thuy Nguyen        6 {txt}{c |}
+333. {c |} {res}           Ninh Phuoc        6 {txt}{c |}
+334. {c |} {res}             Ninh Hai        6 {txt}{c |}
+335. {c |} {res}            Tanh linh        6 {txt}{c |}
+336. {c |} {res}             Tan Binh        6 {txt}{c |}
+337. {c |} {res}            Mang Yang        6 {txt}{c |}
+338. {c |} {res}          Xuan Truong        6 {txt}{c |}
+339. {c |} {res}           Dien Khanh        6 {txt}{c |}
+340. {c |} {res}              Son Tay        6 {txt}{c |}
+341. {c |} {res}             My Xuyen        6 {txt}{c |}
+342. {c |} {res}            Phu Xuyen        6 {txt}{c |}
+343. {c |} {res}            Truc Ninh        6 {txt}{c |}
+344. {c |} {res}        Ham Thuan Bac        6 {txt}{c |}
+345. {c |} {res}            Thanh Phu        6 {txt}{c |}
+346. {c |} {res}             Dak GLei        6 {txt}{c |}
+347. {c |} {res}             Viet Yen        6 {txt}{c |}
+348. {c |} {res}             Binh Dai        6 {txt}{c |}
+349. {c |} {res}             Duc Linh        6 {txt}{c |}
+350. {c |} {res}              An Nhon        6 {txt}{c |}
+351. {c |} {res}            Nghia Dan        6 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+352. {c |} {res}           Phan Thiet        7 {txt}{c |}
+353. {c |} {res}            Giao Thuy        7 {txt}{c |}
+354. {c |} {res}        Tran Van Thoi        7 {txt}{c |}
+355. {c |} {res}                Di An        7 {txt}{c |}
+356. {c |} {res}               An Hai        7 {txt}{c |}
+357. {c |} {res}                My Tu        7 {txt}{c |}
+358. {c |} {res}              Gia Rai        7 {txt}{c |}
+359. {c |} {res}             Tien Hai        7 {txt}{c |}
+360. {c |} {res}              Dam Doi        7 {txt}{c |}
+361. {c |} {res}              Soc Son        7 {txt}{c |}
+362. {c |} {res}             Tieu Can        7 {txt}{c |}
+363. {c |} {res}              Cat Hai        7 {txt}{c |}
+364. {c |} {res}              Gia Lam        7 {txt}{c |}
+365. {c |} {res}            Khanh Son        7 {txt}{c |}
+366. {c |} {res}              Uong Bi        7 {txt}{c |}
+367. {c |} {res}             Tan Hung        7 {txt}{c |}
+368. {c |} {res}             Viet Tri        7 {txt}{c |}
+369. {c |} {res}             Phu Vang        7 {txt}{c |}
+370. {c |} {res}            Binh Minh        7 {txt}{c |}
+371. {c |} {res}             Dong Phu        7 {txt}{c |}
+372. {c |} {res}                Y Yen        7 {txt}{c |}
+373. {c |} {res}               Tra My        7 {txt}{c |}
+374. {c |} {res}             Hong Dan        7 {txt}{c |}
+375. {c |} {res}              Son Tay        7 {txt}{c |}
+376. {c |} {res}                O Mon        7 {txt}{c |}
+377. {c |} {res}                   11        7 {txt}{c |}
+378. {c |} {res}              Phu Tho        7 {txt}{c |}
+379. {c |} {res}               Hoa Lu        7 {txt}{c |}
+380. {c |} {res}              Cam Pha        7 {txt}{c |}
+381. {c |} {res}             Tho Xuan        7 {txt}{c |}
+382. {c |} {res}           Nghia Hung        7 {txt}{c |}
+383. {c |} {res}                 Hien        7 {txt}{c |}
+384. {c |} {res}             Do Luong        7 {txt}{c |}
+385. {c |} {res}            Thoi Binh        7 {txt}{c |}
+386. {c |} {res}               Tuy An        7 {txt}{c |}
+387. {c |} {res}              Dak Mil        7 {txt}{c |}
+388. {c |} {res}           Vinh Thanh        7 {txt}{c |}
+389. {c |} {res}              Hoc Mon        7 {txt}{c |}
+390. {c |} {res}               My Tho        7 {txt}{c |}
+391. {c |} {res}              Tuy Hoa        7 {txt}{c |}
+392. {c |} {res}              Ben Tre        7 {txt}{c |}
+393. {c |} {res}            Nam Giang        7 {txt}{c |}
+394. {c |} {res}            Thanh Tri        7 {txt}{c |}
+395. {c |} {res}              Hai Hau        7 {txt}{c |}
+396. {c |} {res}               Do Son        7 {txt}{c |}
+397. {c |} {res}               U Minh        7 {txt}{c |}
+398. {c |} {res}               Go Dau        7 {txt}{c |}
+399. {c |} {res}           Lang Giang        7 {txt}{c |}
+400. {c |} {res}               An Lao        7 {txt}{c |}
+401. {c |} {res}           Chau Thanh        7 {txt}{c |}
+402. {c |} {res}            Phuoc Son        7 {txt}{c |}
+403. {c |} {res}           Long Khanh        7 {txt}{c |}
+404. {c |} {res}           Vinh Thuan        7 {txt}{c |}
+405. {c |} {res}            Dinh Quan        7 {txt}{c |}
+406. {c |} {res}              Ha Tien        7 {txt}{c |}
+407. {c |} {res}             Thuan An        7 {txt}{c |}
+408. {c |} {res}          Thai Nguyen        7 {txt}{c |}
+409. {c |} {res}             Dong Son        7 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+410. {c |} {res}              Ia Grai        8 {txt}{c |}
+411. {c |} {res}              An Minh        8 {txt}{c |}
+412. {c |} {res}           Chau Thanh        8 {txt}{c |}
+413. {c |} {res}            Tan Thanh        8 {txt}{c |}
+414. {c |} {res}              Can Gio        8 {txt}{c |}
+415. {c |} {res}              Bu Dang        8 {txt}{c |}
+416. {c |} {res}             Ha Trung        8 {txt}{c |}
+417. {c |} {res}             Tra Bong        8 {txt}{c |}
+418. {c |} {res}          Giong Rieng        8 {txt}{c |}
+419. {c |} {res}              Can Tho        8 {txt}{c |}
+420. {c |} {res}              Ha Dong        8 {txt}{c |}
+421. {c |} {res}                   12        8 {txt}{c |}
+422. {c |} {res}             Dong Phu        8 {txt}{c |}
+423. {c |} {res}             Vi Thanh        8 {txt}{c |}
+424. {c |} {res}           Binh Chanh        8 {txt}{c |}
+425. {c |} {res}              Nga Son        8 {txt}{c |}
+426. {c |} {res}            Quynh Phu        8 {txt}{c |}
+427. {c |} {res}              Cho Gao        8 {txt}{c |}
+428. {c |} {res}             Cao Lanh        8 {txt}{c |}
+429. {c |} {res}             Dong Anh        8 {txt}{c |}
+430. {c |} {res}             Xuan Loc        8 {txt}{c |}
+431. {c |} {res}             HuongKhe        8 {txt}{c |}
+432. {c |} {res}               An Lao        8 {txt}{c |}
+433. {c |} {res}           Phung Hiep        8 {txt}{c |}
+434. {c |} {res}           Chau Thanh        8 {txt}{c |}
+435. {c |} {res}               Tra On        8 {txt}{c |}
+436. {c |} {res}            Minh Long        8 {txt}{c |}
+437. {c |} {res}            Thap Muoi        8 {txt}{c |}
+438. {c |} {res}            Duyen Hai        8 {txt}{c |}
+439. {c |} {res}            Chu Prong        8 {txt}{c |}
+440. {c |} {res}               Cau Ke        8 {txt}{c |}
+441. {c |} {res}              Ph? L?c        8 {txt}{c |}
+442. {c |} {res}              Tuy Hoa        8 {txt}{c |}
+443. {c |} {res}           Nhon Trach        8 {txt}{c |}
+444. {c |} {res}            Xuyen Moc        8 {txt}{c |}
+445. {c |} {res}          Go Cong Tay        8 {txt}{c |}
+446. {c |} {res}          Thu Dau Mot        8 {txt}{c |}
+447. {c |} {res}           Thach That        8 {txt}{c |}
+448. {c |} {res}            Hai Duong        8 {txt}{c |}
+449. {c |} {res}             Nam Dong        8 {txt}{c |}
+450. {c |} {res}                  Hue        8 {txt}{c |}
+451. {c |} {res}             Can Duoc        8 {txt}{c |}
+452. {c |} {res}              Yen Bai        8 {txt}{c |}
+453. {c |} {res}         Ngu Hanh Son        8 {txt}{c |}
+454. {c |} {res}             Tam Binh        8 {txt}{c |}
+455. {c |} {res}             Chau Duc        8 {txt}{c |}
+456. {c |} {res}          Hung Nguyen        8 {txt}{c |}
+457. {c |} {res}              Go Quao        8 {txt}{c |}
+458. {c |} {res}           Quang Dien        8 {txt}{c |}
+459. {c |} {res}               Dak To        8 {txt}{c |}
+460. {c |} {res}             Cho Lach        8 {txt}{c |}
+461. {c |} {res}           Thong Nhat        8 {txt}{c |}
+462. {c |} {res}             Nghia Lo        8 {txt}{c |}
+463. {c |} {res}               Son Ha        8 {txt}{c |}
+464. {c |} {res}                    9        8 {txt}{c |}
+465. {c |} {res}              Tay Son        8 {txt}{c |}
+466. {c |} {res}           Long Thanh        8 {txt}{c |}
+467. {c |} {res}           Thanh Xuan        8 {txt}{c |}
+468. {c |} {res}         Hai Ba Trung        8 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+469. {c |} {res}            Tan Phuoc        9 {txt}{c |}
+470. {c |} {res}           Lien Chieu        9 {txt}{c |}
+471. {c |} {res}          Quang Xuong        9 {txt}{c |}
+472. {c |} {res}              Long My        9 {txt}{c |}
+473. {c |} {res}              Chu Pah        9 {txt}{c |}
+474. {c |} {res}            Nui Thanh        9 {txt}{c |}
+475. {c |} {res}            Tinh Bien        9 {txt}{c |}
+476. {c |} {res}             Vinh Cuu        9 {txt}{c |}
+477. {c |} {res}            Hoang Hoa        9 {txt}{c |}
+478. {c |} {res}                Ba To        9 {txt}{c |}
+479. {c |} {res}            Nong Cong        9 {txt}{c |}
+480. {c |} {res}               Phu My        9 {txt}{c |}
+481. {c |} {res}            Tuyen Hoa        9 {txt}{c |}
+482. {c |} {res}            Thai Binh        9 {txt}{c |}
+483. {c |} {res}            Tan Thanh        9 {txt}{c |}
+484. {c |} {res}            Cam Xuyen        9 {txt}{c |}
+485. {c |} {res}        Bac GiangTown        9 {txt}{c |}
+486. {c |} {res}             Tam Diep        9 {txt}{c |}
+487. {c |} {res}             Thu Thua        9 {txt}{c |}
+488. {c |} {res}              Duc Tho        9 {txt}{c |}
+489. {c |} {res}              Tri Ton        9 {txt}{c |}
+490. {c |} {res}              Hau Loc        9 {txt}{c |}
+491. {c |} {res}              Tan Tru        9 {txt}{c |}
+492. {c |} {res}             Binh Son        9 {txt}{c |}
+493. {c |} {res}              Phu Cat        9 {txt}{c |}
+494. {c |} {res}           Huong Thuy        9 {txt}{c |}
+495. {c |} {res}            Cang Long        9 {txt}{c |}
+496. {c |} {res}            Hoa Thanh        9 {txt}{c |}
+497. {c |} {res}           Phuoc Long        9 {txt}{c |}
+498. {c |} {res}           Chau Thanh        9 {txt}{c |}
+499. {c |} {res}              Nam Dan        9 {txt}{c |}
+500. {c |} {res}              Ben Cau        9 {txt}{c |}
+501. {c |} {res}             Tra Vinh        9 {txt}{c |}
+502. {c |} {res}               Ky Anh        9 {txt}{c |}
+503. {c |} {res}           Quang Ninh        9 {txt}{c |}
+504. {c |} {res}             Minh Hoa        9 {txt}{c |}
+505. {c |} {res}             Thach Ha        9 {txt}{c |}
+506. {c |} {res}              Ben Luc        9 {txt}{c |}
+507. {c |} {res}           Nghia Hanh        9 {txt}{c |}
+508. {c |} {res}             Long Dat        9 {txt}{c |}
+509. {c |} {res}              Hoai An        9 {txt}{c |}
+510. {c |} {res}              Duc Hoa        9 {txt}{c |}
+511. {c |} {res}               Duc Co        9 {txt}{c |}
+512. {c |} {res}             Nghi Loc        9 {txt}{c |}
+513. {c |} {res}           Nghi  Xuan        9 {txt}{c |}
+514. {c |} {res}              Sa Thay        9 {txt}{c |}
+515. {c |} {res}              Sam Son        9 {txt}{c |}
+516. {c |} {res}           Chau Thanh        9 {txt}{c |}
+517. {c |} {res}            Hoai Nhon        9 {txt}{c |}
+518. {c |} {res}               Mo Duc        9 {txt}{c |}
+519. {c |} {res}              Bim Son        9 {txt}{c |}
+520. {c |} {res}              Ha Long        9 {txt}{c |}
+521. {c |} {res}             Tu Nghia        9 {txt}{c |}
+522. {c |} {res}               Mo Cay        9 {txt}{c |}
+523. {c |} {res}              Kien An        9 {txt}{c |}
+524. {c |} {res}              Duc Hue        9 {txt}{c |}
+525. {c |} {res}              Can Loc        9 {txt}{c |}
+526. {c |} {res}           Thang Binh        9 {txt}{c |}
+     {c LT}{hline 23}{c -}{hline 8}{c RT}
+527. {c |} {res}             Phu Giao       10 {txt}{c |}
+528. {c |} {res}             Hoa Vang       10 {txt}{c |}
+529. {c |} {res}               Tam Ky       10 {txt}{c |}
+530. {c |} {res}             Nam Dinh       10 {txt}{c |}
+531. {c |} {res}              Duc Pho       10 {txt}{c |}
+532. {c |} {res}      Duong Minh Chau       10 {txt}{c |}
+533. {c |} {res}           Tien Phuoc       10 {txt}{c |}
+534. {c |} {res}            Quynh Luu       10 {txt}{c |}
+535. {c |} {res}               Dak Ha       10 {txt}{c |}
+536. {c |} {res}           Chau Thanh       10 {txt}{c |}
+537. {c |} {res}           Giong Trom       10 {txt}{c |}
+538. {c |} {res}               Cai Be       10 {txt}{c |}
+539. {c |} {res}             Tan Uyen       10 {txt}{c |}
+540. {c |} {res}            Dien Chau       10 {txt}{c |}
+541. {c |} {res}             Son Tinh       10 {txt}{c |}
+542. {c |} {res}              Ha Tinh       10 {txt}{c |}
+543. {c |} {res}              Ben Cat       10 {txt}{c |}
+544. {c |} {res}             Tan Bien       10 {txt}{c |}
+545. {c |} {res}             Tinh Gia       10 {txt}{c |}
+546. {c |} {res}             Loc Ninh       10 {txt}{c |}
+547. {c |} {res}           Trang Bang       10 {txt}{c |}
+548. {c |} {res}               Hoi An       10 {txt}{c |}
+549. {c |} {res}             Bo Trach       10 {txt}{c |}
+550. {c |} {res}              Le Thuy       10 {txt}{c |}
+551. {c |} {res}               Cu Chi       10 {txt}{c |}
+552. {c |} {res}             Hiep Duc       10 {txt}{c |}
+553. {c |} {res}            Ngo Quyen       10 {txt}{c |}
+554. {c |} {res}              Cai Lay       10 {txt}{c |}
+555. {c |} {res}              Kon Tum       10 {txt}{c |}
+556. {c |} {res}           Phong Dien       10 {txt}{c |}
+557. {c |} {res}             Ngoc Hoi       10 {txt}{c |}
+558. {c |} {res}          Quang Trach       10 {txt}{c |}
+559. {c |} {res}              Que Son       10 {txt}{c |}
+560. {c |} {res}             Da Krong       10 {txt}{c |}
+561. {c |} {res}             Tan Chau       10 {txt}{c |}
+562. {c |} {res}            Dau Tieng       10 {txt}{c |}
+563. {c |} {res}            Binh Long       10 {txt}{c |}
+564. {c |} {res}               Cua Lo       10 {txt}{c |}
+565. {c |} {res}                 Vinh       10 {txt}{c |}
+566. {c |} {res}              Dai Loc       10 {txt}{c |}
+567. {c |} {res}               A Luoi       10 {txt}{c |}
+568. {c |} {res}            Thanh Hoa       10 {txt}{c |}
+569. {c |} {res}               Phu Ly       10 {txt}{c |}
+570. {c |} {res}            Duy Xuyen       10 {txt}{c |}
+571. {c |} {res}             Dien Ban       10 {txt}{c |}
+572. {c |} {res}             Dong Hoi       10 {txt}{c |}
+573. {c |} {res}            Huong Tra       10 {txt}{c |}
+574. {c |} {res}            Vinh Linh       10 {txt}{c |}
+575. {c |} {res}            Huong Hoa       10 {txt}{c |}
+576. {c |} {res}            Hong Linh       10 {txt}{c |}
+577. {c |} {res}              Le Chan       10 {txt}{c |}
+578. {c |} {res}               Cam Lo       10 {txt}{c |}
+579. {c |} {res}            Hong Bang       10 {txt}{c |}
+580. {c |} {res}            Ninh Binh       10 {txt}{c |}
+581. {c |} {res}             Gio Linh       10 {txt}{c |}
+582. {c |} {res}             Hai Lang       10 {txt}{c |}
+583. {c |} {res}              Dong Ha       10 {txt}{c |}
+584. {c |} {res}          Trieu phong       10 {txt}{c |}
+     {c BLC}{hline 23}{c -}{hline 8}{c BRC}
+
+{com}. gen toptenpercentile = 0
+{txt}
+{com}. replace toptenpercentile =1 if topten==10
+{txt}(58 real changes made)
+
+{com}. reg poverty_p0 ordnancekm2 i.toptenpercentile, robust
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(2, 581)         =  {res}     5.06
+                                                {txt}Prob > F          = {res}    0.0066
+                                                {txt}R-squared         = {res}    0.0210
+                                                {txt}Root MSE          =    {res} .19758
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32}    Robust
+{col 1}        poverty_p0{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      t{col 52}   P>|t|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}ordnancekm2 {c |}{col 20}{res}{space 2}-.0002926{col 32}{space 2} .0002215{col 43}{space 1}   -1.32{col 52}{space 3}0.187{col 60}{space 4}-.0007278{col 73}{space 3} .0001425
+{txt}1.toptenpercentile {c |}{col 20}{res}{space 2} -.034815{col 32}{space 2} .0430638{col 43}{space 1}   -0.81{col 52}{space 3}0.419{col 60}{space 4}-.1193946{col 73}{space 3} .0497646
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2} .4224981{col 32}{space 2} .0093175{col 43}{space 1}   45.34{col 52}{space 3}0.000{col 60}{space 4}  .404198{col 73}{space 3} .4407981
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg2.xlsx", ctitle(top10percent)
+{txt}{browse `".\output\reg2.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg2.txt""':seeout}
+
+{com}. 
+. gen popdensity6061_100 = popdensity6061/100
+{txt}
+{com}. reg poverty_p0 ordnancekm2 popdensity6061_100 i.south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41, vce(cluster province)
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(27, 60)         =  {res}    49.69
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.6100
+                                                {txt}Root MSE          =    {res} .12748
+
+{txt}{ralign 84:(Std. Err. adjusted for {res:61} clusters in province)}
+{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32}    Robust
+{col 1}        poverty_p0{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      t{col 52}   P>|t|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}ordnancekm2 {c |}{col 20}{res}{space 2}-.0003976{col 32}{space 2} .0002226{col 43}{space 1}   -1.79{col 52}{space 3}0.079{col 60}{space 4}-.0008428{col 73}{space 3} .0000476
+{txt}popdensity6061_100 {c |}{col 20}{res}{space 2}-.0021216{col 32}{space 2} .0009786{col 43}{space 1}   -2.17{col 52}{space 3}0.034{col 60}{space 4}-.0040791{col 73}{space 3}-.0001641
+{txt}{space 11}1.south {c |}{col 20}{res}{space 2}-.1738767{col 32}{space 2} .0714413{col 43}{space 1}   -2.43{col 52}{space 3}0.018{col 60}{space 4}-.3167805{col 73}{space 3}-.0309728
+{txt}{space 5}area_251_500m {c |}{col 20}{res}{space 2} .3393203{col 32}{space 2} .0700372{col 43}{space 1}    4.84{col 52}{space 3}0.000{col 60}{space 4} .1992251{col 73}{space 3} .4794156
+{txt}{space 4}area_501_1000m {c |}{col 20}{res}{space 2} .2608866{col 32}{space 2}  .052372{col 43}{space 1}    4.98{col 52}{space 3}0.000{col 60}{space 4}  .156127{col 73}{space 3} .3656461
+{txt}{space 3}area_over_1000m {c |}{col 20}{res}{space 2}-.0481551{col 32}{space 2} .1132023{col 43}{space 1}   -0.43{col 52}{space 3}0.672{col 60}{space 4}-.2745934{col 73}{space 3} .1782832
+{txt}{space 11}pre_avg {c |}{col 20}{res}{space 2} .0011112{col 32}{space 2} .0003467{col 43}{space 1}    3.21{col 52}{space 3}0.002{col 60}{space 4} .0004178{col 73}{space 3} .0018046
+{txt}{space 11}tmp_avg {c |}{col 20}{res}{space 2}-.0118902{col 32}{space 2} .0194212{col 43}{space 1}   -0.61{col 52}{space 3}0.543{col 60}{space 4}-.0507385{col 73}{space 3}  .026958
+{txt}{space 9}north_lat {c |}{col 20}{res}{space 2}-.0087661{col 32}{space 2} .0088222{col 43}{space 1}   -0.99{col 52}{space 3}0.324{col 60}{space 4}-.0264132{col 73}{space 3} .0088809
+{txt}{space 12}soil_1 {c |}{col 20}{res}{space 2}-.0000395{col 32}{space 2} .0012695{col 43}{space 1}   -0.03{col 52}{space 3}0.975{col 60}{space 4} -.002579{col 73}{space 3} .0024999
+{txt}{space 12}soil_3 {c |}{col 20}{res}{space 2}-.0007067{col 32}{space 2} .0015615{col 43}{space 1}   -0.45{col 52}{space 3}0.652{col 60}{space 4}-.0038302{col 73}{space 3} .0024168
+{txt}{space 12}soil_6 {c |}{col 20}{res}{space 2}-.0013726{col 32}{space 2} .0008338{col 43}{space 1}   -1.65{col 52}{space 3}0.105{col 60}{space 4}-.0030404{col 73}{space 3} .0002953
+{txt}{space 12}soil_7 {c |}{col 20}{res}{space 2}-.0012253{col 32}{space 2} .0009742{col 43}{space 1}   -1.26{col 52}{space 3}0.213{col 60}{space 4} -.003174{col 73}{space 3} .0007235
+{txt}{space 12}soil_8 {c |}{col 20}{res}{space 2} .0000607{col 32}{space 2} .0008223{col 43}{space 1}    0.07{col 52}{space 3}0.941{col 60}{space 4}-.0015841{col 73}{space 3} .0017055
+{txt}{space 12}soil_9 {c |}{col 20}{res}{space 2}-.0022355{col 32}{space 2} .0010209{col 43}{space 1}   -2.19{col 52}{space 3}0.032{col 60}{space 4}-.0042776{col 73}{space 3}-.0001934
+{txt}{space 11}soil_10 {c |}{col 20}{res}{space 2}-.0017966{col 32}{space 2} .0008356{col 43}{space 1}   -2.15{col 52}{space 3}0.036{col 60}{space 4}-.0034681{col 73}{space 3} -.000125
+{txt}{space 11}soil_11 {c |}{col 20}{res}{space 2}-.0006956{col 32}{space 2} .0008519{col 43}{space 1}   -0.82{col 52}{space 3}0.417{col 60}{space 4}-.0023995{col 73}{space 3} .0010084
+{txt}{space 11}soil_12 {c |}{col 20}{res}{space 2}-.0007084{col 32}{space 2} .0005992{col 43}{space 1}   -1.18{col 52}{space 3}0.242{col 60}{space 4}-.0019069{col 73}{space 3} .0004901
+{txt}{space 11}soil_14 {c |}{col 20}{res}{space 2}-.0023237{col 32}{space 2} .0009034{col 43}{space 1}   -2.57{col 52}{space 3}0.013{col 60}{space 4}-.0041309{col 73}{space 3}-.0005166
+{txt}{space 11}soil_24 {c |}{col 20}{res}{space 2}-.0007499{col 32}{space 2} .0008825{col 43}{space 1}   -0.85{col 52}{space 3}0.399{col 60}{space 4}-.0025153{col 73}{space 3} .0010154
+{txt}{space 11}soil_26 {c |}{col 20}{res}{space 2}-.0014774{col 32}{space 2}  .000896{col 43}{space 1}   -1.65{col 52}{space 3}0.104{col 60}{space 4}-.0032697{col 73}{space 3} .0003149
+{txt}{space 11}soil_33 {c |}{col 20}{res}{space 2} .0052889{col 32}{space 2} .0017519{col 43}{space 1}    3.02{col 52}{space 3}0.004{col 60}{space 4} .0017845{col 73}{space 3} .0087933
+{txt}{space 11}soil_34 {c |}{col 20}{res}{space 2}-.0034655{col 32}{space 2} .0011455{col 43}{space 1}   -3.03{col 52}{space 3}0.004{col 60}{space 4}-.0057569{col 73}{space 3}-.0011742
+{txt}{space 11}soil_35 {c |}{col 20}{res}{space 2}-.0047291{col 32}{space 2} .0018164{col 43}{space 1}   -2.60{col 52}{space 3}0.012{col 60}{space 4}-.0083626{col 73}{space 3}-.0010957
+{txt}{space 11}soil_39 {c |}{col 20}{res}{space 2} .0000548{col 32}{space 2}  .000898{col 43}{space 1}    0.06{col 52}{space 3}0.952{col 60}{space 4}-.0017415{col 73}{space 3}  .001851
+{txt}{space 11}soil_40 {c |}{col 20}{res}{space 2} -.000319{col 32}{space 2} .0010363{col 43}{space 1}   -0.31{col 52}{space 3}0.759{col 60}{space 4} -.002392{col 73}{space 3} .0017539
+{txt}{space 11}soil_41 {c |}{col 20}{res}{space 2}-.0047593{col 32}{space 2} .0019799{col 43}{space 1}   -2.40{col 52}{space 3}0.019{col 60}{space 4}-.0087197{col 73}{space 3}-.0007989
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2} .8532198{col 32}{space 2} .5921501{col 43}{space 1}    1.44{col 52}{space 3}0.155{col 60}{space 4}-.3312569{col 73}{space 3} 2.037696
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\reg3.xlsx", replace nocons dec(4) drop(soil*) addtext(District soil controls, YES) ctitle(OLS)
+{txt}{browse `".\output\reg3.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\reg3.txt""':seeout}
+
+{com}. 
+. *fixed effects model(standard errors slightly higher) 
+. *you get exact standard errors if you just use dummies for province
+.  
+. xtset province
+{txt}{col 8}panel variable:  {res}province (unbalanced)
+{txt}
+{com}. xtreg poverty_p0 ordnancekm2 popdensity6061_100 south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41, fe vce(cluster province)
+{p 0 6 2}{txt}note: south omitted because of collinearity{p_end}
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}       584
+{txt}Group variable: {res}province{txt}{col 49}Number of groups{col 67}={col 69}{res}        61
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.4774{col 63}{txt}min{col 67}={col 69}{res}         2
+{txt}     between = {res}0.4401{col 63}{txt}avg{col 67}={col 69}{res}       9.6
+{txt}     overall = {res}0.3451{col 63}{txt}max{col 67}={col 69}{res}        27
+
+{txt}{col 49}F({res}26{txt},{res}60{txt}){col 67}={col 70}{res}    25.51
+{txt}corr(u_i, Xb){col 16}= {res}-0.8108{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{ralign 84:(Std. Err. adjusted for {res:61} clusters in province)}
+{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32}    Robust
+{col 1}        poverty_p0{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      t{col 52}   P>|t|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}ordnancekm2 {c |}{col 20}{res}{space 2}-.0006467{col 32}{space 2} .0001156{col 43}{space 1}   -5.59{col 52}{space 3}0.000{col 60}{space 4} -.000878{col 73}{space 3}-.0004154
+{txt}popdensity6061_100 {c |}{col 20}{res}{space 2}  .000083{col 32}{space 2} .0002131{col 43}{space 1}    0.39{col 52}{space 3}0.698{col 60}{space 4}-.0003433{col 73}{space 3} .0005093
+{txt}{space 13}south {c |}{col 20}{res}{space 2}        0{col 32}{txt}  (omitted)
+{space 5}area_251_500m {c |}{col 20}{res}{space 2}  .181644{col 32}{space 2}  .063115{col 43}{space 1}    2.88{col 52}{space 3}0.006{col 60}{space 4} .0553952{col 73}{space 3} .3078929
+{txt}{space 4}area_501_1000m {c |}{col 20}{res}{space 2} .1572315{col 32}{space 2} .0584222{col 43}{space 1}    2.69{col 52}{space 3}0.009{col 60}{space 4} .0403696{col 73}{space 3} .2740934
+{txt}{space 3}area_over_1000m {c |}{col 20}{res}{space 2}-.0008319{col 32}{space 2}  .150261{col 43}{space 1}   -0.01{col 52}{space 3}0.996{col 60}{space 4}-.3013987{col 73}{space 3} .2997348
+{txt}{space 11}pre_avg {c |}{col 20}{res}{space 2} .0006019{col 32}{space 2}  .000432{col 43}{space 1}    1.39{col 52}{space 3}0.169{col 60}{space 4}-.0002623{col 73}{space 3} .0014661
+{txt}{space 11}tmp_avg {c |}{col 20}{res}{space 2}-.0341237{col 32}{space 2} .0203999{col 43}{space 1}   -1.67{col 52}{space 3}0.100{col 60}{space 4}-.0749295{col 73}{space 3}  .006682
+{txt}{space 9}north_lat {c |}{col 20}{res}{space 2} .0375661{col 32}{space 2} .0243994{col 43}{space 1}    1.54{col 52}{space 3}0.129{col 60}{space 4}-.0112399{col 73}{space 3} .0863721
+{txt}{space 12}soil_1 {c |}{col 20}{res}{space 2} .0000145{col 32}{space 2} .0010419{col 43}{space 1}    0.01{col 52}{space 3}0.989{col 60}{space 4}-.0020696{col 73}{space 3} .0020985
+{txt}{space 12}soil_3 {c |}{col 20}{res}{space 2}-.0012526{col 32}{space 2} .0012036{col 43}{space 1}   -1.04{col 52}{space 3}0.302{col 60}{space 4}-.0036602{col 73}{space 3}  .001155
+{txt}{space 12}soil_6 {c |}{col 20}{res}{space 2}-.0004403{col 32}{space 2} .0005693{col 43}{space 1}   -0.77{col 52}{space 3}0.442{col 60}{space 4}-.0015792{col 73}{space 3} .0006985
+{txt}{space 12}soil_7 {c |}{col 20}{res}{space 2} .0007696{col 32}{space 2} .0004538{col 43}{space 1}    1.70{col 52}{space 3}0.095{col 60}{space 4}-.0001382{col 73}{space 3} .0016774
+{txt}{space 12}soil_8 {c |}{col 20}{res}{space 2} .0001935{col 32}{space 2} .0005707{col 43}{space 1}    0.34{col 52}{space 3}0.736{col 60}{space 4}-.0009481{col 73}{space 3} .0013351
+{txt}{space 12}soil_9 {c |}{col 20}{res}{space 2}-.0010455{col 32}{space 2} .0006777{col 43}{space 1}   -1.54{col 52}{space 3}0.128{col 60}{space 4}-.0024012{col 73}{space 3} .0003102
+{txt}{space 11}soil_10 {c |}{col 20}{res}{space 2}-.0017569{col 32}{space 2} .0006586{col 43}{space 1}   -2.67{col 52}{space 3}0.010{col 60}{space 4}-.0030743{col 73}{space 3}-.0004394
+{txt}{space 11}soil_11 {c |}{col 20}{res}{space 2} .0000294{col 32}{space 2} .0005026{col 43}{space 1}    0.06{col 52}{space 3}0.954{col 60}{space 4}-.0009759{col 73}{space 3} .0010348
+{txt}{space 11}soil_12 {c |}{col 20}{res}{space 2}-.0015978{col 32}{space 2} .0004135{col 43}{space 1}   -3.86{col 52}{space 3}0.000{col 60}{space 4}-.0024249{col 73}{space 3}-.0007706
+{txt}{space 11}soil_14 {c |}{col 20}{res}{space 2}-.0018735{col 32}{space 2} .0008841{col 43}{space 1}   -2.12{col 52}{space 3}0.038{col 60}{space 4}-.0036419{col 73}{space 3}-.0001051
+{txt}{space 11}soil_24 {c |}{col 20}{res}{space 2}-.0001855{col 32}{space 2} .0007523{col 43}{space 1}   -0.25{col 52}{space 3}0.806{col 60}{space 4}-.0016903{col 73}{space 3} .0013193
+{txt}{space 11}soil_26 {c |}{col 20}{res}{space 2} .0000935{col 32}{space 2} .0005831{col 43}{space 1}    0.16{col 52}{space 3}0.873{col 60}{space 4} -.001073{col 73}{space 3} .0012599
+{txt}{space 11}soil_33 {c |}{col 20}{res}{space 2} .0058872{col 32}{space 2} .0017938{col 43}{space 1}    3.28{col 52}{space 3}0.002{col 60}{space 4}  .002299{col 73}{space 3} .0094754
+{txt}{space 11}soil_34 {c |}{col 20}{res}{space 2}-.0015981{col 32}{space 2} .0008323{col 43}{space 1}   -1.92{col 52}{space 3}0.060{col 60}{space 4}-.0032629{col 73}{space 3} .0000667
+{txt}{space 11}soil_35 {c |}{col 20}{res}{space 2} -.000617{col 32}{space 2} .0016276{col 43}{space 1}   -0.38{col 52}{space 3}0.706{col 60}{space 4}-.0038726{col 73}{space 3} .0026387
+{txt}{space 11}soil_39 {c |}{col 20}{res}{space 2} .0003335{col 32}{space 2} .0006635{col 43}{space 1}    0.50{col 52}{space 3}0.617{col 60}{space 4}-.0009938{col 73}{space 3} .0016608
+{txt}{space 11}soil_40 {c |}{col 20}{res}{space 2}-.0002161{col 32}{space 2} .0010447{col 43}{space 1}   -0.21{col 52}{space 3}0.837{col 60}{space 4}-.0023057{col 73}{space 3} .0018735
+{txt}{space 11}soil_41 {c |}{col 20}{res}{space 2}-.0021941{col 32}{space 2} .0013693{col 43}{space 1}   -1.60{col 52}{space 3}0.114{col 60}{space 4} -.004933{col 73}{space 3} .0005448
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2} .4809047{col 32}{space 2} .8087497{col 43}{space 1}    0.59{col 52}{space 3}0.554{col 60}{space 4}-1.136836{col 73}{space 3} 2.098645
+{txt}{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+           sigma_u {c |} {res} .24265069
+           {txt}sigma_e {c |} {res} .09801566
+               {txt}rho {c |} {res} .85972302{txt}   (fraction of variance due to u_i)
+{hline 19}{c BT}{hline 64}
+
+{com}. *outreg2 using reg3.xls, replace nocons dec(4) drop(soil*) addtext(District soil controls, YES, Province fixed effects, YES) ctitle(OLS)
+. 
+. *omit quang tri province
+. reg poverty_p0 ordnancekm2 popdensity6061_100 south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41 if provincename!="Quang Tri", vce(cluster province)
+
+{txt}Linear regression                               Number of obs     = {res}       576
+                                                {txt}F(27, 59)         =  {res}    56.71
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.6292
+                                                {txt}Root MSE          =    {res} .12405
+
+{txt}{ralign 84:(Std. Err. adjusted for {res:60} clusters in province)}
+{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32}    Robust
+{col 1}        poverty_p0{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      t{col 52}   P>|t|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}ordnancekm2 {c |}{col 20}{res}{space 2}-.0007873{col 32}{space 2} .0001611{col 43}{space 1}   -4.89{col 52}{space 3}0.000{col 60}{space 4}-.0011097{col 73}{space 3} -.000465
+{txt}popdensity6061_100 {c |}{col 20}{res}{space 2}-.0022636{col 32}{space 2} .0009731{col 43}{space 1}   -2.33{col 52}{space 3}0.023{col 60}{space 4}-.0042107{col 73}{space 3}-.0003165
+{txt}{space 13}south {c |}{col 20}{res}{space 2}-.1220465{col 32}{space 2}  .070676{col 43}{space 1}   -1.73{col 52}{space 3}0.089{col 60}{space 4}-.2634689{col 73}{space 3} .0193759
+{txt}{space 5}area_251_500m {c |}{col 20}{res}{space 2} .3252475{col 32}{space 2} .0694585{col 43}{space 1}    4.68{col 52}{space 3}0.000{col 60}{space 4} .1862614{col 73}{space 3} .4642336
+{txt}{space 4}area_501_1000m {c |}{col 20}{res}{space 2} .2613422{col 32}{space 2} .0531525{col 43}{space 1}    4.92{col 52}{space 3}0.000{col 60}{space 4} .1549842{col 73}{space 3} .3677001
+{txt}{space 3}area_over_1000m {c |}{col 20}{res}{space 2}-.0661606{col 32}{space 2} .1114466{col 43}{space 1}   -0.59{col 52}{space 3}0.555{col 60}{space 4}-.2891647{col 73}{space 3} .1568436
+{txt}{space 11}pre_avg {c |}{col 20}{res}{space 2} .0011006{col 32}{space 2} .0003339{col 43}{space 1}    3.30{col 52}{space 3}0.002{col 60}{space 4} .0004326{col 73}{space 3} .0017687
+{txt}{space 11}tmp_avg {c |}{col 20}{res}{space 2}-.0128764{col 32}{space 2} .0194561{col 43}{space 1}   -0.66{col 52}{space 3}0.511{col 60}{space 4} -.051808{col 73}{space 3} .0260551
+{txt}{space 9}north_lat {c |}{col 20}{res}{space 2}-.0044401{col 32}{space 2} .0088266{col 43}{space 1}   -0.50{col 52}{space 3}0.617{col 60}{space 4}-.0221021{col 73}{space 3} .0132219
+{txt}{space 12}soil_1 {c |}{col 20}{res}{space 2} -.000393{col 32}{space 2} .0011589{col 43}{space 1}   -0.34{col 52}{space 3}0.736{col 60}{space 4} -.002712{col 73}{space 3} .0019259
+{txt}{space 12}soil_3 {c |}{col 20}{res}{space 2}-.0005309{col 32}{space 2} .0014044{col 43}{space 1}   -0.38{col 52}{space 3}0.707{col 60}{space 4}-.0033411{col 73}{space 3} .0022793
+{txt}{space 12}soil_6 {c |}{col 20}{res}{space 2}-.0015529{col 32}{space 2} .0008191{col 43}{space 1}   -1.90{col 52}{space 3}0.063{col 60}{space 4}-.0031919{col 73}{space 3} .0000862
+{txt}{space 12}soil_7 {c |}{col 20}{res}{space 2}-.0013006{col 32}{space 2}  .000939{col 43}{space 1}   -1.39{col 52}{space 3}0.171{col 60}{space 4}-.0031795{col 73}{space 3} .0005784
+{txt}{space 12}soil_8 {c |}{col 20}{res}{space 2}  .000017{col 32}{space 2} .0008449{col 43}{space 1}    0.02{col 52}{space 3}0.984{col 60}{space 4}-.0016735{col 73}{space 3} .0017076
+{txt}{space 12}soil_9 {c |}{col 20}{res}{space 2}-.0024605{col 32}{space 2}   .00097{col 43}{space 1}   -2.54{col 52}{space 3}0.014{col 60}{space 4}-.0044014{col 73}{space 3}-.0005196
+{txt}{space 11}soil_10 {c |}{col 20}{res}{space 2}-.0018728{col 32}{space 2} .0008021{col 43}{space 1}   -2.33{col 52}{space 3}0.023{col 60}{space 4}-.0034777{col 73}{space 3}-.0002678
+{txt}{space 11}soil_11 {c |}{col 20}{res}{space 2}-.0007209{col 32}{space 2} .0008113{col 43}{space 1}   -0.89{col 52}{space 3}0.378{col 60}{space 4}-.0023442{col 73}{space 3} .0009025
+{txt}{space 11}soil_12 {c |}{col 20}{res}{space 2}-.0008675{col 32}{space 2} .0005488{col 43}{space 1}   -1.58{col 52}{space 3}0.119{col 60}{space 4}-.0019656{col 73}{space 3} .0002307
+{txt}{space 11}soil_14 {c |}{col 20}{res}{space 2}-.0024824{col 32}{space 2} .0008595{col 43}{space 1}   -2.89{col 52}{space 3}0.005{col 60}{space 4}-.0042022{col 73}{space 3}-.0007627
+{txt}{space 11}soil_24 {c |}{col 20}{res}{space 2}-.0010545{col 32}{space 2} .0008308{col 43}{space 1}   -1.27{col 52}{space 3}0.209{col 60}{space 4} -.002717{col 73}{space 3}  .000608
+{txt}{space 11}soil_26 {c |}{col 20}{res}{space 2}-.0016451{col 32}{space 2} .0008721{col 43}{space 1}   -1.89{col 52}{space 3}0.064{col 60}{space 4}-.0033902{col 73}{space 3} .0001001
+{txt}{space 11}soil_33 {c |}{col 20}{res}{space 2} .0051068{col 32}{space 2} .0017459{col 43}{space 1}    2.92{col 52}{space 3}0.005{col 60}{space 4} .0016132{col 73}{space 3} .0086003
+{txt}{space 11}soil_34 {c |}{col 20}{res}{space 2}-.0038021{col 32}{space 2} .0011017{col 43}{space 1}   -3.45{col 52}{space 3}0.001{col 60}{space 4}-.0060066{col 73}{space 3}-.0015976
+{txt}{space 11}soil_35 {c |}{col 20}{res}{space 2}-.0048013{col 32}{space 2} .0017687{col 43}{space 1}   -2.71{col 52}{space 3}0.009{col 60}{space 4}-.0083404{col 73}{space 3}-.0012622
+{txt}{space 11}soil_39 {c |}{col 20}{res}{space 2} .0003047{col 32}{space 2} .0008969{col 43}{space 1}    0.34{col 52}{space 3}0.735{col 60}{space 4}  -.00149{col 73}{space 3} .0020995
+{txt}{space 11}soil_40 {c |}{col 20}{res}{space 2}-.0002395{col 32}{space 2} .0009935{col 43}{space 1}   -0.24{col 52}{space 3}0.810{col 60}{space 4}-.0022274{col 73}{space 3} .0017484
+{txt}{space 11}soil_41 {c |}{col 20}{res}{space 2}-.0039633{col 32}{space 2} .0018007{col 43}{space 1}   -2.20{col 52}{space 3}0.032{col 60}{space 4}-.0075664{col 73}{space 3}-.0003601
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2}  .797067{col 32}{space 2} .5947237{col 43}{space 1}    1.34{col 52}{space 3}0.185{col 60}{space 4}-.3929724{col 73}{space 3} 1.987106
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. *Ivreg(2sls)
+. 
+. gen abs_dis_17 = abs(17 - north_lat)
+{txt}
+{com}. 
+. *first-stage
+. reg ordnancekm2 abs_dis_17 popdensity6061 i.south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41, vce(cluster province)
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(27, 60)         =  {res}     3.24
+                                                {txt}Prob > F          = {res}    0.0001
+                                                {txt}R-squared         = {res}    0.3289
+                                                {txt}Root MSE          =    {res} 57.423
+
+{txt}{ralign 81:(Std. Err. adjusted for {res:61} clusters in province)}
+{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 17}{c |}{col 29}    Robust
+{col 1}    ordnancekm2{col 17}{c |}      Coef.{col 29}   Std. Err.{col 41}      t{col 49}   P>|t|{col 57}     [95% Con{col 70}f. Interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}abs_dis_17 {c |}{col 17}{res}{space 2}-17.04573{col 29}{space 2} 5.967299{col 40}{space 1}   -2.86{col 49}{space 3}0.006{col 57}{space 4} -28.9821{col 70}{space 3}-5.109354
+{txt}{space 1}popdensity6061 {c |}{col 17}{res}{space 2}-.0034625{col 29}{space 2} .0015962{col 40}{space 1}   -2.17{col 49}{space 3}0.034{col 57}{space 4}-.0066554{col 70}{space 3}-.0002697
+{txt}{space 8}1.south {c |}{col 17}{res}{space 2}-134.4913{col 29}{space 2} 87.16273{col 40}{space 1}   -1.54{col 49}{space 3}0.128{col 57}{space 4}-308.8427{col 70}{space 3} 39.86012
+{txt}{space 2}area_251_500m {c |}{col 17}{res}{space 2}-27.61907{col 29}{space 2} 20.53016{col 40}{space 1}   -1.35{col 49}{space 3}0.184{col 57}{space 4}-68.68551{col 70}{space 3} 13.44737
+{txt}{space 1}area_501_1000m {c |}{col 17}{res}{space 2}-17.66205{col 29}{space 2} 18.93065{col 40}{space 1}   -0.93{col 49}{space 3}0.355{col 57}{space 4}  -55.529{col 70}{space 3} 20.20489
+{txt}area_over_1000m {c |}{col 17}{res}{space 2}-5.993314{col 29}{space 2}  30.3753{col 40}{space 1}   -0.20{col 49}{space 3}0.844{col 57}{space 4}-66.75296{col 70}{space 3} 54.76633
+{txt}{space 8}pre_avg {c |}{col 17}{res}{space 2}  .223548{col 29}{space 2} .1788954{col 40}{space 1}    1.25{col 49}{space 3}0.216{col 57}{space 4} -.134296{col 70}{space 3} .5813921
+{txt}{space 8}tmp_avg {c |}{col 17}{res}{space 2}-.2417497{col 29}{space 2}  4.43731{col 40}{space 1}   -0.05{col 49}{space 3}0.957{col 57}{space 4}-9.117691{col 70}{space 3} 8.634192
+{txt}{space 6}north_lat {c |}{col 17}{res}{space 2}-9.996327{col 29}{space 2} 7.147248{col 40}{space 1}   -1.40{col 49}{space 3}0.167{col 57}{space 4}-24.29295{col 70}{space 3} 4.300298
+{txt}{space 9}soil_1 {c |}{col 17}{res}{space 2} .1245393{col 29}{space 2} .6620925{col 40}{space 1}    0.19{col 49}{space 3}0.851{col 57}{space 4}-1.199843{col 70}{space 3} 1.448922
+{txt}{space 9}soil_3 {c |}{col 17}{res}{space 2}-.2872069{col 29}{space 2} .8798484{col 40}{space 1}   -0.33{col 49}{space 3}0.745{col 57}{space 4}-2.047166{col 70}{space 3} 1.472752
+{txt}{space 9}soil_6 {c |}{col 17}{res}{space 2}-.3626547{col 29}{space 2} .3732275{col 40}{space 1}   -0.97{col 49}{space 3}0.335{col 57}{space 4}-1.109221{col 70}{space 3} .3839114
+{txt}{space 9}soil_7 {c |}{col 17}{res}{space 2}-.0163371{col 29}{space 2} .3384112{col 40}{space 1}   -0.05{col 49}{space 3}0.962{col 57}{space 4}-.6932602{col 70}{space 3}  .660586
+{txt}{space 9}soil_8 {c |}{col 17}{res}{space 2}-.0333277{col 29}{space 2} .2340822{col 40}{space 1}   -0.14{col 49}{space 3}0.887{col 57}{space 4}-.5015618{col 70}{space 3} .4349064
+{txt}{space 9}soil_9 {c |}{col 17}{res}{space 2}  -.39628{col 29}{space 2}  .401717{col 40}{space 1}   -0.99{col 49}{space 3}0.328{col 57}{space 4}-1.199834{col 70}{space 3} .4072736
+{txt}{space 8}soil_10 {c |}{col 17}{res}{space 2}-.1759897{col 29}{space 2} .4233895{col 40}{space 1}   -0.42{col 49}{space 3}0.679{col 57}{space 4}-1.022895{col 70}{space 3} .6709155
+{txt}{space 8}soil_11 {c |}{col 17}{res}{space 2} .1306329{col 29}{space 2} .4416454{col 40}{space 1}    0.30{col 49}{space 3}0.768{col 57}{space 4}-.7527894{col 70}{space 3} 1.014055
+{txt}{space 8}soil_12 {c |}{col 17}{res}{space 2} -.076796{col 29}{space 2} .3687405{col 40}{space 1}   -0.21{col 49}{space 3}0.836{col 57}{space 4}-.8143869{col 70}{space 3} .6607949
+{txt}{space 8}soil_14 {c |}{col 17}{res}{space 2}-.7320989{col 29}{space 2} .5119938{col 40}{space 1}   -1.43{col 49}{space 3}0.158{col 57}{space 4}-1.756239{col 70}{space 3} .2920411
+{txt}{space 8}soil_24 {c |}{col 17}{res}{space 2}-.3289722{col 29}{space 2} .4069412{col 40}{space 1}   -0.81{col 49}{space 3}0.422{col 57}{space 4}-1.142976{col 70}{space 3} .4850314
+{txt}{space 8}soil_26 {c |}{col 17}{res}{space 2}-.0033545{col 29}{space 2} .3486455{col 40}{space 1}   -0.01{col 49}{space 3}0.992{col 57}{space 4}-.7007494{col 70}{space 3} .6940403
+{txt}{space 8}soil_33 {c |}{col 17}{res}{space 2}-.4340165{col 29}{space 2} .5212768{col 40}{space 1}   -0.83{col 49}{space 3}0.408{col 57}{space 4}-1.476725{col 70}{space 3} .6086924
+{txt}{space 8}soil_34 {c |}{col 17}{res}{space 2}-.0684601{col 29}{space 2} .4576883{col 40}{space 1}   -0.15{col 49}{space 3}0.882{col 57}{space 4}-.9839729{col 70}{space 3} .8470528
+{txt}{space 8}soil_35 {c |}{col 17}{res}{space 2}-.4798697{col 29}{space 2} .4484823{col 40}{space 1}   -1.07{col 49}{space 3}0.289{col 57}{space 4}-1.376968{col 70}{space 3} .4172284
+{txt}{space 8}soil_39 {c |}{col 17}{res}{space 2}-.2604334{col 29}{space 2}  .482098{col 40}{space 1}   -0.54{col 49}{space 3}0.591{col 57}{space 4}-1.224773{col 70}{space 3} .7039063
+{txt}{space 8}soil_40 {c |}{col 17}{res}{space 2}-.3064848{col 29}{space 2} .4833993{col 40}{space 1}   -0.63{col 49}{space 3}0.528{col 57}{space 4}-1.273427{col 70}{space 3} .6604577
+{txt}{space 8}soil_41 {c |}{col 17}{res}{space 2} 1.741462{col 29}{space 2} 1.269228{col 40}{space 1}    1.37{col 49}{space 3}0.175{col 57}{space 4}-.7973716{col 70}{space 3} 4.280295
+{txt}{space 10}_cons {c |}{col 17}{res}{space 2} 343.4584{col 29}{space 2}  213.744{col 40}{space 1}    1.61{col 49}{space 3}0.113{col 57}{space 4}-84.09328{col 70}{space 3} 771.0101
+{txt}{hline 16}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2 using ".\output\first_stage.xlsx", replace dec(4) nocons drop(soil*) addtext(District soil controls, YES)
+{txt}{browse `".\output\first_stage.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\first_stage.txt""':seeout}
+
+{com}. predict ordnancekm2_hat
+{txt}(option {bf:xb} assumed; fitted values)
+
+{com}. 
+. *second stage
+. reg poverty_p0 ordnancekm2_hat popdensity6061_100 south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41, vce(cluster province)
+
+{txt}Linear regression                               Number of obs     = {res}       584
+                                                {txt}F(27, 60)         =  {res}    67.16
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.5967
+                                                {txt}Root MSE          =    {res} .12964
+
+{txt}{ralign 84:(Std. Err. adjusted for {res:61} clusters in province)}
+{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32}    Robust
+{col 1}        poverty_p0{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      t{col 52}   P>|t|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 3}ordnancekm2_hat {c |}{col 20}{res}{space 2} .0002599{col 32}{space 2} .0004059{col 43}{space 1}    0.64{col 52}{space 3}0.524{col 60}{space 4} -.000552{col 73}{space 3} .0010718
+{txt}popdensity6061_100 {c |}{col 20}{res}{space 2}-.0019584{col 32}{space 2} .0010218{col 43}{space 1}   -1.92{col 52}{space 3}0.060{col 60}{space 4}-.0040022{col 73}{space 3} .0000855
+{txt}{space 13}south {c |}{col 20}{res}{space 2}-.1044143{col 32}{space 2} .0820806{col 43}{space 1}   -1.27{col 52}{space 3}0.208{col 60}{space 4}   -.2686{col 73}{space 3} .0597714
+{txt}{space 5}area_251_500m {c |}{col 20}{res}{space 2} .3489205{col 32}{space 2} .0704444{col 43}{space 1}    4.95{col 52}{space 3}0.000{col 60}{space 4} .2080108{col 73}{space 3} .4898302
+{txt}{space 4}area_501_1000m {c |}{col 20}{res}{space 2} .2572137{col 32}{space 2} .0534976{col 43}{space 1}    4.81{col 52}{space 3}0.000{col 60}{space 4} .1502026{col 73}{space 3} .3642249
+{txt}{space 3}area_over_1000m {c |}{col 20}{res}{space 2}-.0425851{col 32}{space 2} .1193717{col 43}{space 1}   -0.36{col 52}{space 3}0.723{col 60}{space 4} -.281364{col 73}{space 3} .1961938
+{txt}{space 11}pre_avg {c |}{col 20}{res}{space 2} .0006251{col 32}{space 2} .0004185{col 43}{space 1}    1.49{col 52}{space 3}0.140{col 60}{space 4} -.000212{col 73}{space 3} .0014623
+{txt}{space 11}tmp_avg {c |}{col 20}{res}{space 2}-.0142596{col 32}{space 2} .0195987{col 43}{space 1}   -0.73{col 52}{space 3}0.470{col 60}{space 4}-.0534629{col 73}{space 3} .0249438
+{txt}{space 9}north_lat {c |}{col 20}{res}{space 2}-.0025094{col 32}{space 2} .0099717{col 43}{space 1}   -0.25{col 52}{space 3}0.802{col 60}{space 4}-.0224559{col 73}{space 3}  .017437
+{txt}{space 12}soil_1 {c |}{col 20}{res}{space 2}-.0008363{col 32}{space 2} .0013014{col 43}{space 1}   -0.64{col 52}{space 3}0.523{col 60}{space 4}-.0034394{col 73}{space 3} .0017668
+{txt}{space 12}soil_3 {c |}{col 20}{res}{space 2}-.0010465{col 32}{space 2} .0017939{col 43}{space 1}   -0.58{col 52}{space 3}0.562{col 60}{space 4}-.0046349{col 73}{space 3} .0025418
+{txt}{space 12}soil_6 {c |}{col 20}{res}{space 2}-.0011313{col 32}{space 2} .0008603{col 43}{space 1}   -1.32{col 52}{space 3}0.193{col 60}{space 4}-.0028521{col 73}{space 3} .0005894
+{txt}{space 12}soil_7 {c |}{col 20}{res}{space 2}-.0010797{col 32}{space 2} .0010594{col 43}{space 1}   -1.02{col 52}{space 3}0.312{col 60}{space 4}-.0031988{col 73}{space 3} .0010395
+{txt}{space 12}soil_8 {c |}{col 20}{res}{space 2} .0001269{col 32}{space 2} .0008345{col 43}{space 1}    0.15{col 52}{space 3}0.880{col 60}{space 4}-.0015424{col 73}{space 3} .0017962
+{txt}{space 12}soil_9 {c |}{col 20}{res}{space 2}-.0021906{col 32}{space 2} .0010788{col 43}{space 1}   -2.03{col 52}{space 3}0.047{col 60}{space 4}-.0043485{col 73}{space 3}-.0000327
+{txt}{space 11}soil_10 {c |}{col 20}{res}{space 2}-.0021712{col 32}{space 2} .0009577{col 43}{space 1}   -2.27{col 52}{space 3}0.027{col 60}{space 4}-.0040869{col 73}{space 3}-.0002554
+{txt}{space 11}soil_11 {c |}{col 20}{res}{space 2}-.0009576{col 32}{space 2} .0009711{col 43}{space 1}   -0.99{col 52}{space 3}0.328{col 60}{space 4}-.0029001{col 73}{space 3} .0009849
+{txt}{space 11}soil_12 {c |}{col 20}{res}{space 2} -.000673{col 32}{space 2} .0006675{col 43}{space 1}   -1.01{col 52}{space 3}0.317{col 60}{space 4}-.0020082{col 73}{space 3} .0006623
+{txt}{space 11}soil_14 {c |}{col 20}{res}{space 2}-.0022054{col 32}{space 2} .0009588{col 43}{space 1}   -2.30{col 52}{space 3}0.025{col 60}{space 4}-.0041233{col 73}{space 3}-.0002875
+{txt}{space 11}soil_24 {c |}{col 20}{res}{space 2}-.0008928{col 32}{space 2} .0009027{col 43}{space 1}   -0.99{col 52}{space 3}0.327{col 60}{space 4}-.0026985{col 73}{space 3} .0009129
+{txt}{space 11}soil_26 {c |}{col 20}{res}{space 2}-.0016421{col 32}{space 2}  .000921{col 43}{space 1}   -1.78{col 52}{space 3}0.080{col 60}{space 4}-.0034844{col 73}{space 3} .0002003
+{txt}{space 11}soil_33 {c |}{col 20}{res}{space 2} .0053322{col 32}{space 2}  .001769{col 43}{space 1}    3.01{col 52}{space 3}0.004{col 60}{space 4} .0017937{col 73}{space 3} .0088707
+{txt}{space 11}soil_34 {c |}{col 20}{res}{space 2}-.0036605{col 32}{space 2}  .001176{col 43}{space 1}   -3.11{col 52}{space 3}0.003{col 60}{space 4}-.0060127{col 73}{space 3}-.0013082
+{txt}{space 11}soil_35 {c |}{col 20}{res}{space 2}-.0044553{col 32}{space 2}  .001733{col 43}{space 1}   -2.57{col 52}{space 3}0.013{col 60}{space 4}-.0079217{col 73}{space 3}-.0009888
+{txt}{space 11}soil_39 {c |}{col 20}{res}{space 2}-.0001242{col 32}{space 2} .0009585{col 43}{space 1}   -0.13{col 52}{space 3}0.897{col 60}{space 4}-.0020415{col 73}{space 3} .0017931
+{txt}{space 11}soil_40 {c |}{col 20}{res}{space 2}-.0002151{col 32}{space 2} .0010769{col 43}{space 1}   -0.20{col 52}{space 3}0.842{col 60}{space 4}-.0023693{col 73}{space 3} .0019392
+{txt}{space 11}soil_41 {c |}{col 20}{res}{space 2}-.0061968{col 32}{space 2} .0023811{col 43}{space 1}   -2.60{col 52}{space 3}0.012{col 60}{space 4}-.0109598{col 73}{space 3}-.0014338
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2} .8318964{col 32}{space 2} .5934145{col 43}{space 1}    1.40{col 52}{space 3}0.166{col 60}{space 4}-.3551093{col 73}{space 3} 2.018902
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. outreg2
+  outreg2 using `".\output\first_stage.xlsx"', dec(4) nocons drop(soil*) addtext(District soil controls, YES)
+{txt}{browse `".\output\first_stage.xlsx"'}
+{browse `"C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland"' :dir}{com} : {txt}{stata `"seeout using ".\output\first_stage.txt""':seeout}
+
+{com}. 
+. *alternate way (standard errors slightly higher)
+. ivregress 2sls poverty_p0 popdensity6061_100 south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41 (ordnancekm2=abs_dis_17), vce(cluster province)
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}       584
+{txt}{col 1}{col 51}Wald chi2({res}27{txt}){col 67}= {res}   2006.48
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.5719
+{txt}{col 51}Root MSE{col 67}=    {res} .13032
+
+{txt}{ralign 84:(Std. Err. adjusted for {res:61} clusters in province)}
+{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}{col 32}    Robust
+{col 1}        poverty_p0{col 20}{c |}      Coef.{col 32}   Std. Err.{col 44}      z{col 52}   P>|z|{col 60}     [95% Con{col 73}f. Interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}ordnancekm2 {c |}{col 20}{res}{space 2} .0002599{col 32}{space 2} .0004051{col 43}{space 1}    0.64{col 52}{space 3}0.521{col 60}{space 4}-.0005341{col 73}{space 3} .0010538
+{txt}popdensity6061_100 {c |}{col 20}{res}{space 2}-.0019584{col 32}{space 2} .0009829{col 43}{space 1}   -1.99{col 52}{space 3}0.046{col 60}{space 4}-.0038848{col 73}{space 3} -.000032
+{txt}{space 13}south {c |}{col 20}{res}{space 2}-.1044143{col 32}{space 2} .0794971{col 43}{space 1}   -1.31{col 52}{space 3}0.189{col 60}{space 4}-.2602258{col 73}{space 3} .0513972
+{txt}{space 5}area_251_500m {c |}{col 20}{res}{space 2} .3489205{col 32}{space 2} .0708175{col 43}{space 1}    4.93{col 52}{space 3}0.000{col 60}{space 4} .2101209{col 73}{space 3} .4877202
+{txt}{space 4}area_501_1000m {c |}{col 20}{res}{space 2} .2572137{col 32}{space 2} .0531641{col 43}{space 1}    4.84{col 52}{space 3}0.000{col 60}{space 4} .1530141{col 73}{space 3} .3614134
+{txt}{space 3}area_over_1000m {c |}{col 20}{res}{space 2}-.0425851{col 32}{space 2} .1121626{col 43}{space 1}   -0.38{col 52}{space 3}0.704{col 60}{space 4}-.2624197{col 73}{space 3} .1772495
+{txt}{space 11}pre_avg {c |}{col 20}{res}{space 2} .0006251{col 32}{space 2} .0004244{col 43}{space 1}    1.47{col 52}{space 3}0.141{col 60}{space 4}-.0002066{col 73}{space 3} .0014569
+{txt}{space 11}tmp_avg {c |}{col 20}{res}{space 2}-.0142596{col 32}{space 2} .0192427{col 43}{space 1}   -0.74{col 52}{space 3}0.459{col 60}{space 4}-.0519745{col 73}{space 3} .0234554
+{txt}{space 9}north_lat {c |}{col 20}{res}{space 2}-.0025094{col 32}{space 2} .0096529{col 43}{space 1}   -0.26{col 52}{space 3}0.795{col 60}{space 4}-.0214287{col 73}{space 3} .0164098
+{txt}{space 12}soil_1 {c |}{col 20}{res}{space 2}-.0008363{col 32}{space 2} .0013312{col 43}{space 1}   -0.63{col 52}{space 3}0.530{col 60}{space 4}-.0034455{col 73}{space 3} .0017729
+{txt}{space 12}soil_3 {c |}{col 20}{res}{space 2}-.0010465{col 32}{space 2} .0018793{col 43}{space 1}   -0.56{col 52}{space 3}0.578{col 60}{space 4}-.0047299{col 73}{space 3} .0026368
+{txt}{space 12}soil_6 {c |}{col 20}{res}{space 2}-.0011313{col 32}{space 2} .0008641{col 43}{space 1}   -1.31{col 52}{space 3}0.190{col 60}{space 4} -.002825{col 73}{space 3} .0005623
+{txt}{space 12}soil_7 {c |}{col 20}{res}{space 2}-.0010797{col 32}{space 2} .0010624{col 43}{space 1}   -1.02{col 52}{space 3}0.310{col 60}{space 4} -.003162{col 73}{space 3} .0010026
+{txt}{space 12}soil_8 {c |}{col 20}{res}{space 2} .0001269{col 32}{space 2} .0007977{col 43}{space 1}    0.16{col 52}{space 3}0.874{col 60}{space 4}-.0014366{col 73}{space 3} .0016904
+{txt}{space 12}soil_9 {c |}{col 20}{res}{space 2}-.0021906{col 32}{space 2} .0010916{col 43}{space 1}   -2.01{col 52}{space 3}0.045{col 60}{space 4}  -.00433{col 73}{space 3}-.0000511
+{txt}{space 11}soil_10 {c |}{col 20}{res}{space 2}-.0021712{col 32}{space 2} .0009811{col 43}{space 1}   -2.21{col 52}{space 3}0.027{col 60}{space 4}-.0040941{col 73}{space 3}-.0002483
+{txt}{space 11}soil_11 {c |}{col 20}{res}{space 2}-.0009576{col 32}{space 2} .0010004{col 43}{space 1}   -0.96{col 52}{space 3}0.338{col 60}{space 4}-.0029184{col 73}{space 3} .0010032
+{txt}{space 11}soil_12 {c |}{col 20}{res}{space 2} -.000673{col 32}{space 2} .0006986{col 43}{space 1}   -0.96{col 52}{space 3}0.335{col 60}{space 4}-.0020423{col 73}{space 3} .0006964
+{txt}{space 11}soil_14 {c |}{col 20}{res}{space 2}-.0022054{col 32}{space 2} .0009843{col 43}{space 1}   -2.24{col 52}{space 3}0.025{col 60}{space 4}-.0041347{col 73}{space 3}-.0002761
+{txt}{space 11}soil_24 {c |}{col 20}{res}{space 2}-.0008928{col 32}{space 2} .0009162{col 43}{space 1}   -0.97{col 52}{space 3}0.330{col 60}{space 4}-.0026885{col 73}{space 3} .0009028
+{txt}{space 11}soil_26 {c |}{col 20}{res}{space 2}-.0016421{col 32}{space 2} .0009165{col 43}{space 1}   -1.79{col 52}{space 3}0.073{col 60}{space 4}-.0034384{col 73}{space 3} .0001542
+{txt}{space 11}soil_33 {c |}{col 20}{res}{space 2} .0053322{col 32}{space 2} .0016729{col 43}{space 1}    3.19{col 52}{space 3}0.001{col 60}{space 4} .0020535{col 73}{space 3}  .008611
+{txt}{space 11}soil_34 {c |}{col 20}{res}{space 2}-.0036605{col 32}{space 2} .0011889{col 43}{space 1}   -3.08{col 52}{space 3}0.002{col 60}{space 4}-.0059906{col 73}{space 3}-.0013303
+{txt}{space 11}soil_35 {c |}{col 20}{res}{space 2}-.0044553{col 32}{space 2} .0017147{col 43}{space 1}   -2.60{col 52}{space 3}0.009{col 60}{space 4}-.0078159{col 73}{space 3}-.0010946
+{txt}{space 11}soil_39 {c |}{col 20}{res}{space 2}-.0001242{col 32}{space 2} .0009666{col 43}{space 1}   -0.13{col 52}{space 3}0.898{col 60}{space 4}-.0020187{col 73}{space 3} .0017704
+{txt}{space 11}soil_40 {c |}{col 20}{res}{space 2}-.0002151{col 32}{space 2} .0010628{col 43}{space 1}   -0.20{col 52}{space 3}0.840{col 60}{space 4}-.0022982{col 73}{space 3}  .001868
+{txt}{space 11}soil_41 {c |}{col 20}{res}{space 2}-.0061968{col 32}{space 2} .0025149{col 43}{space 1}   -2.46{col 52}{space 3}0.014{col 60}{space 4} -.011126{col 73}{space 3}-.0012677
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2} .8318964{col 32}{space 2} .5789428{col 43}{space 1}    1.44{col 52}{space 3}0.151{col 60}{space 4}-.3028105{col 73}{space 3} 1.966603
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 22}Instrumented:{space 2}ordnancekm2{p_end}
+{p 0 15 22}Instruments:{space 3}popdensity6061_100 south area_251_500m area_501_1000m area_over_1000m pre_avg tmp_avg north_lat soil_1 soil_3 soil_6 soil_7 soil_8 soil_9 soil_10 soil_11 soil_12 soil_14 soil_24 soil_26 soil_33 soil_34 soil_35 soil_39 soil_40 soil_41 abs_dis_17{p_end}
+
+{com}. 
+. *close log
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\johnd\OneDrive\Desktop\sose21\Dev\Miguel_roland\data\miguel_roland_rep.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}28 Jan 2024, 02:21:31
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
